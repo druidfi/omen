@@ -13,6 +13,15 @@ Require omen in your composer.json:
 $ composer require druidfi/omen:^1.0
 ```
 
+And then use this as your `sites/default/settings.php`:
+
+```
+<?php
+
+// Use druidfi/omen
+extract((new Druidfi\Omen\DrupalEnvDetector(__DIR__))->getConfiguration());
+```
+
 ## Known environments
 
 - [Amazee.io Lagoon](https:)
