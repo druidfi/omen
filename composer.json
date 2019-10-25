@@ -1,0 +1,28 @@
+{
+  "name": "druidfi/omen",
+  "type": "library",
+  "description": "",
+  "minimum-stability": "dev",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Druid.fi",
+      "email": "info@druid.fi"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Druidfi\\Omen\\": "src/"
+    }
+  },
+  "require": {
+    "php": "^7.1"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "@stable"
+  },
+  "conflict": {
+    "drupal/core": "8.*",
+    "drupal/drupal": "<7.65"
+  }
+}
