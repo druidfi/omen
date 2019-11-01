@@ -58,7 +58,7 @@ Add support for:
 ## Where the name "Omen" comes from?
 
 Druids interpreted the waves of the ocean or read clouds for mundane or important omens. So `reading clouds` is
-basically what `druidfi/omen` is doing.
+basically what `druidfi/omen` is doing. Your local clouds too.
 
 ## Other information
 

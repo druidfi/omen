@@ -25,6 +25,7 @@
   "scripts": {
     "test": [
       "phpunit --bootstrap vendor/autoload.php tests/AmazeeIoLegacyTest.php",
+      "phpunit --bootstrap vendor/autoload.php tests/LagoonTest.php",
       "phpunit --bootstrap vendor/autoload.php tests/WodbyTest.php"
     ]
   }

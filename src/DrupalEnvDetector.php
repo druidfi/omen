@@ -32,6 +32,9 @@ class DrupalEnvDetector
         if (getenv('AMAZEEIO_SITENAME')) {
             $mapping = $this->getMapping('AmazeeIoLegacy');
         }
+        else if (getenv('LAGOON')) {
+            $mapping = $this->getMapping('Lagoon');
+        }
         else if (getenv('WODBY_INSTANCE_TYPE')) {
             $mapping = $this->getMapping('Wodby');
         }
