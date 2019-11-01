@@ -19,6 +19,5 @@ install:
 
 script:
 
-  # Run lints & tests.
-  - composer lint
+  # Run PHPUnit tests.
   - composer test
