@@ -1,0 +1,24 @@
+language: php
+dist: trusty
+sudo: false
+
+# Supported PHP versions to test with.
+php:
+  - 7.1
+  - 7.2
+  - 7.3
+
+cache:
+  directories:
+    - "$HOME/.composer/cache"
+
+install:
+
+  # Do Composer install.
+  - composer install --no-interaction
+
+script:
+
+  # Run lints & tests.
+  - composer lint
+  - composer test
