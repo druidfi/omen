@@ -5,11 +5,11 @@
  */
 
 return [
-  'APP_ENV' => 'WODBY_INSTANCE_TYPE',
-  'HOSTNAME' => 'WODBY_HOST_PRIMARY',
-  'DRUPAL_DB_NAME' => 'DB_NAME',
-  'DRUPAL_DB_USER' => 'DB_USER',
-  'DRUPAL_DB_PASS' => 'DB_PASSWORD',
-  'DRUPAL_DB_HOST' => 'DB_HOST',
-  'DRUPAL_DB_PORT' => 'MARIADB_SERVICE_PORT',
+    'APP_ENV' => getenv('WODBY_INSTANCE_TYPE'),
+    'HOSTNAME' => getenv('WODBY_HOST_PRIMARY'),
+    'DRUPAL_DB_NAME' => getenv('DB_NAME'),
+    'DRUPAL_DB_USER' => getenv('DB_USER'),
+    'DRUPAL_DB_PASS' => getenv('DB_PASSWORD'),
+    'DRUPAL_DB_HOST' => getenv('DB_HOST'),
+    'DRUPAL_DB_PORT' => getenv('MARIADB_SERVICE_PORT'),
 ];

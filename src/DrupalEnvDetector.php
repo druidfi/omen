@@ -29,12 +29,15 @@ class DrupalEnvDetector
         $mapping = [];
 
         // Do the detection!
-        if (getenv('WODBY_INSTANCE_TYPE')) {
-            $mapping = require_once __DIR__ . self::DS . 'EnvMapping' . self::DS . 'Wodby.php';
+        if (getenv('AMAZEEIO_SITENAME')) {
+            $mapping = $this->getMapping('AmazeeIoLegacy');
+        }
+        else if (getenv('WODBY_INSTANCE_TYPE')) {
+            $mapping = $this->getMapping('Wodby');
         }
 
-        foreach ($mapping as $source => $target) {
-            putenv($source . '='. getenv($target));
+        foreach ($mapping as $var => $val) {
+            putenv($var . '='. $val);
         }
 
         // APP_ENV: dev|test|prod
@@ -73,6 +76,21 @@ class DrupalEnvDetector
             'databases' => (array) $this->databases,
             'settings' => (array) $this->settings,
         ];
+    }
+
+    private function getMapping($system) : array {
+        $map_file = __DIR__ . self::DS . 'EnvMapping' . self::DS . $system . '.php';
+        $mapping = require $map_file;
+
+        if (is_array($mapping)) {
+            return $mapping;
+        }
+        else {
+            echo file_exists($map_file) ? 'JOOO' : 'EII';
+            echo '--'. $system .'--' . $map_file . '---';
+            var_dump($mapping);
+            exit();
+        }
     }
 
     /**

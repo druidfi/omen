@@ -24,7 +24,8 @@
   },
   "scripts": {
     "test": [
-      "phpunit"
+      "phpunit --bootstrap vendor/autoload.php tests/AmazeeIoLegacyTest.php",
+      "phpunit --bootstrap vendor/autoload.php tests/WodbyTest.php"
     ]
   }
 }
