@@ -22,11 +22,28 @@ And then use this as your `sites/default/settings.php`:
 extract((new Druidfi\Omen\DrupalEnvDetector(__DIR__))->getConfiguration());
 ```
 
+See the whole example [here](settings.php).
+
 ## Known environments
 
-- [Amazee.io Lagoon](https:)
-- [Amazee.io Legacy](https:)
-- [Wodby](https://Wodby)
+- [Amazee.io Lagoon](https://lagoon.readthedocs.io/)
+- [Amazee.io Legacy](https://docs.amazee.io/)
+- [Wodby](https://wodby.com/)
+
+## All other environments
+
+Use following ENV variables to set up Drupal:
+
+- `APP_ENV` as current environment, e.g. `dev`, `test` or `prod` (default: `prod`)
+- `DRUPAL_DB_DRIVER` as database driver (default: `mysql`)
+- `DRUPAL_DB_NAME` as database name *
+- `DRUPAL_DB_HOST` as database host to connect *
+- `DRUPAL_DB_USER` as database user for connection *
+- `DRUPAL_DB_PASS` as database password for connection *
+- `DRUPAL_DB_PORT` as database port (default: `3306`)
+- `DRUPAL_DB_PREFIX` as database table prefix (default is no prefix)
+
+`*` required variables
 
 ## TODO
 

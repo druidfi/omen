@@ -23,7 +23,6 @@ class DrupalEnvDetector
     $this->settings = &$settings;
 
     // Do the detection!
-
     if (getenv('WODBY_INSTANCE_TYPE')) {
       echo "Wodby detected!";
     }
