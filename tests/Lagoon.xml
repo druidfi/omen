@@ -16,7 +16,6 @@
         <env name="MARIADB_USERNAME" value="drupal"/>
         <env name="MARIADB_PASSWORD" value="drupal"/>
         <env name="MARIADB_HOST" value="db"/>
-        <env name="MARIADB_post" value="3306"/>
     </php>
     <testsuites>
         <testsuite name="drupal">
