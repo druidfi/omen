@@ -40,17 +40,17 @@ abstract class BaseCase extends TestCase
         $db = $this->databases['default']['default'];
 
         // Test database settings
-        $this->assertSame($this->expected_db_settings['name'], $db['database']);
-        $this->assertSame($this->expected_db_settings['user'], $db['username']);
-        $this->assertSame($this->expected_db_settings['pass'], $db['password']);
-        $this->assertSame($this->expected_db_settings['host'], $db['host']);
-        $this->assertSame($this->expected_db_settings['port'], $db['port']);
+        $this->assertEquals($this->expected_db_settings['name'], $db['database']);
+        $this->assertEquals($this->expected_db_settings['user'], $db['username']);
+        $this->assertEquals($this->expected_db_settings['pass'], $db['password']);
+        $this->assertEquals($this->expected_db_settings['host'], $db['host']);
+        $this->assertEquals($this->expected_db_settings['port'], $db['port']);
     }
 
     public function testTrustedHostPattern()
     {
         // Test trusted host pattern
         $pattern = '^' . str_replace('.', '\.', $this->expected_host) . '$';
-        $this->assertSame($pattern, $this->settings['trusted_host_patterns'][0]);
+        $this->assertEquals($pattern, $this->settings['trusted_host_patterns'][0]);
     }
 }
