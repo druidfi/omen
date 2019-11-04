@@ -15,6 +15,11 @@
       "Druidfi\\Omen\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Druidfi\\Omen\\Tests\\": "tests/"
+    }
+  },
   "require": {
     "php": "^7.1"
   },
@@ -24,9 +29,9 @@
   },
   "scripts": {
     "test": [
-      "phpunit --bootstrap vendor/autoload.php tests/AmazeeIoLegacyTest.php",
-      "phpunit --bootstrap vendor/autoload.php tests/LagoonTest.php",
-      "phpunit --bootstrap vendor/autoload.php tests/WodbyTest.php"
+      "phpunit --configuration tests/AmazeeIoLegacy.xml",
+      "phpunit --configuration tests/Lagoon.xml",
+      "phpunit --configuration tests/Wodby.xml"
     ]
   }
 }

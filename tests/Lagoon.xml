@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="../vendor/autoload.php" colors="true"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutChangesToGlobalState="true"
+         beStrictAboutCoversAnnotation="false"
+         cacheResult="false">
+    <php>
+        <!-- Set error reporting to E_ALL. -->
+        <ini name="error_reporting" value="32767"/>
+        <!-- Do not limit the amount of memory tests take to run. -->
+        <ini name="memory_limit" value="-1"/>
+        <!-- Detectable ENV variables -->
+        <env name="LAGOON_ENVIRONMENT_TYPE" value="development"/>
+        <env name="MARIADB_DATABASE" value="drupal"/>
+        <env name="MARIADB_USERNAME" value="drupal"/>
+        <env name="MARIADB_PASSWORD" value="drupal"/>
+        <env name="MARIADB_HOST" value="db"/>
+        <env name="MARIADB_post" value="3306"/>
+    </php>
+    <testsuites>
+        <testsuite name="drupal">
+            <directory>../tests/Lagoon</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
