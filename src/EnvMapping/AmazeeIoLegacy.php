@@ -12,6 +12,7 @@ $amazeeio_get_app_env = function () {
 return [
     'APP_ENV' => $amazeeio_get_app_env(),
     'HOSTNAME' => getenv('HOSTNAME'),
+    'DRUPAL_DB_DRIVER' => 'mysql',
     'DRUPAL_DB_NAME' => getenv('AMAZEEIO_SITENAME'),
     'DRUPAL_DB_USER' => getenv('AMAZEEIO_DB_USERNAME'),
     'DRUPAL_DB_PASS' => getenv('AMAZEEIO_DB_PASSWORD'),

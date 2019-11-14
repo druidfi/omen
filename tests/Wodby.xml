@@ -13,11 +13,13 @@
         <!-- Detectable ENV variables -->
         <env name="WODBY_HOST_PRIMARY" value="local.drupal.com"/>
         <env name="WODBY_INSTANCE_TYPE" value="dev"/>
+        <env name="DB_DRIVER" value="mysql"/>
         <env name="DB_NAME" value="drupal"/>
         <env name="DB_USER" value="drupal"/>
         <env name="DB_PASSWORD" value="drupal"/>
         <env name="DB_HOST" value="db"/>
-        <env name="MARIADB_SERVICE_PORT" value="3306"/>
+        <env name="DB_PORT" value="3306"/>
+        <env name="DB_PREFIX" value=""/>
     </php>
     <testsuites>
         <testsuite name="drupal">

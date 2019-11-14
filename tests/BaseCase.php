@@ -9,11 +9,13 @@ use PHPUnit\Framework\TestCase;
 abstract class BaseCase extends TestCase
 {
     protected $expected_db_settings = [
+        'driver' => 'mysql',
         'name' => 'drupal',
         'user' => 'drupal',
         'pass' => 'drupal',
         'host' => 'db',
         'port' => '3306',
+        'prefix' => '',
     ];
 
     protected $expected_host = 'local.drupal.com';
@@ -40,11 +42,13 @@ abstract class BaseCase extends TestCase
         $db = $this->databases['default']['default'];
 
         // Test database settings
+        $this->assertEquals($this->expected_db_settings['driver'], $db['driver']);
         $this->assertEquals($this->expected_db_settings['name'], $db['database']);
         $this->assertEquals($this->expected_db_settings['user'], $db['username']);
         $this->assertEquals($this->expected_db_settings['pass'], $db['password']);
         $this->assertEquals($this->expected_db_settings['host'], $db['host']);
         $this->assertEquals($this->expected_db_settings['port'], $db['port']);
+        $this->assertEquals($this->expected_db_settings['prefix'], $db['prefix']);
     }
 
     public function testTrustedHostPattern()

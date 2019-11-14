@@ -16,5 +16,4 @@ return [
     'DRUPAL_DB_USER' => getenv('MARIADB_USERNAME'),
     'DRUPAL_DB_PASS' => getenv('MARIADB_PASSWORD'),
     'DRUPAL_DB_HOST' => getenv('MARIADB_HOST'),
-    'DRUPAL_DB_PORT' => '3306',
 ];

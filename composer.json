@@ -29,9 +29,9 @@
   },
   "scripts": {
     "test": [
-      "phpunit --configuration tests/AmazeeIoLegacy.xml",
-      "phpunit --configuration tests/Lagoon.xml",
-      "phpunit --configuration tests/Wodby.xml"
+      "phpunit --debug --verbose --configuration tests/AmazeeIoLegacy.xml",
+      "phpunit --debug --verbose --configuration tests/Lagoon.xml",
+      "phpunit --debug --verbose --configuration tests/Wodby.xml"
     ]
   }
 }
