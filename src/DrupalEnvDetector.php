@@ -2,12 +2,9 @@
 
 namespace Druidfi\Omen;
 
-if (!defined('CONFIG_SYNC_DIRECTORY')) {
-  define('CONFIG_SYNC_DIRECTORY', 'sync');
-}
-
 class DrupalEnvDetector
 {
+  const CMI_PATH = 'conf/cmi';
   const DEFAULT_APP_ENV = 'prod';
   const DS = DIRECTORY_SEPARATOR;
 
@@ -133,7 +130,9 @@ class DrupalEnvDetector
     else {
       // Load curated default values for detected ENV
       // Set directory for loading CMI configuration.
-      $this->config_directories[CONFIG_SYNC_DIRECTORY] = '../conf/cmi';
+      $this->config_directories['config_sync_directory'] = '../' . self::CMI_PATH;
+      // In Drupal 8.8 this is in $settings array.
+      $this->settings['config_sync_directory'] = '../' . self::CMI_PATH;
 
       // Hash salt.
       $this->settings['hash_salt'] = '0000000000000000';
