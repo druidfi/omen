@@ -18,4 +18,5 @@ return [
     'DRUPAL_DB_PASS' => getenv('AMAZEEIO_DB_PASSWORD'),
     'DRUPAL_DB_HOST' => getenv('AMAZEEIO_DB_HOST'),
     'DRUPAL_DB_PORT' => getenv('AMAZEEIO_DB_PORT'),
+    'DRUPAL_TMP_PATH' => getenv('AMAZEEIO_TMP_PATH'),
 ];
