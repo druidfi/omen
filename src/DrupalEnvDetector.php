@@ -33,6 +33,9 @@ class DrupalEnvDetector
     else if (getenv('LAGOON')) {
       $mapping = $this->getMapping('Lagoon');
     }
+    else if (getenv('LANDO_INFO')) {
+      $mapping = $this->getMapping('Lando');
+    }
     else if (getenv('WODBY_INSTANCE_TYPE')) {
       $mapping = $this->getMapping('Wodby');
     }
@@ -135,7 +138,7 @@ class DrupalEnvDetector
       $this->settings['config_sync_directory'] = '../' . self::CMI_PATH;
 
       // Hash salt.
-      $this->settings['hash_salt'] = '0000000000000000';
+      $this->settings['hash_salt'] = getenv('DRUPAL_HASH_SALT') ?: '0000000000000000';
 
       // Public files path
       $this->settings['file_public_path'] = 'sites/default/files';
