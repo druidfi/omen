@@ -52,7 +52,6 @@ Use following ENV variables to set up Drupal:
 
 Add support for:
 
-- Lando
 - Drupal VM
 - Other dev tools and environments
 
