@@ -12,7 +12,7 @@ You should just focus on your project specific configuration.
 Require omen in your composer.json:
 
 ```
-$ composer require druidfi/omen:^1.0
+$ composer require druidfi/omen
 ```
 
 And then use this as your `sites/default/settings.php`:
