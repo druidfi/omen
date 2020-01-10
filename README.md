@@ -1,11 +1,14 @@
-# druidfi/omen [Work in Progress]
+# druidfi/omen
 
 [![Build Status](https://travis-ci.com/druidfi/omen.svg?branch=master)](https://travis-ci.com/druidfi/omen)
 
 Drupal ENV detector. Detects env related configuration and sets them for you. Helps with moving sites from environment
 to another. Aims also to generalize your env configuration.
 
-You should just focus on your project specific configuration.
+Also sets configuration per environment type. e.g. for development or production. Everything can still be overriden in
+your project.
+
+**You should just focus on your project specific configuration.**
 
 ## How to use
 
@@ -35,7 +38,7 @@ See the whole example [here](settings.php).
 
 ## All other environments
 
-Use following ENV variables to set up Drupal:
+Use following ENV variables to set up Drupal in your servers or containers:
 
 - `APP_ENV` as current environment, e.g. `dev`, `test` or `prod` (default: `prod`)
 - `DRUPAL_DB_DRIVER` as database driver (default: `mysql`)
@@ -45,8 +48,14 @@ Use following ENV variables to set up Drupal:
 - `DRUPAL_DB_PASS` as database password for connection *
 - `DRUPAL_DB_PORT` as database port (default: `3306`)
 - `DRUPAL_DB_PREFIX` as database table prefix (default is no prefix)
+- `DRUPAL_HASH_SALT` (default: `0000000000000000`)
 
 `*` required variables
+
+## Defaults for environment types
+
+- development: see [src/defaults/dev.php](src/defaults/dev.php)
+- production: see [src/defaults/prod.php](src/defaults/prod.php)
 
 ## TODO
 
