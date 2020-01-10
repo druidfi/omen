@@ -31,6 +31,7 @@
     "test": [
       "phpunit --debug --verbose --configuration tests/AmazeeIoLegacy.xml",
       "phpunit --debug --verbose --configuration tests/Lagoon.xml",
+      "phpunit --debug --verbose --configuration tests/Lando.xml",
       "phpunit --debug --verbose --configuration tests/Wodby.xml"
     ]
   }

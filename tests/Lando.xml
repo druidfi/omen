@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="../vendor/autoload.php" colors="true"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutChangesToGlobalState="true"
+         beStrictAboutCoversAnnotation="false"
+         cacheResult="false">
+  <php>
+    <!-- Set error reporting to E_ALL. -->
+    <ini name="error_reporting" value="32767"/>
+    <!-- Do not limit the amount of memory tests take to run. -->
+    <ini name="memory_limit" value="-1"/>
+    <!-- Detectable ENV variables -->
+    <env name="LANDO_APP_NAME" value="local"/>
+    <env name="LANDO_DOMAIN" value="drupal.com"/>
+    <env name="LANDO_INFO" value='{"appserver":{"service":"appserver","urls":["https://localhost:32787","http://localhost:32788","http://omen-test.lndo.site","https://omen-test.lndo.site"],"type":"php","via":"apache","webroot":"public","config":{"php":"/Users/druid/.lando/config/drupal8/php.ini"},"version":"7.2","meUser":"www-data","hostnames":["appserver.omentest.internal"]},"database":{"service":"database","urls":[],"type":"mysql","internal_connection":{"host":"db","port":"3306"},"external_connection":{"host":"localhost","port":true},"creds":{"database":"drupal","password":"drupal","user":"drupal"},"config":{"database":"/Users/druid/.lando/config/drupal8/mysql.cnf"},"version":"5.7","meUser":"www-data","hostnames":["database.omentest.internal"]}}'/>
+  </php>
+  <testsuites>
+    <testsuite name="drupal">
+      <directory>../tests/Lando</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>
