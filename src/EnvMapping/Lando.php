@@ -7,7 +7,7 @@
 $lando_info = json_decode(getenv('LANDO_INFO'), TRUE);
 
 return [
-  'APP_ENV' => 'development',
+  'APP_ENV' => 'dev',
   'HOSTNAME' => getenv('LANDO_APP_NAME') .'.'. getenv('LANDO_DOMAIN'),
   'DRUPAL_DB_NAME' => $lando_info['database']['creds']['database'],
   'DRUPAL_DB_USER' => $lando_info['database']['creds']['user'],
