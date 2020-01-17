@@ -8,8 +8,15 @@ class DrupalEnvDetector
   const DEFAULT_APP_ENV = 'prod';
   const DS = DIRECTORY_SEPARATOR;
 
+  const MAP = [
+    'AMAZEEIO_SITENAME' => 'AmazeeIoLegacy',
+    'LAGOON' => 'Lagoon',
+    'LANDO_INFO' => 'Lando',
+    'PANTHEON_ENVIRONMENT' => 'Pantheon',
+    'WODBY_INSTANCE_TYPE' => 'Wodby',
+  ];
+
   private $drupal7 = FALSE;
-  private $app_root = '/app';
   private $config = [];
   private $config_directories = [];
   private $databases = [];
@@ -27,17 +34,11 @@ class DrupalEnvDetector
     $mapping = [];
 
     // Do the detection!
-    if (getenv('AMAZEEIO_SITENAME')) {
-      $mapping = $this->getMapping('AmazeeIoLegacy');
-    }
-    else if (getenv('LAGOON')) {
-      $mapping = $this->getMapping('Lagoon');
-    }
-    else if (getenv('LANDO_INFO')) {
-      $mapping = $this->getMapping('Lando');
-    }
-    else if (getenv('WODBY_INSTANCE_TYPE')) {
-      $mapping = $this->getMapping('Wodby');
+    foreach (self::MAP as $env_key => $map_key) {
+      if (getenv($env_key)) {
+        $mapping = $this->getMapping($map_key);
+        break;
+      }
     }
 
     foreach ($mapping as $var => $val) {

@@ -2,7 +2,6 @@
   "name": "druidfi/omen",
   "type": "library",
   "description": "",
-  "minimum-stability": "dev",
   "license": "MIT",
   "authors": [
     {
@@ -24,14 +23,17 @@
     "php": "^7.1"
   },
   "require-dev": {
-    "friendsofphp/php-cs-fixer": "@stable",
-    "phpunit/phpunit": "^8.4.0@stable"
+    "friendsofphp/php-cs-fixer": "^2.16.0",
+    "phpunit/phpunit": "^8.5.0"
   },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "scripts": {
     "test": [
       "phpunit --debug --verbose --configuration tests/AmazeeIoLegacy.xml",
       "phpunit --debug --verbose --configuration tests/Lagoon.xml",
       "phpunit --debug --verbose --configuration tests/Lando.xml",
+      "phpunit --debug --verbose --configuration tests/Pantheon.xml",
       "phpunit --debug --verbose --configuration tests/Wodby.xml"
     ]
   }

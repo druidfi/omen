@@ -34,6 +34,7 @@ See the whole example [here](settings.php).
 - [Amazee.io Lagoon](https://lagoon.readthedocs.io/)
 - [Amazee.io Legacy](https://docs.amazee.io/)
 - [Lando](https://lando.dev/)
+- [Pantheon](https://pantheon.io/)
 - [Wodby](https://wodby.com/)
 
 ## All other environments
@@ -62,7 +63,7 @@ Use following ENV variables to set up Drupal in your servers or containers:
 Add support for:
 
 - Drupal VM
-- Other dev tools and environments
+- Other dev tools and hosting environments
 
 ## Where the name "Omen" comes from?
 

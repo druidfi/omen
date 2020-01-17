@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="../vendor/autoload.php" colors="true"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutChangesToGlobalState="true"
+         beStrictAboutCoversAnnotation="false"
+         cacheResult="false">
+  <php>
+    <!-- Set error reporting to E_ALL. -->
+    <ini name="error_reporting" value="32767"/>
+    <!-- Do not limit the amount of memory tests take to run. -->
+    <ini name="memory_limit" value="-1"/>
+    <!-- Detectable ENV variables -->
+    <env name="PANTHEON_ENVIRONMENT" value="live"/>
+    <env name="PANTHEON_SITE_NAME" value="pantheon-test"/>
+    <env name="DB_NAME" value="drupal"/>
+    <env name="DB_USER" value="drupal"/>
+    <env name="DB_PASSWORD" value="drupal"/>
+    <env name="DB_HOST" value="db"/>
+    <env name="DB_PORT" value="3306"/>
+  </php>
+  <testsuites>
+    <testsuite name="drupal">
+      <directory>../tests/Pantheon</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>
