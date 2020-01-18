@@ -114,7 +114,7 @@ class DrupalEnvDetector
    */
   private function setEnvDefaults(string $APP_ENV) {
     $defaults_path = __DIR__ . self::DS . 'defaults' . self::DS;
-    $defaults_file = ($this->drupal7) ? $APP_ENV . '.d7.php' : $APP_ENV . '.php';
+    $defaults_file = $APP_ENV . '.php';
 
     $defaults = require $defaults_path . $defaults_file;
 
