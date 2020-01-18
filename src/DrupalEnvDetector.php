@@ -50,9 +50,11 @@ class DrupalEnvDetector
       }
     }
 
-    // Set mapped env variables
-    foreach ($this->omen->getEnvs() as $env_var => $env_val) {
-      putenv($env_var . '='. $env_val);
+    // Set mapped env variables IF we have detected something
+    if (!is_null($this->omen)) {
+      foreach ($this->omen->getEnvs() as $env_var => $env_val) {
+        putenv($env_var . '=' . $env_val);
+      }
     }
 
     // APP_ENV: dev|test|prod
@@ -91,6 +93,15 @@ class DrupalEnvDetector
       'databases' => (array) $this->databases,
       'settings' => (array) $this->settings,
     ];
+  }
+
+  /**
+   * Print out configuration.
+   */
+  public function showConfiguration() {
+    echo '<pre>';
+    print_r($this->getConfiguration());
+    exit();
   }
 
   /**
