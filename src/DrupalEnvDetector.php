@@ -23,6 +23,7 @@ class DrupalEnvDetector
     'WODBY_INSTANCE_TYPE' => Wodby::class,
   ];
 
+  private $app_env = self::DEFAULT_APP_ENV;
   private $config = [];
   private $config_directories = [];
   private $databases = [];
@@ -55,13 +56,13 @@ class DrupalEnvDetector
     }
 
     // APP_ENV: dev|test|prod
-    $APP_ENV = getenv('APP_ENV') ?: self::DEFAULT_APP_ENV;
+    $this->app_env = getenv('APP_ENV') ?: self::DEFAULT_APP_ENV;
 
     // Env specific default values
-    $this->setEnvDefaults($APP_ENV);
+    $this->setEnvDefaults();
 
     // Load/add files (if exist) from sites/default in following order:
-    foreach (['all', $APP_ENV, 'local'] as $set) {
+    foreach (['all', $this->app_env, 'local'] as $set) {
       // all.settings.php, dev.settings.php and local.settings.php
       if (file_exists($settings_dir . self::DS . $set . '.settings.php')) {
         include $settings_dir . self::DS . $set . '.settings.php';
@@ -94,12 +95,10 @@ class DrupalEnvDetector
 
   /**
    * Set ENV specific default values.
-   *
-   * @param string $APP_ENV
    */
-  private function setEnvDefaults(string $APP_ENV) {
-    $defaults_path = __DIR__ . self::DS . 'defaults' . self::DS;
-    $defaults_file = $APP_ENV . '.php';
+  private function setEnvDefaults() {
+    $defaults_path = __DIR__ . self::DS . 'EnvDefaults' . self::DS;
+    $defaults_file = $this->app_env . '.php';
 
     $defaults = require $defaults_path . $defaults_file;
 

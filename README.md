@@ -55,8 +55,8 @@ Use following ENV variables to set up Drupal in your servers or containers:
 
 ## Defaults for environment types
 
-- development: see [src/defaults/dev.php](src/defaults/dev.php)
-- production: see [src/defaults/prod.php](src/defaults/prod.php)
+- development: see [src/defaults/dev.php](src/EnvDefaults/dev.php)
+- production: see [src/defaults/prod.php](src/EnvDefaults/prod.php)
 
 ## TODO
 
