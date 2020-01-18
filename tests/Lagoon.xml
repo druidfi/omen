@@ -11,6 +11,7 @@
         <!-- Do not limit the amount of memory tests take to run. -->
         <ini name="memory_limit" value="-1"/>
         <!-- Detectable ENV variables -->
+        <env name="LAGOON" value="cli-drupal"/>
         <env name="LAGOON_ENVIRONMENT_TYPE" value="development"/>
         <env name="MARIADB_DATABASE" value="drupal"/>
         <env name="MARIADB_USERNAME" value="drupal"/>

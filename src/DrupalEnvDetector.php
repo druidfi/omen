@@ -2,6 +2,12 @@
 
 namespace Druidfi\Omen;
 
+use Druidfi\Omen\EnvMapping\AmazeeIoLegacy;
+use Druidfi\Omen\EnvMapping\Lagoon;
+use Druidfi\Omen\EnvMapping\Lando;
+use Druidfi\Omen\EnvMapping\Pantheon;
+use Druidfi\Omen\EnvMapping\Wodby;
+
 class DrupalEnvDetector
 {
   const CMI_PATH = 'conf/cmi';
@@ -9,21 +15,19 @@ class DrupalEnvDetector
   const DS = DIRECTORY_SEPARATOR;
 
   const MAP = [
-    'AMAZEEIO_SITENAME' => 'AmazeeIoLegacy',
-    'LAGOON' => 'Lagoon',
-    'LANDO_INFO' => 'Lando',
-    'PANTHEON_ENVIRONMENT' => 'Pantheon',
-    'WODBY_INSTANCE_TYPE' => 'Wodby',
+    'AMAZEEIO_SITENAME' => AmazeeIoLegacy::class,
+    'LAGOON' => Lagoon::class,
+    'LANDO_INFO' => Lando::class,
+    'PANTHEON_ENVIRONMENT' => Pantheon::class,
+    'WODBY_INSTANCE_TYPE' => Wodby::class,
   ];
 
-  private $drupal7 = FALSE;
   private $config = [];
   private $config_directories = [];
   private $databases = [];
   private $settings = [];
 
-  public function __construct($settings_dir)
-  {
+  public function __construct($settings_dir) {
     global $config, $config_directories, $databases, $settings;
 
     $this->config = &$config;
@@ -31,17 +35,21 @@ class DrupalEnvDetector
     $this->databases = &$databases;
     $this->settings = &$settings;
 
-    $mapping = [];
+    $omens = [];
 
     // Do the detection!
-    foreach (self::MAP as $env_key => $map_key) {
+    foreach (self::MAP as $env_key => $class) {
       if (getenv($env_key)) {
-        $mapping = $this->getMapping($map_key);
+        $omens = (new $class())->getOmens();
         break;
       }
     }
 
-    foreach ($mapping as $var => $val) {
+    if (empty($omens)) {
+      throw new \Exception('No known environment detected');
+    }
+
+    foreach ($omens['envs'] as $var => $val) {
       putenv($var . '='. $val);
     }
 
@@ -81,11 +89,6 @@ class DrupalEnvDetector
       'databases' => (array) $this->databases,
       'settings' => (array) $this->settings,
     ];
-  }
-
-  private function getMapping($system) : array {
-    $map_file = __DIR__ . self::DS . 'EnvMapping' . self::DS . $system . '.php';
-    return require $map_file;
   }
 
   /**
@@ -128,29 +131,24 @@ class DrupalEnvDetector
    * Set global values. Same for all environments.
    */
   private function setGlobalDefaults() {
-    if ($this->drupal7) {
+    // Load curated default values for detected ENV
+    // Set directory for loading CMI configuration.
+    $this->config_directories['config_sync_directory'] = '../' . self::CMI_PATH;
+    // In Drupal 8.8 this is in $settings array.
+    $this->settings['config_sync_directory'] = '../' . self::CMI_PATH;
 
-    }
-    else {
-      // Load curated default values for detected ENV
-      // Set directory for loading CMI configuration.
-      $this->config_directories['config_sync_directory'] = '../' . self::CMI_PATH;
-      // In Drupal 8.8 this is in $settings array.
-      $this->settings['config_sync_directory'] = '../' . self::CMI_PATH;
+    // Hash salt.
+    $this->settings['hash_salt'] = getenv('DRUPAL_HASH_SALT') ?: '0000000000000000';
 
-      // Hash salt.
-      $this->settings['hash_salt'] = getenv('DRUPAL_HASH_SALT') ?: '0000000000000000';
+    // Public files path
+    $this->settings['file_public_path'] = 'sites/default/files';
 
-      // Public files path
-      $this->settings['file_public_path'] = 'sites/default/files';
+    // Private files path
+    $this->settings['file_private_path'] = FALSE;
 
-      // Private files path
-      $this->settings['file_private_path'] = FALSE;
-
-      // Trusted Host Patterns, see https://www.drupal.org/node/2410395 for more information.
-      // If your site runs on multiple domains, you need to add these domains here
-      $host = str_replace('.', '\.', getenv('HOSTNAME'));
-      $this->settings['trusted_host_patterns'][] = '^' . $host . '$';
-    }
+    // Trusted Host Patterns, see https://www.drupal.org/node/2410395 for more information.
+    // If your site runs on multiple domains, you need to add these domains here
+    $host = str_replace('.', '\.', getenv('HOSTNAME'));
+    $this->settings['trusted_host_patterns'][] = '^' . $host . '$';
   }
 }
