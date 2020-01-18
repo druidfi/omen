@@ -3,5 +3,7 @@
 namespace Druidfi\Omen\EnvMapping;
 
 interface EnvMappingInterface {
-  public function getOmens() : array;
+  public function getAppEnv();
+
+  public function getEnvs() : array;
 }

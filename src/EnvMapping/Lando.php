@@ -7,7 +7,7 @@ class Lando extends EnvMappingAbstract
   /**
    * @see https://github.com/lando/lando/blob/master/docs/config/env.md
    */
-  protected function getEnvs() : array {
+  public function getEnvs() : array {
     $lando_info = json_decode(getenv('LANDO_INFO'), TRUE);
 
     return [

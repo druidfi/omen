@@ -4,7 +4,7 @@ namespace Druidfi\Omen\EnvMapping;
 
 class Pantheon extends EnvMappingAbstract
 {
-  protected function getAppEnv() {
+  public function getAppEnv() {
     if (getenv('PANTHEON_ENVIRONMENT') === 'live') {
       return 'prod';
     }
@@ -16,7 +16,7 @@ class Pantheon extends EnvMappingAbstract
   /**
    * @see https://pantheon.io/docs/read-environment-config
    */
-  protected function getEnvs() : array {
+  public function getEnvs() : array {
     return [
       'APP_ENV' => $this->getAppEnv(),
       'HOSTNAME' => getenv('PANTHEON_ENVIRONMENT') .'-'. getenv('PANTHEON_SITE_NAME') . '.pantheon.io',

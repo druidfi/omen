@@ -3,19 +3,13 @@
 namespace Druidfi\Omen\EnvMapping;
 
 abstract class EnvMappingAbstract implements EnvMappingInterface {
-  protected function getAppEnv() {
+  public function getAppEnv() {
     return 'dev';
   }
 
-  protected function getEnvs() : array {
+  public function getEnvs() : array {
     return [
       'APP_ENV' => $this->getAppEnv(),
-    ];
-  }
-
-  public function getOmens() : array {
-    return [
-      'envs' => $this->getEnvs(),
     ];
   }
 }

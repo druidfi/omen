@@ -3,6 +3,7 @@
 namespace Druidfi\Omen;
 
 use Druidfi\Omen\EnvMapping\AmazeeIoLegacy;
+use Druidfi\Omen\EnvMapping\EnvMappingAbstract;
 use Druidfi\Omen\EnvMapping\Lagoon;
 use Druidfi\Omen\EnvMapping\Lando;
 use Druidfi\Omen\EnvMapping\Pantheon;
@@ -25,6 +26,11 @@ class DrupalEnvDetector
   private $config = [];
   private $config_directories = [];
   private $databases = [];
+
+  /**
+   * @var EnvMappingAbstract
+   */
+  private $omen;
   private $settings = [];
 
   public function __construct($settings_dir) {
@@ -35,22 +41,17 @@ class DrupalEnvDetector
     $this->databases = &$databases;
     $this->settings = &$settings;
 
-    $omens = [];
-
     // Do the detection!
     foreach (self::MAP as $env_key => $class) {
       if (getenv($env_key)) {
-        $omens = (new $class())->getOmens();
+        $this->omen = new $class();
         break;
       }
     }
 
-    if (empty($omens)) {
-      throw new \Exception('No known environment detected');
-    }
-
-    foreach ($omens['envs'] as $var => $val) {
-      putenv($var . '='. $val);
+    // Set mapped env variables
+    foreach ($this->omen->getEnvs() as $env_var => $env_val) {
+      putenv($env_var . '='. $env_val);
     }
 
     // APP_ENV: dev|test|prod
@@ -88,22 +89,6 @@ class DrupalEnvDetector
       'config_directories' => (array) $this->config_directories,
       'databases' => (array) $this->databases,
       'settings' => (array) $this->settings,
-    ];
-  }
-
-  /**
-   * Set database connection.
-   */
-  private function setDatabaseConnection() {
-    // DRUPAL_DB_* should be defined at this point.
-    $this->databases['default']['default'] = [
-      'driver' => getenv('DRUPAL_DB_DRIVER') ?: 'mysql',
-      'database' => getenv('DRUPAL_DB_NAME') ?: 'drupal',
-      'username' => getenv('DRUPAL_DB_USER') ?: 'drupal',
-      'password' => getenv('DRUPAL_DB_PASS') ?: 'drupal',
-      'host' => getenv('DRUPAL_DB_HOST') ?: 'db',
-      'port' => getenv('DRUPAL_DB_PORT') ?: 3306,
-      'prefix' => getenv('DRUPAL_DB_PREFIX') ?: '',
     ];
   }
 
@@ -150,5 +135,21 @@ class DrupalEnvDetector
     // If your site runs on multiple domains, you need to add these domains here
     $host = str_replace('.', '\.', getenv('HOSTNAME'));
     $this->settings['trusted_host_patterns'][] = '^' . $host . '$';
+  }
+
+  /**
+   * Set database connection.
+   */
+  private function setDatabaseConnection() {
+    // DRUPAL_DB_* should be defined at this point.
+    $this->databases['default']['default'] = [
+      'driver' => getenv('DRUPAL_DB_DRIVER') ?: 'mysql',
+      'database' => getenv('DRUPAL_DB_NAME') ?: 'drupal',
+      'username' => getenv('DRUPAL_DB_USER') ?: 'drupal',
+      'password' => getenv('DRUPAL_DB_PASS') ?: 'drupal',
+      'host' => getenv('DRUPAL_DB_HOST') ?: 'db',
+      'port' => getenv('DRUPAL_DB_PORT') ?: 3306,
+      'prefix' => getenv('DRUPAL_DB_PREFIX') ?: '',
+    ];
   }
 }

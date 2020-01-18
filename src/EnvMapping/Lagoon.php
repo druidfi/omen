@@ -4,7 +4,7 @@ namespace Druidfi\Omen\EnvMapping;
 
 class Lagoon extends EnvMappingAbstract
 {
-  protected function getAppEnv() {
+  public function getAppEnv() {
     if (getenv('LAGOON_ENVIRONMENT_TYPE') === 'development') {
       return 'dev';
     }
@@ -13,7 +13,7 @@ class Lagoon extends EnvMappingAbstract
     }
   }
 
-  protected function getEnvs() : array {
+  public function getEnvs() : array {
     return [
       'APP_ENV' => $this->getAppEnv(),
       'HOSTNAME' => getenv('HOSTNAME'),

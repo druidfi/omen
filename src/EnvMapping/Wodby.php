@@ -4,14 +4,14 @@ namespace Druidfi\Omen\EnvMapping;
 
 class Wodby extends EnvMappingAbstract
 {
-  protected function getAppEnv() {
+  public function getAppEnv() {
     return getenv('WODBY_INSTANCE_TYPE');
   }
 
   /**
    * @see https://wodby.com/docs/infrastructure/env-vars/
    */
-  protected function getEnvs() : array {
+  public function getEnvs() : array {
     return [
       'APP_ENV' => $this->getAppEnv(),
       'HOSTNAME' => getenv('WODBY_HOST_PRIMARY'),
