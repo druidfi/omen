@@ -99,8 +99,18 @@ class DrupalEnvDetector
    * Print out configuration.
    */
   public function showConfiguration() {
+    $conf = $this->getConfiguration();
+    echo '<h1>APP_ENV: '. $this->app_env .'</h1>';
     echo '<pre>';
-    print_r($this->getConfiguration());
+    echo '<h2>$config</h2>';
+    echo json_encode($conf['config'], JSON_PRETTY_PRINT);
+    echo '<h2>$config_directories</h2>';
+    echo json_encode($conf['config_directories'], JSON_PRETTY_PRINT);
+    echo '<h2>$databases</h2>';
+    echo json_encode($conf['databases'], JSON_PRETTY_PRINT);
+    echo '<h2>$settings</h2>';
+    echo json_encode($conf['settings'], JSON_PRETTY_PRINT);
+    echo '</pre>';
     exit();
   }
 

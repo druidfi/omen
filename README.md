@@ -27,6 +27,15 @@ And then use this as your `sites/default/settings.php`:
 extract((new Druidfi\Omen\DrupalEnvDetector(__DIR__))->getConfiguration());
 ```
 
+Or print out all configuration (aka debug):
+
+```
+<?php
+
+// Print out detected configuration by druidfi/omen
+(new Druidfi\Omen\DrupalEnvDetector(__DIR__))->showConfiguration();
+```
+
 See the whole example [here](settings.php).
 
 ## Known environments
