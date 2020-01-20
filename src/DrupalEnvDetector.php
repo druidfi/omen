@@ -17,8 +17,8 @@ class DrupalEnvDetector
   const DS = DIRECTORY_SEPARATOR;
 
   const MAP = [
+    'LAGOON' => Lagoon::class, // Must be before AmazeeIoLegacy
     'AMAZEEIO_SITENAME' => AmazeeIoLegacy::class,
-    'LAGOON' => Lagoon::class,
     'LANDO_INFO' => Lando::class,
     'PANTHEON_ENVIRONMENT' => Pantheon::class,
     'WODBY_INSTANCE_TYPE' => Wodby::class,
