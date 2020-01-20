@@ -8,6 +8,7 @@ use Druidfi\Omen\EnvMapping\Lagoon;
 use Druidfi\Omen\EnvMapping\Lando;
 use Druidfi\Omen\EnvMapping\Pantheon;
 use Druidfi\Omen\EnvMapping\Wodby;
+use ReflectionClass;
 
 class DrupalEnvDetector
 {
@@ -27,6 +28,7 @@ class DrupalEnvDetector
   private $config = [];
   private $config_directories = [];
   private $databases = [];
+  private $drupal_version = '';
 
   /**
    * @var EnvMappingAbstract
@@ -41,6 +43,9 @@ class DrupalEnvDetector
     $this->config_directories = &$config_directories;
     $this->databases = &$databases;
     $this->settings = &$settings;
+
+    // Detect Drupal version
+    $this->drupal_version = (new ReflectionClass('Drupal'))->getConstants()['VERSION'];
 
     // Do the detection!
     foreach (self::MAP as $env_key => $class) {
@@ -87,12 +92,17 @@ class DrupalEnvDetector
    * @return array
    */
   public function getConfiguration() : array {
-    return [
+    $conf = [
       'config' => (array) $this->config,
-      'config_directories' => (array) $this->config_directories,
       'databases' => (array) $this->databases,
       'settings' => (array) $this->settings,
     ];
+
+    if (!empty($this->config_directories)) {
+      $conf['config_directories'] = (array) $this->config_directories;
+    }
+
+    return $conf;
   }
 
   /**
@@ -100,16 +110,18 @@ class DrupalEnvDetector
    */
   public function showConfiguration() {
     $conf = $this->getConfiguration();
-    echo '<h1>APP_ENV: '. $this->app_env .'</h1>';
+    echo '<h1>Drupal: '. $this->drupal_version .', APP_ENV: '. $this->app_env .'</h1>';
     echo '<pre>';
     echo '<h2>$config</h2>';
     echo json_encode($conf['config'], JSON_PRETTY_PRINT);
-    echo '<h2>$config_directories</h2>';
-    echo json_encode($conf['config_directories'], JSON_PRETTY_PRINT);
     echo '<h2>$databases</h2>';
     echo json_encode($conf['databases'], JSON_PRETTY_PRINT);
     echo '<h2>$settings</h2>';
     echo json_encode($conf['settings'], JSON_PRETTY_PRINT);
+    if (isset($conf['config_directories'])) {
+      echo '<h2>$config_directories (deprecated in Drupal 8.8)</h2>';
+      echo json_encode($conf['config_directories'], JSON_PRETTY_PRINT);
+    }
     echo '</pre>';
     exit();
   }
@@ -137,8 +149,12 @@ class DrupalEnvDetector
    */
   private function setGlobalDefaults() {
     // Load curated default values for detected ENV
+
     // Set directory for loading CMI configuration.
-    $this->config_directories['config_sync_directory'] = '../' . self::CMI_PATH;
+    if (version_compare($this->drupal_version, '8.0.0', '<')) {
+      $this->config_directories['config_sync_directory'] = '../' . self::CMI_PATH;
+    }
+
     // In Drupal 8.8 this is in $settings array.
     $this->settings['config_sync_directory'] = '../' . self::CMI_PATH;
 
