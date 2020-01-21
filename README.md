@@ -67,6 +67,16 @@ Use following ENV variables to set up Drupal in your servers or containers:
 - development: see [src/defaults/dev.php](src/EnvDefaults/dev.php)
 - production: see [src/defaults/prod.php](src/EnvDefaults/prod.php)
 
+See current default values by environment:
+
+Env | Development | Testing | Production
+--- | ------ | ----------- | ---
+`$config['system.logging']['error_level']` | `'all'` | `'hide'` | `'hide'`
+`$config['system.performance']['cache']['page']['max_age']` | `0` | `900` | `900`
+`$config['system.performance']['css']['preprocess']` | `0` | `1` | `1`
+`$config['system.performance']['js']['preprocess']` | `0` | `1` | `1`
+`$settings['skip_permissions_hardening']` | `TRUE` | `FALSE` | `FALSE`
+
 ## TODO
 
 Add support for:
