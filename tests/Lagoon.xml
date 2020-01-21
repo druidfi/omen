@@ -15,11 +15,13 @@
         <env name="AMAZEEIO_SITENAME" value="drupal"/>
         <env name="LAGOON" value="php"/>
         <env name="LAGOON_ENVIRONMENT_TYPE" value="development"/>
+        <env name="LAGOON_PROJECT" value="drupal"/>
         <env name="LAGOON_ROUTES" value="https://nginx-drupal-dev.ch.amazee.io,https://varnish-drupal-dev.ch.amazee.io"/>
         <env name="MARIADB_DATABASE" value="lagoon"/>
         <env name="MARIADB_USERNAME" value="lagoon"/>
         <env name="MARIADB_PASSWORD" value="lagoon"/>
         <env name="MARIADB_HOST" value="db"/>
+        <env name="TMP" value="/tmp"/>
     </php>
     <testsuites>
         <testsuite name="drupal">
