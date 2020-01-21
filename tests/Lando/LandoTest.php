@@ -4,5 +4,5 @@ namespace Druidfi\Omen\Tests;
 
 class LandoTest extends BaseCase
 {
-  protected $expected_host = 'http://drupal.lndo.site';
+  protected $expected_host = 'drupal.lndo.site';
 }

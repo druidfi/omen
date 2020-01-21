@@ -84,7 +84,7 @@ class DrupalEnvDetector
     }
 
     $this->setGlobalDefaults();
-
+    $this->setTrustedHostPatterns();
     $this->setDatabaseConnection();
   }
 
@@ -163,21 +163,31 @@ class DrupalEnvDetector
     // Hash salt.
     $this->settings['hash_salt'] = getenv('DRUPAL_HASH_SALT') ?: '0000000000000000';
 
-    // Public files path
+    // Public files path.
     $this->settings['file_public_path'] = 'sites/default/files';
 
-    // Private files path
+    // Private files path.
     $this->settings['file_private_path'] = FALSE;
+  }
 
-    // Drupal route(s) aka domain(s)
-    $routes = explode(',', getenv('DRUPAL_ROUTES'));
-
+  /**
+   * Set trusted host patterns.
+   *
+   * @see https://www.drupal.org/node/2410395
+   */
+  private function setTrustedHostPatterns() {
     $this->settings['trusted_host_patterns'] = [];
 
+    // Drupal route(s).
+    $routes = (getenv('DRUPAL_ROUTES')) ? explode(',', getenv('DRUPAL_ROUTES')) : [];
+
     foreach ($routes as $route) {
-      // Trusted Host Patterns, see https://www.drupal.org/node/2410395 for more information.
-      // If your site runs on multiple domains, you need to add these domains here
-      $host = str_replace('.', '\.', $route);
+      $host = str_replace('.', '\.', parse_url($route)['host']);
+      $this->settings['trusted_host_patterns'][] = '^' . $host . '$';
+    }
+
+    if (getenv('DRUSH_OPTIONS_URI') && !in_array(getenv('DRUSH_OPTIONS_URI'), $routes)) {
+      $host = str_replace('.', '\.', parse_url(getenv('DRUSH_OPTIONS_URI'))['host']);
       $this->settings['trusted_host_patterns'][] = '^' . $host . '$';
     }
   }
