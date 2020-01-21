@@ -168,6 +168,9 @@ class DrupalEnvDetector
 
     // Private files path.
     $this->settings['file_private_path'] = FALSE;
+
+    // Temp path.
+    $this->config['system.file']['path']['temporary'] = getenv('DRUPAL_TMP_PATH') ?: '/tmp';
   }
 
   /**

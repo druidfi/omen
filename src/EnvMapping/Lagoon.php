@@ -19,7 +19,9 @@ class Lagoon extends EnvMappingAbstract
       'DRUPAL_DB_USER' => getenv('MARIADB_USERNAME'),
       'DRUPAL_DB_PASS' => getenv('MARIADB_PASSWORD'),
       'DRUPAL_DB_HOST' => getenv('MARIADB_HOST'),
+      'DRUPAL_HASH_SALT' => hash('sha256', getenv('LAGOON_PROJECT')),
       'DRUPAL_ROUTES' => getenv('LAGOON_ROUTES'),
+      'DRUPAL_TMP_PATH' => getenv('TMP'),
     ];
   }
 }
