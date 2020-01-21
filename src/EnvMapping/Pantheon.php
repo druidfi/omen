@@ -2,6 +2,8 @@
 
 namespace Druidfi\Omen\EnvMapping;
 
+use Druidfi\Omen\DrupalEnvDetector;
+
 class Pantheon extends EnvMappingAbstract
 {
   public function getAppEnv() {
@@ -9,7 +11,7 @@ class Pantheon extends EnvMappingAbstract
       return getenv('APP_ENV');
     }
     else if (getenv('PANTHEON_ENVIRONMENT') === 'live') {
-      return 'prod';
+      return DrupalEnvDetector::ENV_PRODUCTION;
     }
     else {
       return getenv('PANTHEON_ENVIRONMENT');

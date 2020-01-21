@@ -2,6 +2,8 @@
 
 namespace Druidfi\Omen\EnvMapping;
 
+use Druidfi\Omen\DrupalEnvDetector;
+
 class AmazeeIoLegacy extends EnvMappingAbstract
 {
   public function getAppEnv() {
@@ -9,10 +11,10 @@ class AmazeeIoLegacy extends EnvMappingAbstract
       return getenv('APP_ENV');
     }
     else if (getenv('AMAZEEIO_SITE_ENVIRONMENT') === 'development') {
-      return 'dev';
+      return DrupalEnvDetector::ENV_DEVELOPMENT;
     }
     else if (getenv('AMAZEEIO_SITE_ENVIRONMENT') === 'production') {
-      return 'prod';
+      return DrupalEnvDetector::ENV_PRODUCTION;
     }
   }
 

@@ -13,8 +13,10 @@ use ReflectionClass;
 class DrupalEnvDetector
 {
   const CMI_PATH = 'conf/cmi';
-  const DEFAULT_APP_ENV = 'prod';
+  const DEFAULT_APP_ENV = self::ENV_PRODUCTION;
   const DS = DIRECTORY_SEPARATOR;
+  const ENV_DEVELOPMENT = 'dev';
+  const ENV_PRODUCTION = 'prod';
 
   const MAP = [
     'LAGOON' => Lagoon::class, // Must be before AmazeeIoLegacy

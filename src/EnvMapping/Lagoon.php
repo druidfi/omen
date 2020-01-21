@@ -2,6 +2,8 @@
 
 namespace Druidfi\Omen\EnvMapping;
 
+use Druidfi\Omen\DrupalEnvDetector;
+
 class Lagoon extends EnvMappingAbstract
 {
   public function getAppEnv() {
@@ -9,10 +11,10 @@ class Lagoon extends EnvMappingAbstract
       return getenv('APP_ENV');
     }
     else if (getenv('LAGOON_ENVIRONMENT_TYPE') === 'development') {
-      return 'dev';
+      return DrupalEnvDetector::ENV_DEVELOPMENT;
     }
     else if (getenv('LAGOON_ENVIRONMENT_TYPE') === 'production') {
-      return 'prod';
+      return DrupalEnvDetector::ENV_PRODUCTION;
     }
   }
 
