@@ -6,17 +6,10 @@ use Druidfi\Omen\DrupalEnvDetector;
 
 class Pantheon extends EnvMappingAbstract
 {
-  public function getAppEnv() {
-    if (getenv('APP_ENV')) {
-      return getenv('APP_ENV');
-    }
-    else if (getenv('PANTHEON_ENVIRONMENT') === 'live') {
-      return DrupalEnvDetector::ENV_PRODUCTION;
-    }
-    else {
-      return getenv('PANTHEON_ENVIRONMENT');
-    }
-  }
+  protected $env_name = 'PANTHEON_ENVIRONMENT';
+  protected $env_type_map = [
+    'live' => DrupalEnvDetector::ENV_PRODUCTION,
+  ];
 
   /**
    * @see https://pantheon.io/docs/read-environment-config
@@ -24,12 +17,12 @@ class Pantheon extends EnvMappingAbstract
   public function getEnvs() : array {
     return [
       'APP_ENV' => $this->getAppEnv(),
-      'HOSTNAME' => getenv('PANTHEON_ENVIRONMENT') .'-'. getenv('PANTHEON_SITE_NAME') . '.pantheon.io',
       'DRUPAL_DB_NAME' => getenv('DB_NAME'),
       'DRUPAL_DB_USER' => getenv('DB_USER'),
       'DRUPAL_DB_PASS' => getenv('DB_PASSWORD'),
       'DRUPAL_DB_HOST' => getenv('DB_HOST'),
       'DRUPAL_DB_PORT' => getenv('DB_PORT'),
+      'DRUPAL_ROUTES' => 'http://'. getenv('PANTHEON_ENVIRONMENT') .'-'. getenv('PANTHEON_SITE_NAME') . '.pantheon.io',
     ];
   }
 }

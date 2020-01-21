@@ -169,10 +169,17 @@ class DrupalEnvDetector
     // Private files path
     $this->settings['file_private_path'] = FALSE;
 
-    // Trusted Host Patterns, see https://www.drupal.org/node/2410395 for more information.
-    // If your site runs on multiple domains, you need to add these domains here
-    $host = str_replace('.', '\.', getenv('HOSTNAME'));
-    $this->settings['trusted_host_patterns'][] = '^' . $host . '$';
+    // Drupal route(s) aka domain(s)
+    $routes = explode(',', getenv('DRUPAL_ROUTES'));
+
+    $this->settings['trusted_host_patterns'] = [];
+
+    foreach ($routes as $route) {
+      // Trusted Host Patterns, see https://www.drupal.org/node/2410395 for more information.
+      // If your site runs on multiple domains, you need to add these domains here
+      $host = str_replace('.', '\.', $route);
+      $this->settings['trusted_host_patterns'][] = '^' . $host . '$';
+    }
   }
 
   /**

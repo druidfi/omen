@@ -13,6 +13,7 @@
         <!-- Detectable ENV variables -->
         <env name="WODBY_HOST_PRIMARY" value="local.drupal.com"/>
         <env name="WODBY_INSTANCE_TYPE" value="dev"/>
+        <env name="WODBY_URL_PRIMARY" value="http://dev.drupal.wod.by"/>
         <env name="DB_DRIVER" value="mysql"/>
         <env name="DB_NAME" value="drupal"/>
         <env name="DB_USER" value="drupal"/>

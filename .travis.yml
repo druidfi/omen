@@ -2,14 +2,10 @@ language: php
 dist: trusty
 sudo: false
 
-
 # Supported PHP versions to test with.
 php:
   - 7.2
   - 7.3
-
-env:
-  - HOSTNAME=local.drupal.com
 
 cache:
   directories:

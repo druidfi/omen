@@ -13,6 +13,7 @@
         <!-- Detectable ENV variables -->
         <env name="AMAZEEIO_SITE_ENVIRONMENT" value="development"/>
         <env name="AMAZEEIO_SITENAME" value="drupal"/>
+        <env name="AMAZEEIO_BASE_URL" value="http://mysite.com.develop.zh1.compact.amazee.io"/>
         <env name="AMAZEEIO_DB_USERNAME" value="drupal"/>
         <env name="AMAZEEIO_DB_PASSWORD" value="drupal"/>
         <env name="AMAZEEIO_DB_HOST" value="db"/>

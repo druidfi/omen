@@ -13,4 +13,6 @@ class LagoonTest extends BaseCase
     'port' => '3306',
     'prefix' => '',
   ];
+
+  protected $expected_host = 'https://nginx-drupal-dev.ch.amazee.io';
 }

@@ -19,6 +19,8 @@ abstract class BaseCase extends TestCase
 
   protected $expected_host = 'local.drupal.com';
 
+  protected $config = [];
+
   protected $databases = [];
 
   protected $settings = [];
@@ -29,10 +31,17 @@ abstract class BaseCase extends TestCase
       eval("class Drupal { const VERSION = '8.8.1'; }");
     }
 
+    $detector = new DrupalEnvDetector(__DIR__);
+    $conf = $detector->getConfiguration();
+
+    /** @var array $config */
     /** @var array $settings */
     /** @var array $databases */
-    extract((new DrupalEnvDetector(__DIR__))->getConfiguration());
+    extract($conf);
 
+    //echo json_encode($conf, JSON_PRETTY_PRINT);
+
+    $this->config = $config;
     $this->databases = $databases;
     $this->settings = $settings;
   }
@@ -58,6 +67,24 @@ abstract class BaseCase extends TestCase
   {
     // Test trusted host pattern
     $pattern = '^' . str_replace('.', '\.', $this->expected_host) . '$';
-    $this->assertEquals($pattern, $this->settings['trusted_host_patterns'][0]);
+    $message = print_r($this->settings['trusted_host_patterns'], true);
+    $this->assertContains($pattern, $this->settings['trusted_host_patterns'], $message);
+  }
+
+  public function testConfigDefaults()
+  {
+    $app_env = getenv('APP_ENV');
+
+    $error_level = $this->config['system.logging']['error_level'];
+    $expect = ($app_env === DrupalEnvDetector::ENV_PRODUCTION) ? 'hide' : 'all';
+    $this->assertEquals($expect, $error_level);
+
+    $preprocess_css = $this->config['system.performance']['css']['preprocess'];
+    $expect = ($app_env === DrupalEnvDetector::ENV_DEVELOPMENT) ? 0 : 1;
+    $this->assertEquals($expect, $preprocess_css);
+
+    $preprocess_js = $this->config['system.performance']['js']['preprocess'];
+    $expect = ($app_env === DrupalEnvDetector::ENV_DEVELOPMENT) ? 0 : 1;
+    $this->assertEquals($expect, $preprocess_js);
   }
 }
