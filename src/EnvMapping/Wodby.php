@@ -5,6 +5,10 @@ namespace Druidfi\Omen\EnvMapping;
 class Wodby extends EnvMappingAbstract
 {
   public function getAppEnv() {
+    if (getenv('APP_ENV')) {
+      return getenv('APP_ENV');
+    }
+
     return getenv('WODBY_INSTANCE_TYPE');
   }
 

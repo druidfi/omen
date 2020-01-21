@@ -5,7 +5,10 @@ namespace Druidfi\Omen\EnvMapping;
 class Lagoon extends EnvMappingAbstract
 {
   public function getAppEnv() {
-    if (getenv('LAGOON_ENVIRONMENT_TYPE') === 'development') {
+    if (getenv('APP_ENV')) {
+      return getenv('APP_ENV');
+    }
+    else if (getenv('LAGOON_ENVIRONMENT_TYPE') === 'development') {
       return 'dev';
     }
     else if (getenv('LAGOON_ENVIRONMENT_TYPE') === 'production') {

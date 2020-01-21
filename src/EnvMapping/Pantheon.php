@@ -5,7 +5,10 @@ namespace Druidfi\Omen\EnvMapping;
 class Pantheon extends EnvMappingAbstract
 {
   public function getAppEnv() {
-    if (getenv('PANTHEON_ENVIRONMENT') === 'live') {
+    if (getenv('APP_ENV')) {
+      return getenv('APP_ENV');
+    }
+    else if (getenv('PANTHEON_ENVIRONMENT') === 'live') {
       return 'prod';
     }
     else {

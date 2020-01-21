@@ -5,7 +5,10 @@ namespace Druidfi\Omen\EnvMapping;
 class AmazeeIoLegacy extends EnvMappingAbstract
 {
   public function getAppEnv() {
-    if (getenv('AMAZEEIO_SITE_ENVIRONMENT') === 'development') {
+    if (getenv('APP_ENV')) {
+      return getenv('APP_ENV');
+    }
+    else if (getenv('AMAZEEIO_SITE_ENVIRONMENT') === 'development') {
       return 'dev';
     }
     else if (getenv('AMAZEEIO_SITE_ENVIRONMENT') === 'production') {
@@ -17,7 +20,6 @@ class AmazeeIoLegacy extends EnvMappingAbstract
     return [
       'APP_ENV' => $this->getAppEnv(),
       'HOSTNAME' => getenv('HOSTNAME'),
-      'DRUPAL_DB_DRIVER' => 'mysql',
       'DRUPAL_DB_NAME' => getenv('AMAZEEIO_SITENAME'),
       'DRUPAL_DB_USER' => getenv('AMAZEEIO_DB_USERNAME'),
       'DRUPAL_DB_PASS' => getenv('AMAZEEIO_DB_PASSWORD'),
