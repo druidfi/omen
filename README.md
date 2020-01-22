@@ -46,21 +46,36 @@ See the whole example [here](settings.php).
 - [Pantheon](https://pantheon.io/)
 - [Wodby](https://wodby.com/)
 
-## All other environments
+## What is detected?
 
-Use following ENV variables to set up Drupal in your servers or containers:
+- Database connection
+- Trusted host pattern(s)
+- File paths (public, private, tmp)
+- Hash salt
+- TODO: Solr, Redis
 
-- `APP_ENV` as current environment, e.g. `dev`, `test` or `prod` (default: `prod`)
-- `DRUPAL_DB_DRIVER` as database driver (default: `mysql`)
-- `DRUPAL_DB_NAME` as database name *
-- `DRUPAL_DB_HOST` as database host to connect *
-- `DRUPAL_DB_USER` as database user for connection *
-- `DRUPAL_DB_PASS` as database password for connection *
-- `DRUPAL_DB_PORT` as database port (default: `3306`)
-- `DRUPAL_DB_PREFIX` as database table prefix (default is no prefix)
-- `DRUPAL_HASH_SALT` (default: `0000000000000000`)
+## APP_ENV
 
-`*` required variables
+With `APP_ENV` you can force a running configuration. E.g. you can run with `test` configuration on `dev` environment.
+This means that e.g. the database credentials do not change but caching settings do change.
+
+Values: `dev`, `test` or `prod` (default: `prod`)
+
+## Drupal configuration mapping
+
+Drupal configuration can be overridden using ENV variables.
+
+Variable | ENV override | Default value
+--- | ------ | ---
+`$config['system.file']['path']['temporary']` | `DRUPAL_TMP_PATH` | `'/tmp'`
+`$databases['default']['default']['database']` | `DRUPAL_DB_NAME` | REQUIRED
+`$databases['default']['default']['driver']` | `DRUPAL_DB_DRIVER` | `'mysql'`
+`$databases['default']['default']['host']` | `DRUPAL_DB_HOST` | REQUIRED
+`$databases['default']['default']['password']` | `DRUPAL_DB_PASS` | REQUIRED
+`$databases['default']['default']['port']` | `DRUPAL_DB_PORT` | `3306`
+`$databases['default']['default']['username']` | `DRUPAL_DB_USER` | REQUIRED
+`$settings['hash_salt']` | `DRUPAL_HASH_SALT` | `'0000000000000000'`
+`$settings['config_sync_directory']` | TODO | `'conf/cmi'`
 
 ## Defaults for environment types
 
@@ -69,7 +84,7 @@ Use following ENV variables to set up Drupal in your servers or containers:
 
 See current default values by environment:
 
-Env | Development | Testing | Production
+Variable | Development | Testing | Production
 --- | ------ | ----------- | ---
 `$config['system.logging']['error_level']` | `'all'` | `'hide'` | `'hide'`
 `$config['system.performance']['cache']['page']['max_age']` | `0` | `900` | `900`
