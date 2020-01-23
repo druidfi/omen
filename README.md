@@ -80,8 +80,9 @@ Variable | ENV override | Default value
 
 ## Defaults for environment types
 
-- development: see [src/defaults/dev.php](src/EnvDefaults/dev.php)
-- production: see [src/defaults/prod.php](src/EnvDefaults/prod.php)
+- development: see [src/defaults/DevDefaults.php](src/EnvDefaults/DevDefaults.php)
+- testing: see [src/defaults/TestDefaults.php](src/EnvDefaults/TestDefaults.php)
+- production: see [src/defaults/ProdDefaults.php](src/EnvDefaults/ProdDefaults.php)
 
 See current default values by environment:
 

@@ -2,6 +2,8 @@
 
 namespace Druidfi\Omen;
 
+use Druidfi\Omen\EnvDefaults\AbstractDefaults;
+use Druidfi\Omen\EnvDefaults\DevDefaults;
 use Druidfi\Omen\EnvMapping\AmazeeIoLegacy;
 use Druidfi\Omen\EnvMapping\EnvMappingAbstract;
 use Druidfi\Omen\EnvMapping\Lagoon;
@@ -132,12 +134,10 @@ class DrupalEnvDetector
    * Set ENV specific default values.
    */
   private function setEnvDefaults() {
-    $defaults_path = __DIR__ . self::DS . 'EnvDefaults' . self::DS;
-    $defaults_file = $this->app_env . '.php';
+    $class = "Druidfi\Omen\EnvDefaults\\". ucfirst($this->app_env) ."Defaults";
+    $env_defaults = (new $class())->getDefaults();
 
-    $defaults = require $defaults_path . $defaults_file;
-
-    foreach ($defaults as $set => $values) {
+    foreach ($env_defaults as $set => $values) {
       if (!is_array($this->{$set})) {
         $this->{$set} = [];
       }
