@@ -149,8 +149,10 @@ class DrupalEnvDetector
    * Set global values. Same for all environments.
    */
   private function setGlobalDefaults() {
+    $older_than_88 = version_compare($this->drupal_version, '8.0.0', '<');
+
     // Set directory for loading CMI configuration.
-    if (version_compare($this->drupal_version, '8.0.0', '<')) {
+    if ($older_than_88) {
       $this->config_directories['config_sync_directory'] = '../' . self::CMI_PATH;
     }
 
@@ -167,7 +169,11 @@ class DrupalEnvDetector
     $this->settings['file_private_path'] = getenv('DRUPAL_FILES_PRIVATE') ?: FALSE;
 
     // Temp path.
-    $this->config['system.file']['path']['temporary'] = getenv('DRUPAL_TMP_PATH') ?: '/tmp';
+    if ($older_than_88) {
+      $this->config['system.file']['path']['temporary'] = getenv('DRUPAL_TMP_PATH') ?: '/tmp';
+    }
+
+    $this->settings['file_temp_path'] = getenv('DRUPAL_TMP_PATH') ?: '/tmp';
   }
 
   /**

@@ -76,7 +76,9 @@ Variable | ENV override | Default value
 `$settings['config_sync_directory']` | TODO | `'conf/cmi'`
 `$settings['file_public_path']` | - | `'sites/default/files'`
 `$settings['file_private_path']` | `DRUPAL_FILES_PRIVATE` | `FALSE`
+`$settings['file_temp_path']` | `DRUPAL_TMP_PATH` | `'/tmp'`
 `$settings['hash_salt']` | `DRUPAL_HASH_SALT` | `'0000000000000000'`
+
 :heavy_multiplication_x: Detected or required
 
 ## Defaults for environment types
