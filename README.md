@@ -73,9 +73,10 @@ Variable | ENV override | Default value
 `$databases['default']['default']['password']` | `DRUPAL_DB_PASS` | :heavy_multiplication_x:
 `$databases['default']['default']['port']` | `DRUPAL_DB_PORT` | `3306`
 `$databases['default']['default']['username']` | `DRUPAL_DB_USER` | :heavy_multiplication_x:
-`$settings['hash_salt']` | `DRUPAL_HASH_SALT` | `'0000000000000000'`
 `$settings['config_sync_directory']` | TODO | `'conf/cmi'`
-
+`$settings['file_public_path']` | - | `'sites/default/files'`
+`$settings['file_private_path']` | `DRUPAL_FILES_PRIVATE` | `FALSE`
+`$settings['hash_salt']` | `DRUPAL_HASH_SALT` | `'0000000000000000'`
 :heavy_multiplication_x: Detected or required
 
 ## Defaults for environment types
@@ -98,9 +99,10 @@ Variable | Development | Testing | Production
 
 Add support for:
 
-- Detect e.g. Solr and Redis configuration where available
+- Detect e.g. Solr, Redis and Varnish configuration where available
 - Drupal VM
 - Other dev tools and hosting environments
+- Default values for some contrib modules
 
 ## Where the name "Omen" comes from?
 

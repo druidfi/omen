@@ -2,8 +2,6 @@
 
 namespace Druidfi\Omen;
 
-use Druidfi\Omen\EnvDefaults\AbstractDefaults;
-use Druidfi\Omen\EnvDefaults\DevDefaults;
 use Druidfi\Omen\EnvMapping\AmazeeIoLegacy;
 use Druidfi\Omen\EnvMapping\EnvMappingAbstract;
 use Druidfi\Omen\EnvMapping\Lagoon;
@@ -48,13 +46,14 @@ class DrupalEnvDetector
     $this->databases = &$databases;
     $this->settings = &$settings;
 
-    // Detect Drupal version
+    // Detect Drupal version.
     $this->drupal_version = (new ReflectionClass('Drupal'))->getConstants()['VERSION'];
 
     // Do the detection!
     foreach (self::MAP as $env_key => $class) {
       if (getenv($env_key)) {
         $this->omen = new $class();
+        // Break on first detected.
         break;
       }
     }
@@ -150,8 +149,6 @@ class DrupalEnvDetector
    * Set global values. Same for all environments.
    */
   private function setGlobalDefaults() {
-    // Load curated default values for detected ENV
-
     // Set directory for loading CMI configuration.
     if (version_compare($this->drupal_version, '8.0.0', '<')) {
       $this->config_directories['config_sync_directory'] = '../' . self::CMI_PATH;
@@ -167,7 +164,7 @@ class DrupalEnvDetector
     $this->settings['file_public_path'] = 'sites/default/files';
 
     // Private files path.
-    $this->settings['file_private_path'] = FALSE;
+    $this->settings['file_private_path'] = getenv('DRUPAL_FILES_PRIVATE') ?: FALSE;
 
     // Temp path.
     $this->config['system.file']['path']['temporary'] = getenv('DRUPAL_TMP_PATH') ?: '/tmp';
