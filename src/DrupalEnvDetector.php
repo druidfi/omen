@@ -149,11 +149,11 @@ class DrupalEnvDetector
    * Set global values. Same for all environments.
    */
   private function setGlobalDefaults() {
-    $older_than_88 = version_compare($this->drupal_version, '8.0.0', '<');
+    $older_than_88 = version_compare($this->drupal_version, '8.8.0', '<');
 
     // Set directory for loading CMI configuration.
     if ($older_than_88) {
-      $this->config_directories['config_sync_directory'] = '../' . self::CMI_PATH;
+      $this->config_directories['sync'] = '../' . self::CMI_PATH;
     }
 
     // In Drupal 8.8 this is in $settings array.
