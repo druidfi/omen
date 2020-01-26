@@ -1,11 +1,12 @@
 language: php
-dist: trusty
+dist: bionic
 sudo: false
 
 # Supported PHP versions to test with.
 php:
   - 7.2
   - 7.3
+  - 7.4
 
 cache:
   directories:
