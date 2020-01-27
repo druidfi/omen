@@ -20,8 +20,15 @@ class Lagoon extends EnvMappingAbstract
       'DRUPAL_DB_PASS' => getenv('MARIADB_PASSWORD'),
       'DRUPAL_DB_HOST' => getenv('MARIADB_HOST'),
       'DRUPAL_HASH_SALT' => hash('sha256', getenv('LAGOON_PROJECT')),
-      'DRUPAL_ROUTES' => getenv('LAGOON_ROUTES'),
+      'DRUPAL_ROUTES' => $this->getRoutes(),
       'DRUPAL_TMP_PATH' => getenv('TMP'),
     ];
+  }
+
+  protected function getRoutes() {
+    $routes_string = getenv('LAGOON_ROUTE') .','. getenv('LAGOON_ROUTES');
+    $routes = explode(',', $routes_string);
+    $routes = array_filter(array_unique($routes));
+    return join(',', $routes);
   }
 }
