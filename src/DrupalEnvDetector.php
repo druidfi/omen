@@ -113,7 +113,7 @@ class DrupalEnvDetector
    */
   public function showConfiguration() {
     $conf = $this->getConfiguration();
-    echo '<h1>Drupal: '. $this->drupal_version .', APP_ENV: '. $this->app_env .'</h1>';
+    echo '<h1>Drupal: '. $this->drupal_version .', APP_ENV: '. $this->app_env .' on '. get_class($this->omen) .'</h1>';
     echo '<pre>';
     echo '<h2>$config</h2>';
     echo json_encode($conf['config'], JSON_PRETTY_PRINT);
@@ -195,6 +195,11 @@ class DrupalEnvDetector
     if (getenv('DRUSH_OPTIONS_URI') && !in_array(getenv('DRUSH_OPTIONS_URI'), $routes)) {
       $host = str_replace('.', '\.', parse_url(getenv('DRUSH_OPTIONS_URI'))['host']);
       $this->settings['trusted_host_patterns'][] = '^' . $host . '$';
+    }
+
+    if (method_exists($this->omen, 'getTrustedHostPatterns')) {
+      $patterns = $this->omen->getTrustedHostPatterns();
+      $this->settings['trusted_host_patterns'] = array_merge($this->settings['trusted_host_patterns'], $patterns);
     }
   }
 

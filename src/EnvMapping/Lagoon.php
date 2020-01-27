@@ -31,4 +31,10 @@ class Lagoon extends EnvMappingAbstract
     $routes = array_filter(array_unique($routes));
     return join(',', $routes);
   }
+
+  public function getTrustedHostPatterns() {
+    return [
+      '^.+\.docker\.amazee\.io$',
+    ];
+  }
 }

@@ -24,4 +24,10 @@ class AmazeeIoLegacy extends EnvMappingAbstract
       'DRUPAL_TMP_PATH' => getenv('AMAZEEIO_TMP_PATH'),
     ];
   }
+
+  public function getTrustedHostPatterns() {
+    return [
+      '^.+\.docker\.amazee\.io$',
+    ];
+  }
 }
