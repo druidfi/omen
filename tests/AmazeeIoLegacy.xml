@@ -19,6 +19,7 @@
         <env name="AMAZEEIO_DB_HOST" value="db"/>
         <env name="AMAZEEIO_DB_PORT" value="3306"/>
         <env name="AMAZEEIO_TMP_PATH" value="/tmp"/>
+        <env name="AMAZEEIO_HASH_SALT" value="hash"/>
     </php>
     <testsuites>
         <testsuite name="drupal">

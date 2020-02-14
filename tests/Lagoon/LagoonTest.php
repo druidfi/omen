@@ -15,4 +15,6 @@ class LagoonTest extends BaseCase
   ];
 
   protected $expected_host = 'nginx-drupal-dev.ch.amazee.io';
+
+  protected $expected_hash_salt = '1a16b869ad6213440f9466338d3066fdf7d5addab8855fc3cc9928258ccbbeb0';
 }

@@ -19,6 +19,8 @@ abstract class BaseCase extends TestCase
 
   protected $expected_host = 'local.drupal.com';
 
+  protected $expected_hash_salt = "hash";
+
   protected $config = [];
 
   protected $databases = [];
@@ -69,6 +71,17 @@ abstract class BaseCase extends TestCase
     $pattern = '^' . str_replace('.', '\.', $this->expected_host) . '$';
     $message = print_r($this->settings['trusted_host_patterns'], true);
     $this->assertContains($pattern, $this->settings['trusted_host_patterns'], $message);
+  }
+
+  public function testHash()
+  {
+    if ($this->expected_hash_salt) {
+      $this->assertEquals($this->expected_hash_salt, $this->settings['hash_salt']);
+    }
+    // Do not test if explicitly set to null in the test class.
+    else {
+      $this->assertTrue(TRUE);
+    }
   }
 
   public function testConfigDefaults()
