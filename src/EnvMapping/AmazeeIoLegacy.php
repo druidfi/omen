@@ -22,6 +22,7 @@ class AmazeeIoLegacy extends EnvMappingAbstract
       'DRUPAL_DB_PORT' => getenv('AMAZEEIO_DB_PORT'),
       'DRUPAL_ROUTES' => getenv('AMAZEEIO_BASE_URL'),
       'DRUPAL_TMP_PATH' => getenv('AMAZEEIO_TMP_PATH'),
+      'DRUPAL_HASH_SALT' => getenv('AMAZEEIO_HASH_SALT'),
     ];
   }
 
