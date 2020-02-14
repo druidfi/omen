@@ -78,6 +78,10 @@ abstract class BaseCase extends TestCase
     if ($this->expected_hash_salt) {
       $this->assertEquals($this->expected_hash_salt, $this->settings['hash_salt']);
     }
+    // Do not test if explicitly set to null in the test class.
+    else {
+      $this->assertTrue(TRUE);
+    }
   }
 
   public function testConfigDefaults()
