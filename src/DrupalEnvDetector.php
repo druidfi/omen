@@ -160,20 +160,20 @@ class DrupalEnvDetector
     $this->settings['config_sync_directory'] = '../' . self::CMI_PATH;
 
     // Hash salt.
-    $this->settings['hash_salt'] = getenv('DRUPAL_HASH_SALT') ?: '0000000000000000';
+    $this->settings['hash_salt'] = getenv('DRUPAL_HASH_SALT') ?: $this->settings['hash_salt'] ?? '0000000000000000';
 
     // Public files path.
-    $this->settings['file_public_path'] = 'sites/default/files';
+    $this->settings['file_public_path'] = $this->settings['file_public_path'] ?? 'sites/default/files';
 
     // Private files path.
-    $this->settings['file_private_path'] = getenv('DRUPAL_FILES_PRIVATE') ?: FALSE;
+    $this->settings['file_private_path'] = getenv('DRUPAL_FILES_PRIVATE') ?: $this->settings['file_private_path'] ?? FALSE;
 
     // Temp path.
-    if ($older_than_88) {
-      $this->config['system.file']['path']['temporary'] = getenv('DRUPAL_TMP_PATH') ?: '/tmp';
-    }
+    $this->settings['file_temp_path'] = getenv('DRUPAL_TMP_PATH') ?: $this->settings['file_temp_path'] ?? '/tmp';
 
-    $this->settings['file_temp_path'] = getenv('DRUPAL_TMP_PATH') ?: '/tmp';
+    if ($older_than_88) {
+      $this->config['system.file']['path']['temporary'] = $this->settings['file_temp_path'];
+    }
   }
 
   /**
