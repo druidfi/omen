@@ -184,18 +184,27 @@ class DrupalEnvDetector
    */
   private function setTrustedHostPatterns() {
     $this->settings['trusted_host_patterns'] = [];
+    $hosts = [];
 
     // Drupal route(s).
     $routes = (getenv('DRUPAL_ROUTES')) ? explode(',', getenv('DRUPAL_ROUTES')) : [];
 
     foreach ($routes as $route) {
-      $host = str_replace('.', '\.', parse_url($route)['host']);
+      $hosts[] = $host = parse_url($route)['host'];
+      $trusted_host = str_replace('.', '\.', $host);
+      $this->settings['trusted_host_patterns'][] = '^' . $trusted_host . '$';
+    }
+
+    $drush_options_uri = getenv('DRUSH_OPTIONS_URI');
+
+    if ($drush_options_uri && !in_array($drush_options_uri, $routes)) {
+      $host = str_replace('.', '\.', parse_url($drush_options_uri)['host']);
       $this->settings['trusted_host_patterns'][] = '^' . $host . '$';
     }
 
-    if (getenv('DRUSH_OPTIONS_URI') && !in_array(getenv('DRUSH_OPTIONS_URI'), $routes)) {
-      $host = str_replace('.', '\.', parse_url(getenv('DRUSH_OPTIONS_URI'))['host']);
-      $this->settings['trusted_host_patterns'][] = '^' . $host . '$';
+    // If not explicitly set, use first host as DRUSH_OPTIONS_URI
+    if (!$drush_options_uri) {
+      putenv('DRUSH_OPTIONS_URI=http://' . $hosts[0]);
     }
 
     if (method_exists($this->omen, 'getTrustedHostPatterns')) {
