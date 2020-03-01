@@ -30,11 +30,21 @@
   "prefer-stable": true,
   "scripts": {
     "test": [
-      "phpunit --debug --verbose --configuration tests/AmazeeIoLegacy.xml",
-      "phpunit --debug --verbose --configuration tests/Lagoon.xml",
-      "phpunit --debug --verbose --configuration tests/Lando.xml",
-      "phpunit --debug --verbose --configuration tests/Pantheon.xml",
-      "phpunit --debug --verbose --configuration tests/Wodby.xml"
+      "APP_ENV=dev phpunit --debug --verbose --configuration tests/AmazeeIoLegacy.xml",
+      "APP_ENV=test phpunit --debug --verbose --configuration tests/AmazeeIoLegacy.xml",
+      "APP_ENV=prod phpunit --debug --verbose --configuration tests/AmazeeIoLegacy.xml",
+      "APP_ENV=dev phpunit --debug --verbose --configuration tests/Lagoon.xml",
+      "APP_ENV=test phpunit --debug --verbose --configuration tests/Lagoon.xml",
+      "APP_ENV=prod phpunit --debug --verbose --configuration tests/Lagoon.xml",
+      "APP_ENV=dev phpunit --debug --verbose --configuration tests/Lando.xml",
+      "APP_ENV=test phpunit --debug --verbose --configuration tests/Lando.xml",
+      "APP_ENV=prod phpunit --debug --verbose --configuration tests/Lando.xml",
+      "APP_ENV=dev phpunit --debug --verbose --configuration tests/Pantheon.xml",
+      "APP_ENV=test phpunit --debug --verbose --configuration tests/Pantheon.xml",
+      "APP_ENV=prod phpunit --debug --verbose --configuration tests/Pantheon.xml",
+      "APP_ENV=dev phpunit --debug --verbose --configuration tests/Wodby.xml",
+      "APP_ENV=test phpunit --debug --verbose --configuration tests/Wodby.xml",
+      "APP_ENV=prod phpunit --debug --verbose --configuration tests/Wodby.xml"
     ]
   }
 }

@@ -6,10 +6,22 @@ abstract class AbstractDefaults {
   protected $config = [];
   protected $settings = [];
 
-  public function getDefaults() {
+  public function getDefaults() : array {
+    $contrib_module_defaults = $this->getContribModuleDefaults();
+
+    $config = array_merge($this->config, $contrib_module_defaults['config']);
+    $settings = array_merge($this->settings, $contrib_module_defaults['settings']);
+
     return [
-      'config' => $this->config,
-      'settings' => $this->settings,
+      'config' => $config,
+      'settings' => $settings,
+    ];
+  }
+
+  protected function getContribModuleDefaults() : array {
+    return [
+      'config' => [],
+      'settings' => [],
     ];
   }
 }

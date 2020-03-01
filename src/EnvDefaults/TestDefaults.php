@@ -19,4 +19,14 @@ class TestDefaults extends AbstractDefaults {
 
     $this->config = $config;
   }
+
+  protected function getContribModuleDefaults() : array {
+    // Simple Environment Indicator.
+    $settings['simple_environment_indicator'] = 'Blue Testing';
+
+    return [
+      'config' => [],
+      'settings' => $settings,
+    ];
+  }
 }

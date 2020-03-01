@@ -30,7 +30,7 @@ abstract class BaseCase extends TestCase
   protected function setUp(): void
   {
     if (!class_exists('Drupal')) {
-      eval("class Drupal { const VERSION = '8.8.1'; }");
+      eval("class Drupal { const VERSION = '8.8.2'; }");
     }
 
     $detector = new DrupalEnvDetector(__DIR__);
@@ -89,7 +89,7 @@ abstract class BaseCase extends TestCase
     $app_env = getenv('APP_ENV');
 
     $error_level = $this->config['system.logging']['error_level'];
-    $expect = ($app_env === DrupalEnvDetector::ENV_PRODUCTION) ? 'hide' : 'all';
+    $expect = ($app_env === DrupalEnvDetector::ENV_DEVELOPMENT) ? 'all' : 'hide';
     $this->assertEquals($expect, $error_level);
 
     $preprocess_css = $this->config['system.performance']['css']['preprocess'];
@@ -99,5 +99,17 @@ abstract class BaseCase extends TestCase
     $preprocess_js = $this->config['system.performance']['js']['preprocess'];
     $expect = ($app_env === DrupalEnvDetector::ENV_DEVELOPMENT) ? 0 : 1;
     $this->assertEquals($expect, $preprocess_js);
+  }
+
+  public function testSimpleEnvironmentIndicator()
+  {
+    $app_env = getenv('APP_ENV');
+    $value = $this->settings['simple_environment_indicator'] ?: FALSE;
+    $expect = [
+      'dev' => 'Black Development',
+      'test' => 'Blue Testing',
+      'prod' => 'DarkRed Production',
+    ];
+    $this->assertEquals($expect[$app_env], $value);
   }
 }

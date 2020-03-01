@@ -23,4 +23,14 @@ class DevDefaults extends AbstractDefaults {
     $this->config = $config;
     $this->settings = $settings;
   }
+
+  protected function getContribModuleDefaults() : array {
+    // Simple Environment Indicator.
+    $settings['simple_environment_indicator'] = 'Black Development';
+
+    return [
+      'config' => [],
+      'settings' => $settings,
+    ];
+  }
 }

@@ -19,4 +19,14 @@ class ProdDefaults extends AbstractDefaults {
 
     $this->config = $config;
   }
+
+  protected function getContribModuleDefaults() : array {
+    // Simple Environment Indicator.
+    $settings['simple_environment_indicator'] = 'DarkRed Production';
+
+    return [
+      'config' => [],
+      'settings' => $settings,
+    ];
+  }
 }
