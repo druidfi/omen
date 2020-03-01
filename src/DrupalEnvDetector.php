@@ -46,6 +46,12 @@ class DrupalEnvDetector
     $this->databases = &$databases;
     $this->settings = &$settings;
 
+    // Handle HTTPS
+    if (getenv('HTTPS') !== 'on' && getenv('HTTP_X_FORWARDED_PROTO') === 'https') {
+      $_SERVER['HTTPS'] = 'on';
+      $_SERVER["SERVER_PORT"] = getenv('HTTP_X_FORWARDED_PORT') ?: 443;
+    }
+
     // Detect Drupal version.
     $this->drupal_version = (new ReflectionClass('Drupal'))->getConstants()['VERSION'];
 

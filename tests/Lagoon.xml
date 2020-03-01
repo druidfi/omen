@@ -22,6 +22,8 @@
         <env name="MARIADB_PASSWORD" value="lagoon"/>
         <env name="MARIADB_HOST" value="db"/>
         <env name="TMP" value="/tmp"/>
+        <!-- Detectable SERVER variables -->
+        <server name="HTTP_X_FORWARDED_PROTO" value="https"/>
     </php>
     <testsuites>
         <testsuite name="drupal">
