@@ -1,50 +1,71 @@
 {
-  "name": "druidfi/omen",
-  "type": "library",
-  "description": "",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Druid.fi",
-      "email": "info@druid.fi"
+    "name": "druidfi/omen",
+    "type": "library",
+    "description": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Druid.fi",
+            "email": "info@druid.fi"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Druidfi\\Omen\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Druidfi\\Omen\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.1"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16.0",
+        "phpunit/phpunit": "^8.5.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "test": [
+            "@test-amazeeio-legacy",
+            "@test-amazeeio-lagoon",
+            "@test-ddev",
+            "@test-lando",
+            "@test-pantheon",
+            "@test-wodby"
+        ],
+        "test-amazeeio-legacy": [
+            "APP_ENV=dev phpunit --debug --verbose --configuration tests/AmazeeIoLegacy.xml",
+            "APP_ENV=test phpunit --debug --verbose --configuration tests/AmazeeIoLegacy.xml",
+            "APP_ENV=prod phpunit --debug --verbose --configuration tests/AmazeeIoLegacy.xml"
+        ],
+        "test-amazeeio-lagoon": [
+            "APP_ENV=dev phpunit --debug --verbose --configuration tests/Lagoon.xml",
+            "APP_ENV=test phpunit --debug --verbose --configuration tests/Lagoon.xml",
+            "APP_ENV=prod phpunit --debug --verbose --configuration tests/Lagoon.xml"
+        ],
+        "test-ddev": [
+            "APP_ENV=dev phpunit --debug --verbose --configuration tests/Ddev.xml",
+            "APP_ENV=test phpunit --debug --verbose --configuration tests/Ddev.xml",
+            "APP_ENV=prod phpunit --debug --verbose --configuration tests/Ddev.xml"
+        ],
+        "test-lando": [
+            "APP_ENV=dev phpunit --debug --verbose --configuration tests/Lando.xml",
+            "APP_ENV=test phpunit --debug --verbose --configuration tests/Lando.xml",
+            "APP_ENV=prod phpunit --debug --verbose --configuration tests/Lando.xml"
+        ],
+        "test-pantheon": [
+            "APP_ENV=dev phpunit --debug --verbose --configuration tests/Pantheon.xml",
+            "APP_ENV=test phpunit --debug --verbose --configuration tests/Pantheon.xml",
+            "APP_ENV=prod phpunit --debug --verbose --configuration tests/Pantheon.xml"
+        ],
+        "test-wodby": [
+            "APP_ENV=dev phpunit --debug --verbose --configuration tests/Wodby.xml",
+            "APP_ENV=test phpunit --debug --verbose --configuration tests/Wodby.xml",
+            "APP_ENV=prod phpunit --debug --verbose --configuration tests/Wodby.xml"
+        ]
     }
-  ],
-  "autoload": {
-    "psr-4": {
-      "Druidfi\\Omen\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Druidfi\\Omen\\Tests\\": "tests/"
-    }
-  },
-  "require": {
-    "php": "^7.1"
-  },
-  "require-dev": {
-    "friendsofphp/php-cs-fixer": "^2.16.0",
-    "phpunit/phpunit": "^8.5.0"
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
-  "scripts": {
-    "test": [
-      "APP_ENV=dev phpunit --debug --verbose --configuration tests/AmazeeIoLegacy.xml",
-      "APP_ENV=test phpunit --debug --verbose --configuration tests/AmazeeIoLegacy.xml",
-      "APP_ENV=prod phpunit --debug --verbose --configuration tests/AmazeeIoLegacy.xml",
-      "APP_ENV=dev phpunit --debug --verbose --configuration tests/Lagoon.xml",
-      "APP_ENV=test phpunit --debug --verbose --configuration tests/Lagoon.xml",
-      "APP_ENV=prod phpunit --debug --verbose --configuration tests/Lagoon.xml",
-      "APP_ENV=dev phpunit --debug --verbose --configuration tests/Lando.xml",
-      "APP_ENV=test phpunit --debug --verbose --configuration tests/Lando.xml",
-      "APP_ENV=prod phpunit --debug --verbose --configuration tests/Lando.xml",
-      "APP_ENV=dev phpunit --debug --verbose --configuration tests/Pantheon.xml",
-      "APP_ENV=test phpunit --debug --verbose --configuration tests/Pantheon.xml",
-      "APP_ENV=prod phpunit --debug --verbose --configuration tests/Pantheon.xml",
-      "APP_ENV=dev phpunit --debug --verbose --configuration tests/Wodby.xml",
-      "APP_ENV=test phpunit --debug --verbose --configuration tests/Wodby.xml",
-      "APP_ENV=prod phpunit --debug --verbose --configuration tests/Wodby.xml"
-    ]
-  }
 }

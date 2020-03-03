@@ -3,6 +3,7 @@
 namespace Druidfi\Omen;
 
 use Druidfi\Omen\EnvMapping\AmazeeIoLegacy;
+use Druidfi\Omen\EnvMapping\Ddev;
 use Druidfi\Omen\EnvMapping\EnvMappingAbstract;
 use Druidfi\Omen\EnvMapping\Lagoon;
 use Druidfi\Omen\EnvMapping\Lando;
@@ -21,6 +22,7 @@ class DrupalEnvDetector
   const MAP = [
     'LAGOON' => Lagoon::class, // Must be before AmazeeIoLegacy
     'AMAZEEIO_SITENAME' => AmazeeIoLegacy::class,
+    'IS_DDEV_PROJECT' => Ddev::class,
     'LANDO_INFO' => Lando::class,
     'PANTHEON_ENVIRONMENT' => Pantheon::class,
     'WODBY_INSTANCE_TYPE' => Wodby::class,

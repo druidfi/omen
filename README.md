@@ -42,8 +42,9 @@ See the whole example [here](settings.php).
 
 - [Amazee.io Lagoon](https://lagoon.readthedocs.io/)
 - [Amazee.io Legacy](https://docs.amazee.io/)
-- [Lando](https://lando.dev/)
-- [Pantheon](https://pantheon.io/)
+- [DDEV](https://ddev.readthedocs.io/en/latest/) - Work in Progress
+- [Lando](https://lando.dev/) - Work in Progress
+- [Pantheon](https://pantheon.io/) - Work in Progress
 - [Wodby](https://wodby.com/)
 
 ## What is detected?
