@@ -24,8 +24,11 @@ class ProdDefaults extends AbstractDefaults {
     // Simple Environment Indicator.
     $settings['simple_environment_indicator'] = 'DarkRed Production';
 
+    // Stage File Proxy
+    $config['stage_file_proxy.settings']['origin'] = FALSE;
+
     return [
-      'config' => [],
+      'config' => $config,
       'settings' => $settings,
     ];
   }
