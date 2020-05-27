@@ -54,6 +54,12 @@ class DrupalEnvDetector
       $_SERVER["SERVER_PORT"] = getenv('HTTP_X_FORWARDED_PORT') ?: 443;
     }
 
+    // Set reverse proxy
+    if ($_SERVER['REMOTE_ADDR'] !== $_SERVER['HTTP_X_FORWARDED_FOR']) {
+      $settings['reverse_proxy'] = TRUE;
+      $settings['reverse_proxy_addresses'] = [$_SERVER['REMOTE_ADDR']];
+    }
+
     // Detect Drupal version.
     $this->drupal_version = (new ReflectionClass('Drupal'))->getConstants()['VERSION'];
 

@@ -42,7 +42,7 @@ See the whole example [here](settings.php).
 
 - [Amazee.io Lagoon](https://lagoon.readthedocs.io/)
 - [Amazee.io Legacy](https://docs.amazee.io/)
-- [DDEV](https://ddev.readthedocs.io/en/latest/) - Work in Progress
+- [DDEV Local](https://ddev.readthedocs.io/en/latest/) - Work in Progress
 - [Lando](https://lando.dev/) - Work in Progress
 - [Pantheon](https://pantheon.io/) - Work in Progress
 - [Wodby](https://wodby.com/)
@@ -53,6 +53,8 @@ See the whole example [here](settings.php).
 - Trusted host pattern(s)
 - File paths (public, private, tmp)
 - Hash salt
+- Contrib module settings (which are affected by env)
+  - [Simple Environment Indicator](https://www.drupal.org/project/simplei)
 
 ## APP_ENV
 
