@@ -55,7 +55,7 @@ class DrupalEnvDetector
     }
 
     // Set reverse proxy
-    if (isset($_SERVER['REMOTE_ADDR'])) {
+    if (isset($_SERVER['REMOTE_ADDR']) && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
       if ($_SERVER['REMOTE_ADDR'] !== $_SERVER['HTTP_X_FORWARDED_FOR']) {
         $settings['reverse_proxy'] = TRUE;
         $settings['reverse_proxy_addresses'] = [$_SERVER['REMOTE_ADDR']];
