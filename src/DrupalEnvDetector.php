@@ -59,6 +59,9 @@ class DrupalEnvDetector
       if ($_SERVER['REMOTE_ADDR'] !== $_SERVER['HTTP_X_FORWARDED_FOR']) {
         $settings['reverse_proxy'] = TRUE;
         $settings['reverse_proxy_addresses'] = [$_SERVER['REMOTE_ADDR']];
+
+        // Set reverse proxy header to make the site functional on Varnish.
+        $settings['reverse_proxy_header'] = 'X_FORWARDED';
       }
     }
 
