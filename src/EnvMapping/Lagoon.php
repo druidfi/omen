@@ -4,6 +4,9 @@ namespace Druidfi\Omen\EnvMapping;
 
 use Druidfi\Omen\DrupalEnvDetector;
 
+/**
+ * @see https://github.com/amazeeio/drupal-example/blob/master/web/sites/default/settings.php
+ */
 class Lagoon extends EnvMappingAbstract
 {
   protected $env_name = 'LAGOON_ENVIRONMENT_TYPE';
@@ -11,6 +14,29 @@ class Lagoon extends EnvMappingAbstract
     'development' => DrupalEnvDetector::ENV_DEVELOPMENT,
     'production' => DrupalEnvDetector::ENV_PRODUCTION,
   ];
+
+  public function getConfiguration() : array {
+    $config = [];
+
+    if (getenv('SOLR_HOST')) {
+      $config['search_api.server.solr']['backend_config']['connector_config']['host'] = getenv('SOLR_HOST') ?: 'solr';
+      $config['search_api.server.solr']['backend_config']['connector_config']['path'] = '/solr/';
+      $config['search_api.server.solr']['backend_config']['connector_config']['core'] = getenv('SOLR_CORE') ?: 'drupal';
+      $config['search_api.server.solr']['backend_config']['connector_config']['port'] = 8983;
+      $config['search_api.server.solr']['backend_config']['connector_config']['http_user'] = (getenv('SOLR_USER') ?: '');
+      $config['search_api.server.solr']['backend_config']['connector_config']['http']['http_user'] = (getenv('SOLR_USER') ?: '');
+      $config['search_api.server.solr']['backend_config']['connector_config']['http_pass'] = (getenv('SOLR_PASSWORD') ?: '');
+      $config['search_api.server.solr']['backend_config']['connector_config']['http']['http_pass'] = (getenv('SOLR_PASSWORD') ?: '');
+      $config['search_api.server.solr']['name'] = 'Lagoon Solr - Environment: ' . getenv('LAGOON_PROJECT');
+    }
+
+    return [
+      'config' => $config,
+      'settings' => [
+        'reverse_proxy' => TRUE,
+      ],
+    ];
+  }
 
   public function getEnvs() : array {
     return [

@@ -55,19 +55,6 @@ class DrupalEnvDetector
       $_SERVER["SERVER_PORT"] = getenv('HTTP_X_FORWARDED_PORT') ?: 443;
     }
 
-    // Set reverse proxy automatically
-    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-      $forwarded = array_map('trim', explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']));
-      // Client IP is the most left one on HTTP_X_FORWARDED_FOR
-      $client_ip = array_shift($forwarded);
-
-      if ($_SERVER['REMOTE_ADDR'] !== $client_ip) {
-        $settings['reverse_proxy'] = TRUE;
-        $settings['reverse_proxy_addresses'] = (!empty($forwarded)) ? $forwarded : [$_SERVER['REMOTE_ADDR']];
-        $settings['reverse_proxy_trusted_headers'] = Request::HEADER_X_FORWARDED_ALL;
-      }
-    }
-
     // Detect Drupal version.
     $this->drupal_version = (new ReflectionClass('Drupal'))->getConstants()['VERSION'];
 
@@ -84,6 +71,31 @@ class DrupalEnvDetector
     if (!is_null($this->omen)) {
       foreach ($this->omen->getEnvs() as $env_var => $env_val) {
         putenv($env_var . '=' . $env_val);
+      }
+
+      // Get Env specific conf if any is set
+      $configuration = $this->omen->getConfiguration();
+
+      if (isset($configuration['config'])) {
+        $config = array_merge($config, $configuration['config']);
+      }
+
+      if (isset($configuration['settings'])) {
+        $settings = array_merge($settings, $configuration['settings']);
+      }
+    }
+    else {
+      // Set reverse proxy automatically for other environments
+      if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $forwarded = array_map('trim', explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']));
+        // Client IP is the most left one on HTTP_X_FORWARDED_FOR
+        $client_ip = array_shift($forwarded);
+
+        if ($_SERVER['REMOTE_ADDR'] !== $client_ip) {
+          $settings['reverse_proxy'] = TRUE;
+          $settings['reverse_proxy_addresses'] = (!empty($forwarded)) ? $forwarded : [$_SERVER['REMOTE_ADDR']];
+          $settings['reverse_proxy_trusted_headers'] = Request::HEADER_X_FORWARDED_ALL;
+        }
       }
     }
 
