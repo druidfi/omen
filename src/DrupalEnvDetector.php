@@ -10,6 +10,7 @@ use Druidfi\Omen\EnvMapping\Lando;
 use Druidfi\Omen\EnvMapping\Pantheon;
 use Druidfi\Omen\EnvMapping\Wodby;
 use ReflectionClass;
+use Symfony\Component\HttpFoundation\Request;
 
 class DrupalEnvDetector
 {
@@ -54,14 +55,16 @@ class DrupalEnvDetector
       $_SERVER["SERVER_PORT"] = getenv('HTTP_X_FORWARDED_PORT') ?: 443;
     }
 
-    // Set reverse proxy
-    if (isset($_SERVER['REMOTE_ADDR']) && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-      if ($_SERVER['REMOTE_ADDR'] !== $_SERVER['HTTP_X_FORWARDED_FOR']) {
-        $settings['reverse_proxy'] = TRUE;
-        $settings['reverse_proxy_addresses'] = [$_SERVER['REMOTE_ADDR']];
+    // Set reverse proxy automatically
+    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+      $forwarded = array_map('trim', explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']));
+      // Client IP is the most left one on HTTP_X_FORWARDED_FOR
+      $client_ip = array_shift($forwarded);
 
-        // Set reverse proxy header to make the site functional on Varnish.
-        $settings['reverse_proxy_header'] = 'X_FORWARDED';
+      if ($_SERVER['REMOTE_ADDR'] !== $client_ip) {
+        $settings['reverse_proxy'] = TRUE;
+        $settings['reverse_proxy_addresses'] = (!empty($forwarded)) ? $forwarded : [$_SERVER['REMOTE_ADDR']];
+        $settings['reverse_proxy_trusted_headers'] = Request::HEADER_X_FORWARDED_ALL;
       }
     }
 
