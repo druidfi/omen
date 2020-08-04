@@ -131,8 +131,10 @@ class DrupalEnvDetector
       $conf['config_directories'] = (array) $this->config_directories;
     }
 
-    if (isset($_GET['_show_omens']) && $_GET['_show_omens'] == 'bakra-hispul') {
-      $this->printConfiguration($conf);
+    if (getenv('OMEN_TOKEN') && isset($_GET['_show_omens'])) {
+      if ($_GET['_show_omens'] == getenv('OMEN_TOKEN')) {
+        $this->printConfiguration($conf);
+      }
     }
 
     return $conf;
