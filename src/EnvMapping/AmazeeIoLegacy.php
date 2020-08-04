@@ -35,7 +35,7 @@ class AmazeeIoLegacy extends EnvMappingAbstract
       $settings['reverse_proxy'] = TRUE;
       $settings['reverse_proxy_addresses'] = array_merge(explode(',', getenv('AMAZEEIO_VARNISH_HOSTS')), ['127.0.0.1']);
 
-      $config['varnish.settings']['varnish_control_terminal'] = implode($varnish_hosts, " ");
+      $config['varnish.settings']['varnish_control_terminal'] = implode(" ", $varnish_hosts);
       $config['varnish.settings']['varnish_control_key'] = getenv('AMAZEEIO_VARNISH_SECRET');
       $config['varnish.settings']['varnish_version'] = 4;
     }
