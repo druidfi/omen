@@ -24,4 +24,9 @@ class LagoonTest extends BaseCase
     $expect = 'https';
     $this->assertEquals($expect, $value);
   }
+
+  public function testProxySettings()
+  {
+    $this->assertEquals(TRUE, $this->settings['reverse_proxy']);
+  }
 }

@@ -27,8 +27,7 @@ abstract class EnvMappingAbstract implements EnvMappingInterface {
     return DrupalEnvDetector::ENV_DEVELOPMENT;
   }
 
-  public function getConfiguration() : array {
-    return [];
+  public function setConfiguration(&$config, &$settings) {
   }
 
   public function getEnvs() : array {

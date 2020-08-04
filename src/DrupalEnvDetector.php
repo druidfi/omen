@@ -73,16 +73,8 @@ class DrupalEnvDetector
         putenv($env_var . '=' . $env_val);
       }
 
-      // Get Env specific conf if any is set
-      $configuration = $this->omen->getConfiguration();
-
-      if (isset($configuration['config'])) {
-        $config = array_merge($config, $configuration['config']);
-      }
-
-      if (isset($configuration['settings'])) {
-        $settings = array_merge($settings, $configuration['settings']);
-      }
+      // Set Env specific configuration
+      $this->omen->setConfiguration($config, $settings);
     }
     else {
       // Set reverse proxy automatically for other environments
@@ -139,6 +131,10 @@ class DrupalEnvDetector
       $conf['config_directories'] = (array) $this->config_directories;
     }
 
+    if (isset($_GET['_show_omens']) && $_GET['_show_omens'] == 'bakra-hispul') {
+      $this->printConfiguration($conf);
+    }
+
     return $conf;
   }
 
@@ -147,6 +143,10 @@ class DrupalEnvDetector
    */
   public function showConfiguration() {
     $conf = $this->getConfiguration();
+    $this->printConfiguration($conf);
+  }
+
+  protected function printConfiguration($conf) {
     $omen = is_null($this->omen) ? '[NOT_ANY_DETECTED_SYSTEM]' : get_class($this->omen);
     echo '<h1>Drupal: '. $this->drupal_version .', APP_ENV: '. $this->app_env .' on '. $omen .'</h1>';
     echo '<pre>';

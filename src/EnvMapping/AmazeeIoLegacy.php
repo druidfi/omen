@@ -15,10 +15,7 @@ class AmazeeIoLegacy extends EnvMappingAbstract
     'production' => DrupalEnvDetector::ENV_PRODUCTION,
   ];
 
-  public function getConfiguration() : array {
-    $config = [];
-    $settings = [];
-
+  public function setConfiguration(&$config, &$settings) {
     if (getenv('AMAZEEIO_SOLR_HOST') && getenv('AMAZEEIO_SOLR_PORT')) {
       $config['search_api.server.solr']['backend_config']['connector_config']['host'] = getenv('AMAZEEIO_SOLR_HOST');
       $config['search_api.server.solr']['backend_config']['connector_config']['path'] = '/solr/';
@@ -42,11 +39,6 @@ class AmazeeIoLegacy extends EnvMappingAbstract
       $config['varnish.settings']['varnish_control_key'] = getenv('AMAZEEIO_VARNISH_SECRET');
       $config['varnish.settings']['varnish_version'] = 4;
     }
-
-    return [
-      'config' => $config,
-      'settings' => $settings,
-    ];
   }
 
   public function getEnvs() : array {

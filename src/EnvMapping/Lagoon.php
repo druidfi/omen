@@ -15,7 +15,7 @@ class Lagoon extends EnvMappingAbstract
     'production' => DrupalEnvDetector::ENV_PRODUCTION,
   ];
 
-  public function getConfiguration() : array {
+  public function setConfiguration(&$config, &$settings) {
     $config = [];
 
     if (getenv('SOLR_HOST')) {
@@ -30,12 +30,7 @@ class Lagoon extends EnvMappingAbstract
       $config['search_api.server.solr']['name'] = 'Lagoon Solr - Environment: ' . getenv('LAGOON_PROJECT');
     }
 
-    return [
-      'config' => $config,
-      'settings' => [
-        'reverse_proxy' => TRUE,
-      ],
-    ];
+    $settings['reverse_proxy'] = TRUE;
   }
 
   public function getEnvs() : array {
