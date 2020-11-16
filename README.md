@@ -1,6 +1,6 @@
 # druidfi/omen
 
-[![Build Status](https://travis-ci.com/druidfi/omen.svg?branch=master)](https://travis-ci.com/druidfi/omen)
+![Tests](https://github.com/druidfi/omen/workflows/Tests/badge.svg)
 
 Drupal ENV detector. Detects env related configuration and sets them for you. Helps with moving sites from environment
 to another. Aims also to generalize your env configuration.
