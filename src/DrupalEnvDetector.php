@@ -243,7 +243,7 @@ class DrupalEnvDetector
       putenv('DRUSH_OPTIONS_URI=http://' . $hosts[0]);
     }
 
-    if (method_exists($this->omen, 'getTrustedHostPatterns')) {
+    if (!is_null($this->omen) && method_exists($this->omen, 'getTrustedHostPatterns')) {
       $patterns = $this->omen->getTrustedHostPatterns();
       $this->settings['trusted_host_patterns'] = array_merge($this->settings['trusted_host_patterns'], $patterns);
     }
