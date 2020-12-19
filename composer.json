@@ -20,10 +20,10 @@
         }
     },
     "require": {
-        "php": "^7.1"
+        "php": "^7.1 || ^8.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.16.0",
+        "friendsofphp/php-cs-fixer": "^2.17.0",
         "phpunit/phpunit": "^8.5.0"
     },
     "minimum-stability": "dev",

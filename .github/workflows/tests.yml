@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['7.3', '7.4']
+        php-versions: ['7.3', '7.4', '8.0']
 
     steps:
 
@@ -47,7 +47,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
-        run: composer install --prefer-dist --optimize-autoloader --no-progress --no-interaction
+        run: composer install --no-progress --no-interaction
 
       - name: Run PHPUnit tests.
         run: composer test
