@@ -2,7 +2,6 @@
 
 namespace Druidfi\Omen;
 
-use Druidfi\Omen\EnvMapping\AmazeeIoLegacy;
 use Druidfi\Omen\EnvMapping\Ddev;
 use Druidfi\Omen\EnvMapping\EnvMappingAbstract;
 use Druidfi\Omen\EnvMapping\Lagoon;
@@ -21,8 +20,7 @@ class DrupalEnvDetector
   const ENV_PRODUCTION = 'prod';
 
   const MAP = [
-    'LAGOON' => Lagoon::class, // Must be before AmazeeIoLegacy
-    'AMAZEEIO_SITENAME' => AmazeeIoLegacy::class,
+    'LAGOON' => Lagoon::class,
     'IS_DDEV_PROJECT' => Ddev::class,
     'LANDO_INFO' => Lando::class,
     'PANTHEON_ENVIRONMENT' => Pantheon::class,
@@ -210,6 +208,11 @@ class DrupalEnvDetector
 
     if ($older_than_88) {
       $this->config['system.file']['path']['temporary'] = $this->settings['file_temp_path'];
+    }
+
+    // Exclude these modules from configuration export if Drupal 8.8+.
+    if (!$older_than_88) {
+      $this->settings['config_exclude_modules'] = ['devel', 'stage_file_proxy'];
     }
   }
 
