@@ -30,13 +30,13 @@
     "prefer-stable": true,
     "scripts": {
         "test": [
-            "@test-amazeeio-lagoon",
+            "@test-lagoon",
             "@test-ddev",
             "@test-lando",
             "@test-pantheon",
             "@test-wodby"
         ],
-        "test-amazeeio-lagoon": [
+        "test-lagoon": [
             "APP_ENV=dev phpunit --debug --verbose --configuration tests/Lagoon.xml",
             "APP_ENV=test phpunit --debug --verbose --configuration tests/Lagoon.xml",
             "APP_ENV=prod phpunit --debug --verbose --configuration tests/Lagoon.xml"
