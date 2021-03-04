@@ -27,7 +27,7 @@ class DrupalEnvDetector
     'WODBY_INSTANCE_TYPE' => Wodby::class,
   ];
 
-  private $app_env = self::DEFAULT_APP_ENV;
+  private $app_env;
   private $config = [];
   private $config_directories = [];
   private $databases = [];
