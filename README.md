@@ -5,7 +5,7 @@
 Drupal ENV detector. Detects env related configuration and sets them for you. Helps with moving sites from environment
 to another. Aims also to generalize your env configuration.
 
-Also sets configuration per environment type. e.g. for development or production. Everything can still be overriden in
+Also sets configuration per environment type. e.g. for development or production. Everything can still be overridden in
 your project.
 
 **You should just focus on your project specific configuration.**
@@ -40,8 +40,7 @@ See the whole example [here](settings.php).
 
 ## Known environments
 
-- [Amazee.io Lagoon](https://lagoon.readthedocs.io/)
-- [Amazee.io Legacy](https://docs.amazee.io/)
+- [Amazee.io Lagoon](https://docs.lagoon.sh/)
 - [DDEV Local](https://ddev.readthedocs.io/en/latest/) - Work in Progress
 - [Lando](https://lando.dev/) - Work in Progress
 - [Pantheon](https://pantheon.io/) - Work in Progress
