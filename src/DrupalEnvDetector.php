@@ -222,7 +222,10 @@ class DrupalEnvDetector
    * @see https://www.drupal.org/node/2410395
    */
   private function setTrustedHostPatterns() {
-    $this->settings['trusted_host_patterns'] = [];
+    if (!isset($this->settings['trusted_host_patterns'])) {
+      $this->settings['trusted_host_patterns'] = [];
+    }
+
     $hosts = [];
 
     // Drupal route(s).
