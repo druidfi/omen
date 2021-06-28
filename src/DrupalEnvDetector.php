@@ -244,8 +244,12 @@ class DrupalEnvDetector
     $drush_options_uri = getenv('DRUSH_OPTIONS_URI');
 
     if ($drush_options_uri && !in_array($drush_options_uri, $routes)) {
-      $host = str_replace('.', '\.', parse_url($drush_options_uri)['host']);
-      $this->settings['trusted_host_patterns'][] = '^' . $host . '$';
+      $parsed_host = parse_url($drush_options_uri);
+
+      if (is_array($parsed_host)) {
+        $host = str_replace('.', '\.', $parsed_host['host']);
+        $this->settings['trusted_host_patterns'][] = '^' . $host . '$';
+      }
     }
 
     // If not explicitly set, use first host as DRUSH_OPTIONS_URI

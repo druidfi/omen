@@ -115,4 +115,4 @@ basically what `druidfi/omen` is doing. Your local clouds too.
 
 ## Other information
 
-This project is found from the Packagist: https://packagist.org/packages/druidfi/omen
+This project can be found from the Packagist: https://packagist.org/packages/druidfi/omen
