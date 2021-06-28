@@ -232,9 +232,13 @@ class DrupalEnvDetector
     $routes = (getenv('DRUPAL_ROUTES')) ? explode(',', getenv('DRUPAL_ROUTES')) : [];
 
     foreach ($routes as $route) {
-      $hosts[] = $host = parse_url($route)['host'];
-      $trusted_host = str_replace('.', '\.', $host);
-      $this->settings['trusted_host_patterns'][] = '^' . $trusted_host . '$';
+      $host = parse_url($route);
+
+      if (is_array($host)) {
+        $hosts[] = $host['host'];
+        $trusted_host = str_replace('.', '\.', $host['host']);
+        $this->settings['trusted_host_patterns'][] = '^' . $trusted_host . '$';
+      }
     }
 
     $drush_options_uri = getenv('DRUSH_OPTIONS_URI');
