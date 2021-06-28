@@ -2,6 +2,9 @@ name: Tests
 
 on:
   push:
+    branches:
+      # Push events on main branch
+      - main
   pull_request:
   schedule:
     - cron:  '0 0 * * *'
