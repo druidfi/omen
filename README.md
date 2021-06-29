@@ -15,12 +15,12 @@ your project.
 Require omen in your composer.json:
 
 ```
-$ composer require druidfi/omen
+composer require druidfi/omen
 ```
 
 And then use this as your `sites/default/settings.php`:
 
-```
+```php
 <?php
 
 // Use druidfi/omen
@@ -29,7 +29,7 @@ extract((new Druidfi\Omen\DrupalEnvDetector(__DIR__))->getConfiguration());
 
 Or print out all configuration (aka debug):
 
-```
+```php
 <?php
 
 // Print out detected configuration by druidfi/omen
