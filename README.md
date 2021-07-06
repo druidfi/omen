@@ -42,7 +42,7 @@ See the whole example [here](settings.php).
 
 - [Amazee.io Lagoon](https://docs.lagoon.sh/)
 - [DDEV Local](https://ddev.readthedocs.io/en/latest/) - Work in Progress
-- [Lando](https://lando.dev/) - Work in Progress
+- [Lando](https://lando.dev/)
 - [Pantheon](https://pantheon.io/) - Work in Progress
 - [Wodby](https://wodby.com/)
 
