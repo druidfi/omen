@@ -6,7 +6,7 @@
 //
 // ENV.settings.php and ENV.services.yml
 // and
-// local.settings.php and local.service.yml
+// local.settings.php and local.services.yml. Note: local.* should not be added to version control.
 //
 // These files are loaded automatically if found.
 //
