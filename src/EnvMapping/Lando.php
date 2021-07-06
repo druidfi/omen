@@ -8,7 +8,8 @@ class Lando extends EnvMappingAbstract
    * @see https://github.com/lando/lando/blob/master/docs/config/env.md
    */
   public function getEnvs() : array {
-    $lando_info = json_decode(getenv('LANDO_INFO'), TRUE);
+    $lando_info = $this->getLandoInfo();
+    $lando_host = $this->getLandoHost();
 
     return [
       'APP_ENV' => $this->getAppEnv(),
@@ -18,7 +19,15 @@ class Lando extends EnvMappingAbstract
       'DRUPAL_DB_HOST' => $lando_info['database']['internal_connection']['host'],
       'DRUPAL_DB_PORT' => $lando_info['database']['internal_connection']['port'],
       'DRUPAL_HASH_SALT' => getenv('HASH_SALT'),
-      'DRUPAL_ROUTES' => 'http://'. getenv('LANDO_APP_NAME') .'.'. getenv('LANDO_DOMAIN'),
+      'DRUPAL_ROUTES' => sprintf('http://%s,https://%s', $lando_host, $lando_host),
     ];
+  }
+
+  private function getLandoHost() : string {
+    return getenv('LANDO_APP_NAME') . '.' . getenv('LANDO_DOMAIN');
+  }
+
+  private function getLandoInfo() : array {
+    return json_decode(getenv('LANDO_INFO'), TRUE);
   }
 }
