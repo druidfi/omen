@@ -5,7 +5,7 @@ namespace Druidfi\Omen\EnvMapping;
 class Lando extends EnvMappingAbstract
 {
   /**
-   * @see https://github.com/lando/lando/blob/master/docs/config/env.md
+   * @see https://github.com/lando/lando/blob/main/docs/config/env.md
    */
   public function getEnvs() : array {
     $lando_info = $this->getLandoInfo();
