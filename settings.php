@@ -15,7 +15,7 @@ extract((new Druidfi\Omen\DrupalEnvDetector(__DIR__))->getConfiguration());
 // Here you can still override things
 
 /**
- * Only in Wodby environment. @see https://wodby.com/docs/stacks/drupal/#overriding-settings-from-wodbysettingsphp
+ * Only in Wodby environment. @see https://wodby.com/docs/1.0/stacks/drupal/#overriding-settings-from-wodbysettingsphp
  * Can be removed if not using Wodby.
  */
 
