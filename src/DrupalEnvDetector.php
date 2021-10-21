@@ -120,13 +120,13 @@ class DrupalEnvDetector
    */
   public function getConfiguration() : array {
     $conf = [
-      'config' => (array) $this->config,
-      'databases' => (array) $this->databases,
-      'settings' => (array) $this->settings,
+      'config' => $this->config,
+      'databases' => $this->databases,
+      'settings' => $this->settings,
     ];
 
     if (!empty($this->config_directories)) {
-      $conf['config_directories'] = (array) $this->config_directories;
+      $conf['config_directories'] = $this->config_directories;
     }
 
     if (getenv('OMEN_TOKEN') && isset($_GET['_show_omens'])) {
@@ -142,8 +142,7 @@ class DrupalEnvDetector
    * Print out configuration.
    */
   public function showConfiguration() {
-    $conf = $this->getConfiguration();
-    $this->printConfiguration($conf);
+    $this->printConfiguration($this->getConfiguration());
   }
 
   protected function printConfiguration($conf) {
@@ -184,14 +183,7 @@ class DrupalEnvDetector
    * Set global values. Same for all environments.
    */
   private function setGlobalDefaults() {
-    $older_than_88 = version_compare($this->drupal_version, '8.8.0', '<');
-
     // Set directory for loading CMI configuration.
-    if ($older_than_88) {
-      $this->config_directories['sync'] = '../' . self::CMI_PATH;
-    }
-
-    // In Drupal 8.8 this is in $settings array.
     $this->settings['config_sync_directory'] = '../' . self::CMI_PATH;
 
     // Hash salt.
@@ -206,14 +198,8 @@ class DrupalEnvDetector
     // Temp path.
     $this->settings['file_temp_path'] = getenv('DRUPAL_TMP_PATH') ?: $this->settings['file_temp_path'] ?? '/tmp';
 
-    if ($older_than_88) {
-      $this->config['system.file']['path']['temporary'] = $this->settings['file_temp_path'];
-    }
-
-    // Exclude these modules from configuration export if Drupal 8.8+.
-    if (!$older_than_88) {
-      $this->settings['config_exclude_modules'] = ['devel', 'stage_file_proxy'];
-    }
+    // Exclude these modules from configuration export.
+    $this->settings['config_exclude_modules'] = ['devel', 'stage_file_proxy', 'upgrade_status'];
   }
 
   /**
