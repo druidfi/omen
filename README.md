@@ -48,6 +48,7 @@ See the whole example [here](settings.php).
 
 ## What is detected?
 
+- Loading of setting files and service configurations
 - Database connection
 - Trusted host pattern(s)
 - File paths (public, private, tmp)
