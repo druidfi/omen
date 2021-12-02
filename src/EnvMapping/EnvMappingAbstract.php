@@ -1,15 +1,16 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Druidfi\Omen\EnvMapping;
 
-use Druidfi\Omen\DrupalEnvDetector;
+use Druidfi\Omen\Reader;
 
-abstract class EnvMappingAbstract implements EnvMappingInterface {
-
+abstract class EnvMappingAbstract implements EnvMappingInterface
+{
   protected string $env_name = 'LOCAL_ENV_TYPE';
   protected array $env_type_map = [];
 
-  public function getAppEnv() {
+  public function getAppEnv()
+  {
     if (getenv('APP_ENV')) {
       return getenv('APP_ENV');
     }
@@ -24,13 +25,15 @@ abstract class EnvMappingAbstract implements EnvMappingInterface {
       return getenv($this->env_name);
     }
 
-    return DrupalEnvDetector::ENV_DEVELOPMENT;
+    return Reader::ENV_DEVELOPMENT;
   }
 
-  public function setConfiguration(&$config, &$settings) {
+  public function setConfiguration(&$config, &$settings)
+  {
   }
 
-  public function getEnvs() : array {
+  public function getEnvs() : array
+  {
     return [
       'APP_ENV' => $this->getAppEnv(),
     ];

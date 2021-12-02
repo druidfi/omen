@@ -6,7 +6,7 @@ class DevDefaults extends AbstractDefaults {
 
   protected array $config = [
     'stage_file_proxy.settings' => [
-      'origin' => TRUE,
+      'origin' => FALSE,
     ],
     'system.logging' => [
       'error_level' => 'all'

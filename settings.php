@@ -10,7 +10,7 @@
 //
 // These files are loaded automatically if found.
 //
-extract((new Druidfi\Omen\DrupalEnvDetector(__DIR__))->getConfiguration());
+extract((new Druidfi\Omen\Reader(__DIR__))->getConfiguration());
 
 // Here you can still override things
 

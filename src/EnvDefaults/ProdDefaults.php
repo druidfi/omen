@@ -2,8 +2,8 @@
 
 namespace Druidfi\Omen\EnvDefaults;
 
-class ProdDefaults extends AbstractDefaults {
-
+class ProdDefaults extends AbstractDefaults
+{
   protected array $config = [
     'stage_file_proxy.settings' => [
       'origin' => FALSE,

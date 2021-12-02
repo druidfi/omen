@@ -24,7 +24,7 @@ And then use this as your `sites/default/settings.php`:
 <?php
 
 // Use druidfi/omen
-extract((new Druidfi\Omen\DrupalEnvDetector(__DIR__))->getConfiguration());
+extract((new Druidfi\Omen\Reader())->get());
 ```
 
 Or print out all configuration (aka debug):
@@ -33,7 +33,7 @@ Or print out all configuration (aka debug):
 <?php
 
 // Print out detected configuration by druidfi/omen
-(new Druidfi\Omen\DrupalEnvDetector(__DIR__))->showConfiguration();
+(new Druidfi\Omen\Reader())->show();
 ```
 
 See the whole example [here](settings.php).
@@ -55,10 +55,6 @@ See the whole example [here](settings.php).
 - Hash salt
 - Contrib module settings (which are affected by env)
   - [Simple Environment Indicator](https://www.drupal.org/project/simplei)
-- Set excluded modules for configuration export:
-  - devel
-  - stage_file_proxy
-  - upgrade_status
 
 ## APP_ENV
 
@@ -80,7 +76,6 @@ Variable | ENV override | Default value
 `$databases['default']['default']['password']` | `DRUPAL_DB_PASS` | :heavy_multiplication_x:
 `$databases['default']['default']['port']` | `DRUPAL_DB_PORT` | `3306`
 `$databases['default']['default']['username']` | `DRUPAL_DB_USER` | :heavy_multiplication_x:
-`$settings['config_sync_directory']` | TODO | `'conf/cmi'`
 `$settings['file_public_path']` | - | `'sites/default/files'`
 `$settings['file_private_path']` | `DRUPAL_FILES_PRIVATE` | `FALSE`
 `$settings['file_temp_path']` | `DRUPAL_TMP_PATH` | `'/tmp'`
@@ -104,12 +99,16 @@ Variable | Development | Testing | Production
 `$config['system.performance']['js']['preprocess']` | `0` | `1` | `1`
 `$settings['skip_permissions_hardening']` | `TRUE` | `FALSE` | `FALSE`
 
+Same for all environments:
+
+- `$settings['config_exclude_modules']` = `['devel','stage_file_proxy','upgrade_status']`
+- `$settings['config_sync_directory']` = `'conf/cmi'`
+
 ## TODO
 
 Add support for:
 
 - Detect e.g. Solr, Redis and Varnish configuration where available
-- Drupal VM
 - Other dev tools and hosting environments
 - Default values for some contrib modules
 

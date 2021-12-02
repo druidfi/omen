@@ -1,10 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Druidfi\Omen\EnvMapping;
 
 class Ddev extends EnvMappingAbstract
 {
-  public function getEnvs() : array {
+  public function getEnvs() : array
+  {
     return [
       'APP_ENV' => $this->getAppEnv(),
       'DRUPAL_DB_NAME' => 'db',
@@ -16,7 +17,9 @@ class Ddev extends EnvMappingAbstract
     ];
   }
 
-  protected function getRoutes() {
+  protected function getRoutes(): string
+  {
+    $routes = [];
     $sheme = (getenv('HTTPS') === 'on') ? 'https' : 'http';
     $hosts = explode(',', getenv('VIRTUAL_HOST'));
     $hosts = array_filter(array_unique($hosts));
@@ -28,7 +31,8 @@ class Ddev extends EnvMappingAbstract
     return join(',', $routes);
   }
 
-  public function getTrustedHostPatterns() {
+  public function getTrustedHostPatterns(): array
+  {
     return [
       '^.+\.ddev\.site',
     ];

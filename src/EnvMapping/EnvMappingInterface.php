@@ -2,7 +2,8 @@
 
 namespace Druidfi\Omen\EnvMapping;
 
-interface EnvMappingInterface {
+interface EnvMappingInterface
+{
   public function getAppEnv();
 
   public function getEnvs() : array;
