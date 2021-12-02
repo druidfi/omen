@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 abstract class BaseCase extends TestCase
 {
-  protected $expected_db_settings = [
+  protected array $expected_db_settings = [
     'driver' => 'mysql',
     'name' => 'drupal',
     'user' => 'drupal',
@@ -17,15 +17,15 @@ abstract class BaseCase extends TestCase
     'prefix' => '',
   ];
 
-  protected $expected_host = 'local.drupal.com';
+  protected string $expected_host = 'local.drupal.com';
 
-  protected $expected_hash_salt = "hash";
+  protected ?string $expected_hash_salt = "hash";
 
-  protected $config = [];
+  protected array $config = [];
 
-  protected $databases = [];
+  protected array $databases = [];
 
-  protected $settings = [];
+  protected array $settings = [];
 
   protected function setUp(): void
   {
