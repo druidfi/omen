@@ -28,16 +28,16 @@ class DrupalEnvDetector
   ];
 
   private $app_env;
-  private $config = [];
-  private $config_directories = [];
-  private $databases = [];
+  private array $config = [];
+  private array $config_directories = [];
+  private array $databases = [];
   private $drupal_version = '';
 
   /**
    * @var EnvMappingAbstract
    */
   private $omen;
-  private $settings = [];
+  private array $settings = [];
 
   public function __construct($settings_dir) {
     global $config, $config_directories, $databases, $settings;
@@ -240,7 +240,7 @@ class DrupalEnvDetector
 
     // If not explicitly set, use first host as DRUSH_OPTIONS_URI
     if (!$drush_options_uri) {
-      putenv('DRUSH_OPTIONS_URI=http://' . $hosts[0]);
+      putenv('DRUSH_OPTIONS_URI=https://' . $hosts[0]);
     }
 
     if (!is_null($this->omen) && method_exists($this->omen, 'getTrustedHostPatterns')) {

@@ -4,7 +4,7 @@ namespace Druidfi\Omen\EnvMapping;
 
 class Wodby extends EnvMappingAbstract
 {
-  protected $env_name = 'WODBY_INSTANCE_TYPE';
+  protected string $env_name = 'WODBY_INSTANCE_TYPE';
 
   /**
    * @see https://wodby.com/docs/infrastructure/env-vars/

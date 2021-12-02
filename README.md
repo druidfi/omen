@@ -55,6 +55,10 @@ See the whole example [here](settings.php).
 - Hash salt
 - Contrib module settings (which are affected by env)
   - [Simple Environment Indicator](https://www.drupal.org/project/simplei)
+- Set excluded modules for configuration export:
+  - devel
+  - stage_file_proxy
+  - upgrade_status
 
 ## APP_ENV
 

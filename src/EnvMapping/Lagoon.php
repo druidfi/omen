@@ -9,8 +9,8 @@ use Druidfi\Omen\DrupalEnvDetector;
  */
 class Lagoon extends EnvMappingAbstract
 {
-  protected $env_name = 'LAGOON_ENVIRONMENT_TYPE';
-  protected $env_type_map = [
+  protected string $env_name = 'LAGOON_ENVIRONMENT_TYPE';
+  protected array $env_type_map = [
     'development' => DrupalEnvDetector::ENV_DEVELOPMENT,
     'production' => DrupalEnvDetector::ENV_PRODUCTION,
   ];
@@ -19,7 +19,7 @@ class Lagoon extends EnvMappingAbstract
     $config = [];
 
     if (getenv('SOLR_HOST')) {
-      $config['search_api.server.solr']['backend_config']['connector_config']['host'] = getenv('SOLR_HOST') ?: 'solr';
+      $config['search_api.server.solr']['backend_config']['connector_config']['host'] = getenv('SOLR_HOST');
       $config['search_api.server.solr']['backend_config']['connector_config']['path'] = '/solr/';
       $config['search_api.server.solr']['backend_config']['connector_config']['core'] = getenv('SOLR_CORE') ?: 'drupal';
       $config['search_api.server.solr']['backend_config']['connector_config']['port'] = 8983;
@@ -46,14 +46,14 @@ class Lagoon extends EnvMappingAbstract
     ];
   }
 
-  protected function getRoutes() {
+  protected function getRoutes(): string {
     $routes_string = getenv('LAGOON_ROUTE') .','. getenv('LAGOON_ROUTES');
     $routes = explode(',', $routes_string);
     $routes = array_filter(array_unique($routes));
     return join(',', $routes);
   }
 
-  public function getTrustedHostPatterns() {
+  public function getTrustedHostPatterns(): array {
     return [
       '^.+\.docker\.amazee\.io$',
     ];

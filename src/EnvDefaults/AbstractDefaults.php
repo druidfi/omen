@@ -3,8 +3,8 @@
 namespace Druidfi\Omen\EnvDefaults;
 
 abstract class AbstractDefaults {
-  protected $config = [];
-  protected $settings = [];
+  protected array $config = [];
+  protected array $settings = [];
 
   public function getDefaults() : array {
     $contrib_module_defaults = $this->getContribModuleDefaults();

@@ -6,8 +6,8 @@ use Druidfi\Omen\DrupalEnvDetector;
 
 abstract class EnvMappingAbstract implements EnvMappingInterface {
 
-  protected $env_name = 'LOCAL_ENV_TYPE';
-  protected $env_type_map = [];
+  protected string $env_name = 'LOCAL_ENV_TYPE';
+  protected array $env_type_map = [];
 
   public function getAppEnv() {
     if (getenv('APP_ENV')) {

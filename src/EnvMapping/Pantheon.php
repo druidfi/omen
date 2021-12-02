@@ -6,8 +6,8 @@ use Druidfi\Omen\DrupalEnvDetector;
 
 class Pantheon extends EnvMappingAbstract
 {
-  protected $env_name = 'PANTHEON_ENVIRONMENT';
-  protected $env_type_map = [
+  protected string $env_name = 'PANTHEON_ENVIRONMENT';
+  protected array $env_type_map = [
     'live' => DrupalEnvDetector::ENV_PRODUCTION,
   ];
 
