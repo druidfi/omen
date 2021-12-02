@@ -39,9 +39,9 @@ class Reader
   private $omen;
   private ?array $settings = [];
 
-  public function __construct()
+  public function __construct(string $settings_dir)
   {
-    global $app_root, $config, $config_directories, $databases, $settings, $site_path;
+    global $config, $config_directories, $databases, $settings;
 
     $this->config = &$config;
     $this->config_directories = &$config_directories;
@@ -95,9 +95,6 @@ class Reader
 
     // Env specific default values
     $this->setEnvDefaults();
-
-    // Site path
-    $settings_dir = $app_root . '/' . $site_path;
 
     // Load/add files (if exist) from sites/default in following order:
     foreach (['all', $this->app_env, 'local'] as $set) {
