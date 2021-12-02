@@ -1,10 +1,12 @@
+test: PHP := 8.0
 test: vendor
 	@echo "Run composer test (all tests)"
-	@docker run --rm -it --volume $$PWD:/app druidfi/drupal:php-7.4 composer test
+	@docker run --rm -it --volume $$PWD:/app druidfi/drupal:php-$(PHP) composer test
 
+test-%: PHP := 8.0
 test-%: vendor
 	@echo "Run composer test-$*"
-	@docker run --rm -it --volume $$PWD:/app druidfi/drupal:php-7.4 composer test-$*
+	@docker run --rm -it --volume $$PWD:/app druidfi/drupal:php-$(PHP) composer test-$*
 
 vendor:
 	composer install

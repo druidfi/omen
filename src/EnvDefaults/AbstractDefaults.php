@@ -1,27 +1,31 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Druidfi\Omen\EnvDefaults;
 
-abstract class AbstractDefaults {
-  protected $config = [];
-  protected $settings = [];
+abstract class AbstractDefaults
+{
+  protected array $config = [];
+  protected array $settings = [];
 
-  public function getDefaults() : array {
-    $contrib_module_defaults = $this->getContribModuleDefaults();
-
-    $config = array_merge($this->config, $contrib_module_defaults['config']);
-    $settings = array_merge($this->settings, $contrib_module_defaults['settings']);
-
-    return [
-      'config' => $config,
-      'settings' => $settings,
-    ];
+  public function getDefaults() : array
+  {
+    return $this->alter([
+      'config' => $this->config,
+      'settings' => $this->settings,
+    ]);
   }
 
-  protected function getContribModuleDefaults() : array {
-    return [
-      'config' => [],
-      'settings' => [],
+  private function alter(array $defaults) : array
+  {
+    // Add defaults which are same always.
+
+    // Exclude these modules from configuration export.
+    $defaults['settings']['config_exclude_modules'] = [
+      'devel',
+      'stage_file_proxy',
+      'upgrade_status',
     ];
+
+    return $defaults;
   }
 }

@@ -4,7 +4,7 @@ namespace Druidfi\Omen\Tests;
 
 class DdevTest extends BaseCase
 {
-  protected $expected_db_settings = [
+  protected array $expected_db_settings = [
     'driver' => 'mysql',
     'name' => 'db',
     'user' => 'db',
@@ -14,9 +14,9 @@ class DdevTest extends BaseCase
     'prefix' => '',
   ];
 
-  protected $expected_host = 'local.ddev.site';
+  protected string $expected_host = 'local.ddev.site';
 
-  protected $expected_hash_salt = 'xjfCkJoDvrzrDHbiabQAvHMYtMltJUrgyinZfDuCFiDrXMiqQCfpRWouLfkAwdVr';
+  protected ?string $expected_hash_salt = 'xjfCkJoDvrzrDHbiabQAvHMYtMltJUrgyinZfDuCFiDrXMiqQCfpRWouLfkAwdVr';
 
   protected function setUp(): void
   {

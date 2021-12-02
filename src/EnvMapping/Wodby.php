@@ -1,15 +1,16 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Druidfi\Omen\EnvMapping;
 
 class Wodby extends EnvMappingAbstract
 {
-  protected $env_name = 'WODBY_INSTANCE_TYPE';
+  protected string $env_name = 'WODBY_INSTANCE_TYPE';
 
   /**
    * @see https://wodby.com/docs/infrastructure/env-vars/
    */
-  public function getEnvs() : array {
+  public function getEnvs() : array
+  {
     return [
       'APP_ENV' => $this->getAppEnv(),
       'DRUPAL_DB_DRIVER' => getenv('DB_DRIVER'),

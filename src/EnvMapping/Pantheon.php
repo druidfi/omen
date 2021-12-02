@@ -1,20 +1,21 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Druidfi\Omen\EnvMapping;
 
-use Druidfi\Omen\DrupalEnvDetector;
+use Druidfi\Omen\Reader;
 
 class Pantheon extends EnvMappingAbstract
 {
-  protected $env_name = 'PANTHEON_ENVIRONMENT';
-  protected $env_type_map = [
-    'live' => DrupalEnvDetector::ENV_PRODUCTION,
+  protected string $env_name = 'PANTHEON_ENVIRONMENT';
+  protected array $env_type_map = [
+    'live' => Reader::ENV_PRODUCTION,
   ];
 
   /**
    * @see https://pantheon.io/docs/read-environment-config
    */
-  public function getEnvs() : array {
+  public function getEnvs() : array
+  {
     return [
       'APP_ENV' => $this->getAppEnv(),
       'DRUPAL_DB_NAME' => getenv('DB_NAME'),

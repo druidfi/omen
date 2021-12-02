@@ -4,7 +4,7 @@ namespace Druidfi\Omen\Tests;
 
 class LagoonTest extends BaseCase
 {
-  protected $expected_db_settings = [
+  protected array $expected_db_settings = [
     'driver' => 'mysql',
     'name' => 'lagoon',
     'user' => 'lagoon',
@@ -14,9 +14,9 @@ class LagoonTest extends BaseCase
     'prefix' => '',
   ];
 
-  protected $expected_host = 'nginx-drupal-dev.ch.amazee.io';
+  protected string $expected_host = 'nginx-drupal-dev.ch.amazee.io';
 
-  protected $expected_hash_salt = '1a16b869ad6213440f9466338d3066fdf7d5addab8855fc3cc9928258ccbbeb0';
+  protected ?string $expected_hash_salt = '1a16b869ad6213440f9466338d3066fdf7d5addab8855fc3cc9928258ccbbeb0';
 
   public function testHttps()
   {

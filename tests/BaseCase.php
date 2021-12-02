@@ -2,12 +2,12 @@
 
 namespace Druidfi\Omen\Tests;
 
-use Druidfi\Omen\DrupalEnvDetector;
+use Druidfi\Omen\Reader;
 use PHPUnit\Framework\TestCase;
 
 abstract class BaseCase extends TestCase
 {
-  protected $expected_db_settings = [
+  protected array $expected_db_settings = [
     'driver' => 'mysql',
     'name' => 'drupal',
     'user' => 'drupal',
@@ -17,15 +17,15 @@ abstract class BaseCase extends TestCase
     'prefix' => '',
   ];
 
-  protected $expected_host = 'local.drupal.com';
+  protected string $expected_host = 'local.drupal.com';
 
-  protected $expected_hash_salt = "hash";
+  protected ?string $expected_hash_salt = "hash";
 
-  protected $config = [];
+  protected array $config = [];
 
-  protected $databases = [];
+  protected array $databases = [];
 
-  protected $settings = [];
+  protected array $settings = [];
 
   protected function setUp(): void
   {
@@ -33,8 +33,8 @@ abstract class BaseCase extends TestCase
       eval("class Drupal { const VERSION = '9.2.0'; }");
     }
 
-    $detector = new DrupalEnvDetector(__DIR__);
-    $conf = $detector->getConfiguration();
+    $detector = new Reader();
+    $conf = $detector->get();
 
     /** @var array $config */
     /** @var array $settings */
@@ -89,15 +89,15 @@ abstract class BaseCase extends TestCase
     $app_env = getenv('APP_ENV');
 
     $error_level = $this->config['system.logging']['error_level'];
-    $expect = ($app_env === DrupalEnvDetector::ENV_DEVELOPMENT) ? 'all' : 'hide';
+    $expect = ($app_env === Reader::ENV_DEVELOPMENT) ? 'all' : 'hide';
     $this->assertEquals($expect, $error_level);
 
     $preprocess_css = $this->config['system.performance']['css']['preprocess'];
-    $expect = ($app_env === DrupalEnvDetector::ENV_DEVELOPMENT) ? 0 : 1;
+    $expect = ($app_env === Reader::ENV_DEVELOPMENT) ? 0 : 1;
     $this->assertEquals($expect, $preprocess_css);
 
     $preprocess_js = $this->config['system.performance']['js']['preprocess'];
-    $expect = ($app_env === DrupalEnvDetector::ENV_DEVELOPMENT) ? 0 : 1;
+    $expect = ($app_env === Reader::ENV_DEVELOPMENT) ? 0 : 1;
     $this->assertEquals($expect, $preprocess_js);
   }
 

@@ -1,25 +1,26 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Druidfi\Omen\EnvMapping;
 
-use Druidfi\Omen\DrupalEnvDetector;
+use Druidfi\Omen\Reader;
 
 /**
  * @see https://github.com/amazeeio/drupal-example/blob/master/web/sites/default/settings.php
  */
 class Lagoon extends EnvMappingAbstract
 {
-  protected $env_name = 'LAGOON_ENVIRONMENT_TYPE';
-  protected $env_type_map = [
-    'development' => DrupalEnvDetector::ENV_DEVELOPMENT,
-    'production' => DrupalEnvDetector::ENV_PRODUCTION,
+  protected string $env_name = 'LAGOON_ENVIRONMENT_TYPE';
+  protected array $env_type_map = [
+    'development' => Reader::ENV_DEVELOPMENT,
+    'production' => Reader::ENV_PRODUCTION,
   ];
 
-  public function setConfiguration(&$config, &$settings) {
+  public function setConfiguration(&$config, &$settings)
+  {
     $config = [];
 
     if (getenv('SOLR_HOST')) {
-      $config['search_api.server.solr']['backend_config']['connector_config']['host'] = getenv('SOLR_HOST') ?: 'solr';
+      $config['search_api.server.solr']['backend_config']['connector_config']['host'] = getenv('SOLR_HOST');
       $config['search_api.server.solr']['backend_config']['connector_config']['path'] = '/solr/';
       $config['search_api.server.solr']['backend_config']['connector_config']['core'] = getenv('SOLR_CORE') ?: 'drupal';
       $config['search_api.server.solr']['backend_config']['connector_config']['port'] = 8983;
@@ -33,7 +34,8 @@ class Lagoon extends EnvMappingAbstract
     $settings['reverse_proxy'] = TRUE;
   }
 
-  public function getEnvs() : array {
+  public function getEnvs() : array
+  {
     return [
       'APP_ENV' => $this->getAppEnv(),
       'DRUPAL_DB_NAME' => getenv('MARIADB_DATABASE'),
@@ -46,14 +48,16 @@ class Lagoon extends EnvMappingAbstract
     ];
   }
 
-  protected function getRoutes() {
+  protected function getRoutes(): string
+  {
     $routes_string = getenv('LAGOON_ROUTE') .','. getenv('LAGOON_ROUTES');
     $routes = explode(',', $routes_string);
     $routes = array_filter(array_unique($routes));
     return join(',', $routes);
   }
 
-  public function getTrustedHostPatterns() {
+  public function getTrustedHostPatterns(): array
+  {
     return [
       '^.+\.docker\.amazee\.io$',
     ];
