@@ -33,7 +33,7 @@ abstract class BaseCase extends TestCase
       eval("class Drupal { const VERSION = '9.2.0'; }");
     }
 
-    $detector = new Reader();
+    $detector = new Reader(__DIR__);
     $conf = $detector->get();
 
     /** @var array $config */
