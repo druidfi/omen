@@ -29,7 +29,6 @@ class Reader
 
   private $app_env;
   private ?array $config = [];
-  private ?array $config_directories = [];
   private ?array $databases = [];
   private string $drupal_version;
 
@@ -41,10 +40,9 @@ class Reader
 
   public function __construct(string $settings_dir)
   {
-    global $config, $config_directories, $databases, $settings;
+    global $config, $databases, $settings;
 
     $this->config = &$config;
-    $this->config_directories = &$config_directories;
     $this->databases = &$databases;
     $this->settings = &$settings;
 
@@ -159,10 +157,6 @@ class Reader
     echo json_encode($conf['databases'], JSON_PRETTY_PRINT);
     echo '<h2>$settings</h2>';
     echo json_encode($conf['settings'], JSON_PRETTY_PRINT);
-    if (isset($conf['config_directories'])) {
-      echo '<h2>$config_directories (deprecated in Drupal 8.8)</h2>';
-      echo json_encode($conf['config_directories'], JSON_PRETTY_PRINT);
-    }
     echo '</pre>';
     exit();
   }
