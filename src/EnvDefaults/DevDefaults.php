@@ -28,6 +28,6 @@ class DevDefaults extends AbstractDefaults {
 
   protected array $settings = [
     'simple_environment_indicator' => 'Black Development', // Simple Environment Indicator.
-    'skip_permissions_hardening' => FALSE,
+    'skip_permissions_hardening' => TRUE,
   ];
 }
