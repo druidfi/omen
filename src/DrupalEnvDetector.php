@@ -28,16 +28,16 @@ class DrupalEnvDetector
   ];
 
   private $app_env;
-  private array $config = [];
-  private array $config_directories = [];
-  private array $databases = [];
-  private $drupal_version = '';
+  private ?array $config = [];
+  private ?array $config_directories = [];
+  private ?array $databases = [];
+  private string $drupal_version = '';
 
   /**
    * @var EnvMappingAbstract
    */
   private $omen;
-  private array $settings = [];
+  private ?array $settings = [];
 
   public function __construct($settings_dir) {
     global $config, $config_directories, $databases, $settings;
