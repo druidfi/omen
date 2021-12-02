@@ -31,7 +31,7 @@ class DrupalEnvDetector
   private ?array $config = [];
   private ?array $config_directories = [];
   private ?array $databases = [];
-  private string $drupal_version = '';
+  private string $drupal_version;
 
   /**
    * @var EnvMappingAbstract
