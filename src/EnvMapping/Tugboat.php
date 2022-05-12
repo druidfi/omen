@@ -17,6 +17,7 @@ class Tugboat extends EnvMappingAbstract
       'DRUPAL_DB_PASS' => 'tugboat',
       'DRUPAL_DB_HOST' => 'mysql',
       'DRUPAL_DB_PORT' => '3306',
+      'DRUPAL_HASH_SALT' => hash('sha256', getenv('TUGBOAT_REPO_ID')),
       'DRUPAL_ROUTES' => getenv('TUGBOAT_DEFAULT_SERVICE_URL'),
     ];
   }
