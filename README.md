@@ -44,6 +44,7 @@ See the whole example [here](settings.php).
 - [DDEV Local](https://ddev.readthedocs.io/en/latest/) - Work in Progress
 - [Lando](https://lando.dev/)
 - [Pantheon](https://pantheon.io/) - Work in Progress
+- [Tugboat](https://www.tugboat.qa/)
 - [Wodby](https://wodby.com/)
 
 ## What is detected?
@@ -67,19 +68,19 @@ Values: `dev`, `test` or `prod` (default: `prod`)
 
 Drupal configuration can be overridden using ENV variables.
 
-Variable | ENV override | Default value
---- | ------ | ---
-`$config['system.file']['path']['temporary']` | `DRUPAL_TMP_PATH` | `'/tmp'`
-`$databases['default']['default']['database']` | `DRUPAL_DB_NAME` | :heavy_multiplication_x:
-`$databases['default']['default']['driver']` | `DRUPAL_DB_DRIVER` | `'mysql'`
-`$databases['default']['default']['host']` | `DRUPAL_DB_HOST` | :heavy_multiplication_x:
-`$databases['default']['default']['password']` | `DRUPAL_DB_PASS` | :heavy_multiplication_x:
-`$databases['default']['default']['port']` | `DRUPAL_DB_PORT` | `3306`
-`$databases['default']['default']['username']` | `DRUPAL_DB_USER` | :heavy_multiplication_x:
-`$settings['file_public_path']` | - | `'sites/default/files'`
-`$settings['file_private_path']` | `DRUPAL_FILES_PRIVATE` | `FALSE`
-`$settings['file_temp_path']` | `DRUPAL_TMP_PATH` | `'/tmp'`
-`$settings['hash_salt']` | `DRUPAL_HASH_SALT` | `'0000000000000000'`
+| Variable                                       | ENV override           | Default value            |
+|------------------------------------------------|------------------------|--------------------------|
+| `$config['system.file']['path']['temporary']`  | `DRUPAL_TMP_PATH`      | `'/tmp'`                 |
+| `$databases['default']['default']['database']` | `DRUPAL_DB_NAME`       | :heavy_multiplication_x: |
+| `$databases['default']['default']['driver']`   | `DRUPAL_DB_DRIVER`     | `'mysql'`                |
+| `$databases['default']['default']['host']`     | `DRUPAL_DB_HOST`       | :heavy_multiplication_x: |
+| `$databases['default']['default']['password']` | `DRUPAL_DB_PASS`       | :heavy_multiplication_x: |
+| `$databases['default']['default']['port']`     | `DRUPAL_DB_PORT`       | `3306`                   |
+| `$databases['default']['default']['username']` | `DRUPAL_DB_USER`       | :heavy_multiplication_x: |
+| `$settings['file_public_path']`                | -                      | `'sites/default/files'`  |
+| `$settings['file_private_path']`               | `DRUPAL_FILES_PRIVATE` | `FALSE`                  |
+| `$settings['file_temp_path']`                  | `DRUPAL_TMP_PATH`      | `'/tmp'`                 |
+| `$settings['hash_salt']`                       | `DRUPAL_HASH_SALT`     | `'0000000000000000'`     |
 
 :heavy_multiplication_x: Detected or required
 
@@ -91,13 +92,13 @@ Variable | ENV override | Default value
 
 See current default values by environment:
 
-Variable | Development | Testing | Production
---- | ------ | ----------- | ---
-`$config['system.logging']['error_level']` | `'all'` | `'hide'` | `'hide'`
-`$config['system.performance']['cache']['page']['max_age']` | `0` | `900` | `900`
-`$config['system.performance']['css']['preprocess']` | `0` | `1` | `1`
-`$config['system.performance']['js']['preprocess']` | `0` | `1` | `1`
-`$settings['skip_permissions_hardening']` | `TRUE` | `FALSE` | `FALSE`
+| Variable                                                    | Development | Testing  | Production |
+|-------------------------------------------------------------|-------------|----------|------------|
+| `$config['system.logging']['error_level']`                  | `'all'`     | `'hide'` | `'hide'`   |
+| `$config['system.performance']['cache']['page']['max_age']` | `0`         | `900`    | `900`      |
+| `$config['system.performance']['css']['preprocess']`        | `0`         | `1`      | `1`        |
+| `$config['system.performance']['js']['preprocess']`         | `0`         | `1`      | `1`        |
+| `$settings['skip_permissions_hardening']`                   | `TRUE`      | `FALSE`  | `FALSE`    |
 
 Same for all environments:
 

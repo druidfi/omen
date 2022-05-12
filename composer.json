@@ -36,6 +36,7 @@
             "@test-ddev",
             "@test-lando",
             "@test-pantheon",
+            "@test-tugboat",
             "@test-wodby"
         ],
         "test-lagoon": [
@@ -57,6 +58,11 @@
             "APP_ENV=dev phpunit --debug --verbose --configuration tests/Pantheon.xml",
             "APP_ENV=test phpunit --debug --verbose --configuration tests/Pantheon.xml",
             "APP_ENV=prod phpunit --debug --verbose --configuration tests/Pantheon.xml"
+        ],
+        "test-tugboat": [
+            "APP_ENV=dev phpunit --debug --verbose --configuration tests/Tugboat.xml",
+            "APP_ENV=test phpunit --debug --verbose --configuration tests/Tugboat.xml",
+            "APP_ENV=prod phpunit --debug --verbose --configuration tests/Tugboat.xml"
         ],
         "test-wodby": [
             "APP_ENV=dev phpunit --debug --verbose --configuration tests/Wodby.xml",
