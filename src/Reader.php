@@ -7,6 +7,7 @@ use Druidfi\Omen\EnvMapping\EnvMappingAbstract;
 use Druidfi\Omen\EnvMapping\Lagoon;
 use Druidfi\Omen\EnvMapping\Lando;
 use Druidfi\Omen\EnvMapping\Pantheon;
+use Druidfi\Omen\EnvMapping\Tugboat;
 use Druidfi\Omen\EnvMapping\Wodby;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,7 @@ class Reader
     'IS_DDEV_PROJECT' => Ddev::class,
     'LANDO_INFO' => Lando::class,
     'PANTHEON_ENVIRONMENT' => Pantheon::class,
+    'TUGBOAT_PREVIEW_ID' => Tugboat::class,
     'WODBY_INSTANCE_TYPE' => Wodby::class,
   ];
 
