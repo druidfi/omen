@@ -21,7 +21,7 @@
     },
     "require": {
         "php": "^7.4 || ^8.0",
-        "drupal/core-recommended": "^8.9 || ^9.2",
+        "drupal/core-recommended": "^9.2 || ^10.0",
         "ext-json": "*"
     },
     "require-dev": {
