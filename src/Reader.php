@@ -91,7 +91,12 @@ class Reader
         if ($_SERVER['REMOTE_ADDR'] !== $client_ip) {
           $settings['reverse_proxy'] = TRUE;
           $settings['reverse_proxy_addresses'] = (!empty($forwarded)) ? $forwarded : [$_SERVER['REMOTE_ADDR']];
-          $settings['reverse_proxy_trusted_headers'] = Request::HEADER_X_FORWARDED_ALL;
+          $settings['reverse_proxy_trusted_headers'] =
+            Request::HEADER_X_FORWARDED_FOR |
+            Request::HEADER_X_FORWARDED_HOST |
+            Request::HEADER_X_FORWARDED_PORT |
+            Request::HEADER_X_FORWARDED_PROTO |
+            Request::HEADER_FORWARDED;
         }
       }
     }
