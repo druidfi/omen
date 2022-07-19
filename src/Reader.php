@@ -30,6 +30,7 @@ class Reader
   ];
 
   private $app_env;
+  private ?string $app_root;
   private ?array $config = [];
   private ?array $databases = [];
   private string $drupal_version;
@@ -40,10 +41,15 @@ class Reader
   private $omen;
   private ?array $settings = [];
 
-  public function __construct(string $settings_dir)
+  public function __construct(array $vars)
   {
-    global $config, $databases, $settings;
+    unset($vars['class_loader']);
+    extract($vars);
+    unset($vars);
 
+    $settings_dir = $app_root . self::DS . $site_path;
+
+    $this->app_root = $app_root;
     $this->config = &$config;
     $this->databases = &$databases;
     $this->settings = &$settings;
@@ -114,12 +120,17 @@ class Reader
     $this->setDatabaseConnection();
   }
 
+  public static function get(array $vars) : array
+  {
+    return (new Reader($vars))->getConf();
+  }
+
   /**
    * Get read configuration.
    *
    * @return array
    */
-  public function get() : array
+  public function getConf() : array
   {
     $conf = [
       'config' => $this->config,
@@ -143,9 +154,10 @@ class Reader
   /**
    * Print out configuration.
    */
-  public function show()
+  public static function show(array $vars)
   {
-    $this->printConfiguration($this->get());
+    $reader = new Reader($vars);
+    $reader->printConfiguration($reader->getConf());
   }
 
   protected function printConfiguration($conf)
