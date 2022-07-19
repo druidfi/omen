@@ -24,7 +24,7 @@ And then use this as your `sites/default/settings.php`:
 <?php
 
 // Use druidfi/omen
-extract((new Druidfi\Omen\Reader())->get());
+extract(Druidfi\Omen\Reader::get(get_defined_vars()));
 ```
 
 Or print out all configuration (aka debug):
@@ -33,7 +33,7 @@ Or print out all configuration (aka debug):
 <?php
 
 // Print out detected configuration by druidfi/omen
-(new Druidfi\Omen\Reader())->show();
+Druidfi\Omen\Reader::show(get_defined_vars());
 ```
 
 See the whole example [here](settings.php).

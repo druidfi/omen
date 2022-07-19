@@ -10,7 +10,7 @@
 //
 // These files are loaded automatically if found.
 //
-extract((new Druidfi\Omen\Reader(__DIR__))->getConfiguration());
+extract(Druidfi\Omen\Reader::get(get_defined_vars()));
 
 // Here you can still override things
 
