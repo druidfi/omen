@@ -281,5 +281,13 @@ class Reader
       'port' => getenv('DRUPAL_DB_PORT') ?: 3306,
       'prefix' => getenv('DRUPAL_DB_PREFIX') ?: '',
     ];
+
+    $drupal_10 = version_compare($this->drupal_version, '10.0.0-alpha1', '>=');
+
+    if ($drupal_10) {
+      $this->databases['default']['default']['init_commands'] = [
+        'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
+      ];
+    }
   }
 }
