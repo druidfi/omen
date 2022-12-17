@@ -41,7 +41,7 @@ See the whole example [here](settings.php).
 ## Known environments
 
 - [Amazee.io Lagoon](https://docs.lagoon.sh/)
-- [DDEV Local](https://ddev.readthedocs.io/en/latest/) - Work in Progress
+- [DDEV Local](https://ddev.readthedocs.io/en/latest/)
 - [Lando](https://lando.dev/)
 - [Pantheon](https://pantheon.io/) - Work in Progress
 - [Tugboat](https://www.tugboat.qa/)

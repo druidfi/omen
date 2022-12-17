@@ -203,16 +203,19 @@ class Reader
   private function setGlobalDefaults()
   {
     // Set directory for loading CMI configuration.
-    $this->settings['config_sync_directory'] = '../' . self::CMI_PATH;
+    $this->settings['config_sync_directory'] = getenv('DRUPAL_SYNC_DIR')
+      ?: $this->settings['config_sync_directory'] ?: '../' . self::CMI_PATH;
 
     // Hash salt.
-    $this->settings['hash_salt'] = getenv('DRUPAL_HASH_SALT') ?: $this->settings['hash_salt'] ?? '0000000000000000';
+    $this->settings['hash_salt'] = getenv('DRUPAL_HASH_SALT')
+      ?: $this->settings['hash_salt'] ?: '0000000000000000';
 
     // Public files path.
     $this->settings['file_public_path'] = $this->settings['file_public_path'] ?? 'sites/default/files';
 
     // Private files path.
-    $this->settings['file_private_path'] = getenv('DRUPAL_FILES_PRIVATE') ?: $this->settings['file_private_path'] ?? FALSE;
+    $this->settings['file_private_path'] = getenv('DRUPAL_FILES_PRIVATE')
+      ?: $this->settings['file_private_path'] ?: FALSE;
 
     // Temp path.
     $this->settings['file_temp_path'] = getenv('DRUPAL_TMP_PATH') ?: $this->settings['file_temp_path'] ?? '/tmp';
@@ -282,7 +285,7 @@ class Reader
       'prefix' => getenv('DRUPAL_DB_PREFIX') ?: '',
     ];
 
-    $drupal_10 = version_compare($this->drupal_version, '10.0.0-alpha1', '>=');
+    $drupal_10 = version_compare($this->drupal_version, '10.0.0', '>=');
 
     if ($drupal_10) {
       $this->databases['default']['default']['init_commands'] = [
