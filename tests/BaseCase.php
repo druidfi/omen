@@ -30,7 +30,7 @@ abstract class BaseCase extends TestCase
   protected function setUp(): void
   {
     if (!class_exists('Drupal')) {
-      eval("class Drupal { const VERSION = '9.4.0'; }");
+      eval("class Drupal { const VERSION = '10.0.0'; }");
     }
 
     $conf = Reader::get(['app_root' => '/app/public', 'site_path' => 'site/default']);
