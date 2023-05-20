@@ -29,12 +29,12 @@ class Ddev extends EnvMappingAbstract
   protected function getRoutes(): string
   {
     $routes = [];
-    $sheme = (getenv('HTTPS') === 'on') ? 'https' : 'http';
+    $scheme = (getenv('HTTPS') === 'on') ? 'https' : 'http';
     $hosts = explode(',', getenv('VIRTUAL_HOST'));
     $hosts = array_filter(array_unique($hosts));
 
     foreach ($hosts as $host) {
-      $routes[] = $sheme . '://' . $host;
+      $routes[] = $scheme . '://' . $host;
     }
 
     return join(',', $routes);
