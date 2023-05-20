@@ -6,7 +6,12 @@
     "authors": [
         {
             "name": "Druid.fi",
-            "email": "info@druid.fi"
+            "homepage": "https://github.com/druidfi",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Marko Korhonen",
+            "homepage": "https://github.com/back-2-95"
         }
     ],
     "autoload": {
