@@ -31,7 +31,7 @@ class Lagoon extends EnvMappingAbstract
       $config['search_api.server.solr']['name'] = 'Lagoon Solr - Environment: ' . getenv('LAGOON_PROJECT');
     }
 
-    $settings['reverse_proxy'] = TRUE;
+    $settings['reverse_proxy'] = true;
   }
 
   public function getEnvs() : array

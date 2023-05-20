@@ -21,7 +21,7 @@ class Ddev extends EnvMappingAbstract
   {
     // Don't use Symfony's APCLoader. ddev includes APCu; Composer's APCu loader has
     // better performance.
-    $settings['class_loader_auto_detect'] = FALSE;
+    $settings['class_loader_auto_detect'] = false;
 
     $settings['config_sync_directory'] = 'sites/default/files/sync';
   }

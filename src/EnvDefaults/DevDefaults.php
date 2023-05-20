@@ -6,7 +6,7 @@ class DevDefaults extends AbstractDefaults {
 
   protected array $config = [
     'stage_file_proxy.settings' => [
-      'origin' => FALSE,
+      'origin' => false,
     ],
     'system.logging' => [
       'error_level' => 'all'
@@ -28,6 +28,6 @@ class DevDefaults extends AbstractDefaults {
 
   protected array $settings = [
     'simple_environment_indicator' => 'Black Development', // Simple Environment Indicator.
-    'skip_permissions_hardening' => TRUE,
+    'skip_permissions_hardening' => true,
   ];
 }

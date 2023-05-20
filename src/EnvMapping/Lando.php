@@ -31,6 +31,6 @@ class Lando extends EnvMappingAbstract
 
   private function getLandoInfo() : array
   {
-    return json_decode(getenv('LANDO_INFO'), TRUE);
+    return json_decode(getenv('LANDO_INFO'), true);
   }
 }

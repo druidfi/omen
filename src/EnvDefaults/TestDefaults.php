@@ -6,7 +6,7 @@ class TestDefaults extends AbstractDefaults {
 
   protected array $config = [
     'stage_file_proxy.settings' => [
-      'origin' => FALSE,
+      'origin' => false,
     ],
     'system.logging' => [
       'error_level' => 'hide'
@@ -28,6 +28,6 @@ class TestDefaults extends AbstractDefaults {
 
   protected array $settings = [
     'simple_environment_indicator' => 'Blue Testing', // Simple Environment Indicator.
-    'skip_permissions_hardening' => FALSE,
+    'skip_permissions_hardening' => false,
   ];
 }

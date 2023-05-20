@@ -89,7 +89,7 @@ class Reader
         $client_ip = array_shift($forwarded);
 
         if ($_SERVER['REMOTE_ADDR'] !== $client_ip) {
-          $settings['reverse_proxy'] = TRUE;
+          $settings['reverse_proxy'] = true;
           $settings['reverse_proxy_addresses'] = (!empty($forwarded)) ? $forwarded : [$_SERVER['REMOTE_ADDR']];
           $settings['reverse_proxy_trusted_headers'] =
             Request::HEADER_X_FORWARDED_FOR |
@@ -204,21 +204,21 @@ class Reader
   {
     // Set directory for loading CMI configuration.
     $this->settings['config_sync_directory'] = getenv('DRUPAL_SYNC_DIR')
-      ?: $this->settings['config_sync_directory'] ?: '../' . self::CMI_PATH;
+      ?? $this->settings['config_sync_directory'] ?? '../' . self::CMI_PATH;
 
     // Hash salt.
     $this->settings['hash_salt'] = getenv('DRUPAL_HASH_SALT')
-      ?: $this->settings['hash_salt'] ?: '0000000000000000';
+      ?? $this->settings['hash_salt'] ?? '0000000000000000';
 
     // Public files path.
     $this->settings['file_public_path'] = $this->settings['file_public_path'] ?? 'sites/default/files';
 
     // Private files path.
     $this->settings['file_private_path'] = getenv('DRUPAL_FILES_PRIVATE')
-      ?: $this->settings['file_private_path'] ?: FALSE;
+      ?? $this->settings['file_private_path'] ?? false;
 
     // Temp path.
-    $this->settings['file_temp_path'] = getenv('DRUPAL_TMP_PATH') ?: $this->settings['file_temp_path'] ?? '/tmp';
+    $this->settings['file_temp_path'] = getenv('DRUPAL_TMP_PATH') ?? $this->settings['file_temp_path'] ?? '/tmp';
   }
 
   /**
