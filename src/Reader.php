@@ -9,6 +9,7 @@ use Druidfi\Omen\EnvMapping\Lando;
 use Druidfi\Omen\EnvMapping\Pantheon;
 use Druidfi\Omen\EnvMapping\Tugboat;
 use Druidfi\Omen\EnvMapping\Wodby;
+use JetBrains\PhpStorm\NoReturn;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -29,10 +30,10 @@ class Reader
     'WODBY_INSTANCE_TYPE' => Wodby::class,
   ];
 
-  private $app_env;
+  private string $app_env;
   private ?string $app_root;
-  private ?array $config = [];
-  private ?array $databases = [];
+  private array $config = [];
+  private array $databases = [];
   private string $drupal_version;
 
   /**
@@ -72,13 +73,15 @@ class Reader
       }
     }
 
+    $features = new Features();
+
     // Set mapped env variables IF we have detected something
-    if (!is_null($this->omen)) {
+    if ($this->omen) {
       foreach ($this->omen->getEnvs() as $env_var => $env_val) {
         putenv($env_var . '=' . $env_val);
       }
 
-      // Set Env specific configuration
+      // Set system specific configuration
       $this->omen->setConfiguration($config, $settings);
     }
     else {
@@ -125,7 +128,7 @@ class Reader
     $this->setDatabaseConnection();
   }
 
-  public static function get(array $vars) : array
+  public static function get(array $vars): array
   {
     return (new Reader($vars))->getConf();
   }
@@ -135,7 +138,7 @@ class Reader
    *
    * @return array
    */
-  public function getConf() : array
+  public function getConf(): array
   {
     $conf = [
       'config' => $this->config,
@@ -159,13 +162,15 @@ class Reader
   /**
    * Print out configuration.
    */
-  public static function show(array $vars)
+  #[NoReturn]
+  public static function show(array $vars): void
   {
     $reader = new Reader($vars);
     $reader->printConfiguration($reader->getConf());
   }
 
-  protected function printConfiguration($conf)
+  #[NoReturn]
+  protected function printConfiguration($conf): void
   {
     $omen = is_null($this->omen) ? '[NOT_ANY_DETECTED_SYSTEM]' : get_class($this->omen);
     echo '<h1>Drupal: '. $this->drupal_version .', APP_ENV: '. $this->app_env .' on '. $omen .'</h1>';
@@ -183,10 +188,9 @@ class Reader
   /**
    * Set ENV specific default values.
    */
-  private function setEnvDefaults()
+  private function setEnvDefaults(): void
   {
-    $class = "Druidfi\Omen\EnvDefaults\\". ucfirst($this->app_env) ."Defaults";
-    $env_defaults = (new $class())->getDefaults();
+    $env_defaults = (new Defaults($this->app_env))->getDefaults();
 
     foreach ($env_defaults as $set => $values) {
       if (!is_array($this->{$set})) {
@@ -200,7 +204,7 @@ class Reader
   /**
    * Set global values. Same for all environments.
    */
-  private function setGlobalDefaults()
+  private function setGlobalDefaults(): void
   {
     // Set directory for loading CMI configuration.
     $this->settings['config_sync_directory'] = getenv('DRUPAL_SYNC_DIR')
@@ -226,7 +230,7 @@ class Reader
    *
    * @see https://www.drupal.org/node/2410395
    */
-  private function setTrustedHostPatterns()
+  private function setTrustedHostPatterns(): void
   {
     if (!isset($this->settings['trusted_host_patterns'])) {
       $this->settings['trusted_host_patterns'] = [];
@@ -263,7 +267,7 @@ class Reader
       putenv('DRUSH_OPTIONS_URI=https://' . $hosts[0]);
     }
 
-    if (!is_null($this->omen) && method_exists($this->omen, 'getTrustedHostPatterns')) {
+    if ($this->omen && method_exists($this->omen, 'getTrustedHostPatterns')) {
       $patterns = $this->omen->getTrustedHostPatterns();
       $this->settings['trusted_host_patterns'] = array_merge($this->settings['trusted_host_patterns'], $patterns);
     }
@@ -272,7 +276,7 @@ class Reader
   /**
    * Set database connection.
    */
-  private function setDatabaseConnection()
+  private function setDatabaseConnection(): void
   {
     // DRUPAL_DB_* should be defined at this point.
     $this->databases['default']['default'] = [
