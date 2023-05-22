@@ -42,7 +42,8 @@
             "@test-lando",
             "@test-pantheon",
             "@test-tugboat",
-            "@test-wodby"
+            "@test-wodby",
+            "@test-unknown"
         ],
         "test-lagoon": [
             "APP_ENV=dev phpunit --debug --verbose --configuration tests/Lagoon.xml",
@@ -73,6 +74,11 @@
             "APP_ENV=dev phpunit --debug --verbose --configuration tests/Wodby.xml",
             "APP_ENV=test phpunit --debug --verbose --configuration tests/Wodby.xml",
             "APP_ENV=prod phpunit --debug --verbose --configuration tests/Wodby.xml"
+        ],
+        "test-unknown": [
+            "APP_ENV=dev phpunit --debug --verbose --configuration tests/Unknown.xml",
+            "APP_ENV=test phpunit --debug --verbose --configuration tests/Unknown.xml",
+            "APP_ENV=prod phpunit --debug --verbose --configuration tests/Unknown.xml"
         ]
     }
 }

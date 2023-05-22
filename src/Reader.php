@@ -3,21 +3,18 @@
 namespace Druidfi\Omen;
 
 use Druidfi\Omen\EnvMapping\Ddev;
-use Druidfi\Omen\EnvMapping\EnvMappingAbstract;
+use Druidfi\Omen\EnvMapping\EnvMappingInterface;
 use Druidfi\Omen\EnvMapping\Lagoon;
 use Druidfi\Omen\EnvMapping\Lando;
 use Druidfi\Omen\EnvMapping\Pantheon;
 use Druidfi\Omen\EnvMapping\Tugboat;
 use Druidfi\Omen\EnvMapping\Wodby;
-use JetBrains\PhpStorm\NoReturn;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 
 class Reader
 {
-  const CMI_PATH = 'conf/cmi';
   const DEFAULT_APP_ENV = self::ENV_PRODUCTION;
-  const DS = DIRECTORY_SEPARATOR;
   const ENV_DEVELOPMENT = 'dev';
   const ENV_PRODUCTION = 'prod';
 
@@ -30,16 +27,20 @@ class Reader
     'WODBY_INSTANCE_TYPE' => Wodby::class,
   ];
 
+  const DRUPAL_SETTING_DEFAULTS = [
+    'config_sync_directory' => 'conf/cmi',
+    'file_public_path' => 'sites/default/files',
+    'file_private_path' => FALSE,
+    'file_temp_path' => '/tmp',
+    'hash_salt' => '0000000000000000',
+  ];
+
   private string $app_env;
   private ?string $app_root;
-  private array $config = [];
-  private array $databases = [];
+  private ?array $config = [];
+  private ?array $databases = [];
   private string $drupal_version;
-
-  /**
-   * @var EnvMappingAbstract
-   */
-  private $omen;
+  private ?EnvMappingInterface $omen = null;
   private ?array $settings = [];
 
   public function __construct(array $vars)
@@ -48,7 +49,7 @@ class Reader
     extract($vars);
     unset($vars);
 
-    $settings_dir = $app_root . self::DS . $site_path;
+    $settings_dir = $app_root . DIRECTORY_SEPARATOR . $site_path;
 
     $this->app_root = $app_root;
     $this->config = &$config;
@@ -92,7 +93,7 @@ class Reader
         $client_ip = array_shift($forwarded);
 
         if ($_SERVER['REMOTE_ADDR'] !== $client_ip) {
-          $settings['reverse_proxy'] = true;
+          $settings['reverse_proxy'] = TRUE;
           $settings['reverse_proxy_addresses'] = (!empty($forwarded)) ? $forwarded : [$_SERVER['REMOTE_ADDR']];
           $settings['reverse_proxy_trusted_headers'] =
             Request::HEADER_X_FORWARDED_FOR |
@@ -113,17 +114,27 @@ class Reader
     // Load/add files (if exist) from sites/default in following order:
     foreach (['all', $this->app_env, 'local'] as $set) {
       // all.settings.php, dev.settings.php and local.settings.php
-      if (file_exists($settings_dir . self::DS . $set . '.settings.php')) {
-        include $settings_dir . self::DS . $set . '.settings.php';
+      if (file_exists($settings_dir . DIRECTORY_SEPARATOR . $set . '.settings.php')) {
+        include $settings_dir . DIRECTORY_SEPARATOR . $set . '.settings.php';
       }
 
       // all.services.yml, dev.services.yml and local.services.yml
-      if (file_exists($settings_dir . self::DS . $set . '.services.yml')) {
-        $settings['container_yamls'][] = $settings_dir . self::DS . $set . '.services.yml';
+      if (file_exists($settings_dir . DIRECTORY_SEPARATOR . $set . '.services.yml')) {
+        $settings['container_yamls'][] = $settings_dir . DIRECTORY_SEPARATOR . $set . '.services.yml';
       }
     }
 
-    $this->setGlobalDefaults();
+    // Set directory for loading CMI configuration.
+    $this->setSetting('config_sync_directory');
+
+    // Hash salt.
+    $this->setSetting('hash_salt');
+
+    // Set file paths.
+    $this->setSetting('file_public_path');
+    $this->setSetting('file_private_path');
+    $this->setSetting('file_temp_path');
+
     $this->setTrustedHostPatterns();
     $this->setDatabaseConnection();
   }
@@ -146,10 +157,6 @@ class Reader
       'settings' => $this->settings,
     ];
 
-    if (!empty($this->config_directories)) {
-      $conf['config_directories'] = $this->config_directories;
-    }
-
     if (getenv('OMEN_TOKEN') && isset($_GET['_show_omens'])) {
       if ($_GET['_show_omens'] == getenv('OMEN_TOKEN')) {
         $this->printConfiguration($conf);
@@ -162,14 +169,12 @@ class Reader
   /**
    * Print out configuration.
    */
-  #[NoReturn]
   public static function show(array $vars): void
   {
     $reader = new Reader($vars);
     $reader->printConfiguration($reader->getConf());
   }
 
-  #[NoReturn]
   protected function printConfiguration($conf): void
   {
     $omen = is_null($this->omen) ? '[NOT_ANY_DETECTED_SYSTEM]' : get_class($this->omen);
@@ -199,30 +204,6 @@ class Reader
 
       $this->{$set} = array_merge($this->{$set}, $values);
     }
-  }
-
-  /**
-   * Set global values. Same for all environments.
-   */
-  private function setGlobalDefaults(): void
-  {
-    // Set directory for loading CMI configuration.
-    $this->settings['config_sync_directory'] = getenv('DRUPAL_SYNC_DIR')
-      ?? $this->settings['config_sync_directory'] ?? '../' . self::CMI_PATH;
-
-    // Hash salt.
-    $this->settings['hash_salt'] = getenv('DRUPAL_HASH_SALT')
-      ?? $this->settings['hash_salt'] ?? '0000000000000000';
-
-    // Public files path.
-    $this->settings['file_public_path'] = $this->settings['file_public_path'] ?? 'sites/default/files';
-
-    // Private files path.
-    $this->settings['file_private_path'] = getenv('DRUPAL_FILES_PRIVATE')
-      ?? $this->settings['file_private_path'] ?? false;
-
-    // Temp path.
-    $this->settings['file_temp_path'] = getenv('DRUPAL_TMP_PATH') ?? $this->settings['file_temp_path'] ?? '/tmp';
   }
 
   /**
@@ -296,5 +277,13 @@ class Reader
         'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
       ];
     }
+  }
+
+  private function setSetting(string $setting): void
+  {
+    $env = sprintf('DRUPAL_%s', strtoupper($setting));
+    $default = self::DRUPAL_SETTING_DEFAULTS[$setting];
+
+    $this->settings[$setting] = getenv($env) ?: $this->settings[$setting] ?? $default;
   }
 }

@@ -9,7 +9,7 @@ class Wodby extends EnvMappingAbstract
   /**
    * @see https://wodby.com/docs/infrastructure/env-vars/
    */
-  public function getEnvs() : array
+  public function getEnvs(): array
   {
     return [
       'APP_ENV' => $this->getAppEnv(),

@@ -7,7 +7,7 @@ class Tugboat extends EnvMappingAbstract
   /**
    * @see https://docs.tugboat.qa/starter-configs/tutorials/drupal-9/
    */
-  public function getEnvs() : array
+  public function getEnvs(): array
   {
     return [
       'APP_ENV' => 'prod',

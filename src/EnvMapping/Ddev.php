@@ -4,7 +4,7 @@ namespace Druidfi\Omen\EnvMapping;
 
 class Ddev extends EnvMappingAbstract
 {
-  public function getEnvs() : array
+  public function getEnvs(): array
   {
     return [
       'APP_ENV' => $this->getAppEnv(),
@@ -17,7 +17,7 @@ class Ddev extends EnvMappingAbstract
     ];
   }
 
-  public function setConfiguration(&$config, &$settings)
+  public function setConfiguration(&$config, &$settings): void
   {
     // Don't use Symfony's APCLoader. ddev includes APCu; Composer's APCu loader has
     // better performance.

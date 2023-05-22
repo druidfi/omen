@@ -14,7 +14,7 @@ class Pantheon extends EnvMappingAbstract
   /**
    * @see https://pantheon.io/docs/read-environment-config
    */
-  public function getEnvs() : array
+  public function getEnvs(): array
   {
     return [
       'APP_ENV' => $this->getAppEnv(),

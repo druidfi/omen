@@ -15,7 +15,7 @@ class Lagoon extends EnvMappingAbstract
     'production' => Reader::ENV_PRODUCTION,
   ];
 
-  public function setConfiguration(&$config, &$settings)
+  public function setConfiguration(&$config, &$settings): void
   {
     $config = [];
 
@@ -34,7 +34,7 @@ class Lagoon extends EnvMappingAbstract
     $settings['reverse_proxy'] = true;
   }
 
-  public function getEnvs() : array
+  public function getEnvs(): array
   {
     return [
       'APP_ENV' => $this->getAppEnv(),
