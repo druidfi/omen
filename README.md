@@ -68,18 +68,19 @@ Values: `dev`, `test` or `prod` (default: `prod`)
 
 Drupal configuration can be overridden using ENV variables.
 
-| Variable                                       | ENV override               | Default value            |
-|------------------------------------------------|----------------------------|--------------------------|
-| `$databases['default']['default']['database']` | `DRUPAL_DB_NAME`           | :heavy_multiplication_x: |
-| `$databases['default']['default']['driver']`   | `DRUPAL_DB_DRIVER`         | `'mysql'`                |
-| `$databases['default']['default']['host']`     | `DRUPAL_DB_HOST`           | :heavy_multiplication_x: |
-| `$databases['default']['default']['password']` | `DRUPAL_DB_PASS`           | :heavy_multiplication_x: |
-| `$databases['default']['default']['port']`     | `DRUPAL_DB_PORT`           | `3306`                   |
-| `$databases['default']['default']['username']` | `DRUPAL_DB_USER`           | :heavy_multiplication_x: |
-| `$settings['file_public_path']`                | `DRUPAL_FILE_PUBLIC_PATH`  | `'sites/default/files'`  |
-| `$settings['file_private_path']`               | `DRUPAL_FILE_PRIVATE_PATH` | `FALSE`                  |
-| `$settings['file_temp_path']`                  | `DRUPAL_FILE_TEMP_PATH`    | `'/tmp'`                 |
-| `$settings['hash_salt']`                       | `DRUPAL_HASH_SALT`         | `'0000000000000000'`     |
+| Variable                                       | ENV override                   | Default value            |
+|------------------------------------------------|--------------------------------|--------------------------|
+| `$databases['default']['default']['database']` | `DRUPAL_DB_NAME`               | :heavy_multiplication_x: |
+| `$databases['default']['default']['driver']`   | `DRUPAL_DB_DRIVER`             | `'mysql'`                |
+| `$databases['default']['default']['host']`     | `DRUPAL_DB_HOST`               | :heavy_multiplication_x: |
+| `$databases['default']['default']['password']` | `DRUPAL_DB_PASS`               | :heavy_multiplication_x: |
+| `$databases['default']['default']['port']`     | `DRUPAL_DB_PORT`               | `3306`                   |
+| `$databases['default']['default']['username']` | `DRUPAL_DB_USER`               | :heavy_multiplication_x: |
+| `$settings['config_sync_directory']`           | `DRUPAL_CONFIG_SYNC_DIRECTORY` | `'conf/cmi'`             |
+| `$settings['file_public_path']`                | `DRUPAL_FILE_PUBLIC_PATH`      | `'sites/default/files'`  |
+| `$settings['file_private_path']`               | `DRUPAL_FILE_PRIVATE_PATH`     | `FALSE`                  |
+| `$settings['file_temp_path']`                  | `DRUPAL_FILE_TEMP_PATH`        | `'/tmp'`                 |
+| `$settings['hash_salt']`                       | `DRUPAL_HASH_SALT`             | `'0000000000000000'`     |
 
 :heavy_multiplication_x: Detected or required
 

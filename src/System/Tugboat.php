@@ -1,8 +1,8 @@
 <?php
 
-namespace Druidfi\Omen\EnvMapping;
+namespace Druidfi\Omen\System;
 
-class Tugboat extends EnvMappingAbstract
+class Tugboat extends AbstractSystem
 {
   /**
    * @see https://docs.tugboat.qa/starter-configs/tutorials/drupal-9/

@@ -1,10 +1,10 @@
 <?php
 
-namespace Druidfi\Omen\EnvMapping;
+namespace Druidfi\Omen\System;
 
 use Druidfi\Omen\Reader;
 
-class Pantheon extends EnvMappingAbstract
+class Pantheon extends AbstractSystem
 {
   protected string $env_name = 'PANTHEON_ENVIRONMENT';
   protected array $env_type_map = [

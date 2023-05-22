@@ -1,8 +1,8 @@
 <?php
 
-namespace Druidfi\Omen\EnvMapping;
+namespace Druidfi\Omen\System;
 
-class Wodby extends EnvMappingAbstract
+class Wodby extends AbstractSystem
 {
   protected string $env_name = 'WODBY_INSTANCE_TYPE';
 

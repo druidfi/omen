@@ -1,8 +1,8 @@
 <?php
 
-namespace Druidfi\Omen\EnvMapping;
+namespace Druidfi\Omen\System;
 
-class Ddev extends EnvMappingAbstract
+class Ddev extends AbstractSystem
 {
   public function getEnvs(): array
   {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Druidfi\Omen\EnvMapping;
+namespace Druidfi\Omen\System;
 
-class Lando extends EnvMappingAbstract
+class Lando extends AbstractSystem
 {
   /**
    * @see https://github.com/lando/lando/blob/main/docs/config/env.md

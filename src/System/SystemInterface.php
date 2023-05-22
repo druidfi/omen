@@ -1,8 +1,8 @@
 <?php
 
-namespace Druidfi\Omen\EnvMapping;
+namespace Druidfi\Omen\System;
 
-interface EnvMappingInterface
+interface SystemInterface
 {
   public function getAppEnv(): string;
 

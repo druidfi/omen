@@ -1,13 +1,13 @@
 <?php
 
-namespace Druidfi\Omen\EnvMapping;
+namespace Druidfi\Omen\System;
 
 use Druidfi\Omen\Reader;
 
 /**
  * @see https://github.com/amazeeio/drupal-example/blob/master/web/sites/default/settings.php
  */
-class Lagoon extends EnvMappingAbstract
+class Lagoon extends AbstractSystem
 {
   protected string $env_name = 'LAGOON_ENVIRONMENT_TYPE';
   protected array $env_type_map = [

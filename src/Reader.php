@@ -2,13 +2,13 @@
 
 namespace Druidfi\Omen;
 
-use Druidfi\Omen\EnvMapping\Ddev;
-use Druidfi\Omen\EnvMapping\EnvMappingInterface;
-use Druidfi\Omen\EnvMapping\Lagoon;
-use Druidfi\Omen\EnvMapping\Lando;
-use Druidfi\Omen\EnvMapping\Pantheon;
-use Druidfi\Omen\EnvMapping\Tugboat;
-use Druidfi\Omen\EnvMapping\Wodby;
+use Druidfi\Omen\System\Ddev;
+use Druidfi\Omen\System\SystemInterface;
+use Druidfi\Omen\System\Lagoon;
+use Druidfi\Omen\System\Lando;
+use Druidfi\Omen\System\Pantheon;
+use Druidfi\Omen\System\Tugboat;
+use Druidfi\Omen\System\Wodby;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -39,8 +39,8 @@ class Reader
   private ?string $app_root;
   private ?array $config = [];
   private ?array $databases = [];
-  private string $drupal_version;
-  private ?EnvMappingInterface $omen = null;
+  private ?string $drupal_version = null;
+  private ?SystemInterface $system = null;
   private ?array $settings = [];
 
   public function __construct(array $vars)
@@ -62,28 +62,23 @@ class Reader
       $_SERVER["SERVER_PORT"] = getenv('HTTP_X_FORWARDED_PORT') ?: 443;
     }
 
-    // Detect Drupal version.
-    $this->drupal_version = (new ReflectionClass('Drupal'))->getConstants()['VERSION'];
-
-    // Do the detection!
+    // Detect system
     foreach (self::MAP as $env_key => $class) {
       if (getenv($env_key)) {
-        $this->omen = new $class();
+        $this->system = new $class();
         // Break on first detected.
         break;
       }
     }
 
-    $features = new Features();
-
     // Set mapped env variables IF we have detected something
-    if ($this->omen) {
-      foreach ($this->omen->getEnvs() as $env_var => $env_val) {
-        putenv($env_var . '=' . $env_val);
+    if ($this->system) {
+      foreach ($this->system->getEnvs() as $env_var => $env_val) {
+        putenv(sprintf('%s=%s', $env_var, $env_val));
       }
 
       // Set system specific configuration
-      $this->omen->setConfiguration($config, $settings);
+      $this->system->setConfiguration($config, $settings);
     }
     else {
       // Set reverse proxy automatically for other environments
@@ -110,6 +105,8 @@ class Reader
 
     // Env specific default values
     $this->setEnvDefaults();
+
+    $features = new Features();
 
     // Load/add files (if exist) from sites/default in following order:
     foreach (['all', $this->app_env, 'local'] as $set) {
@@ -177,8 +174,8 @@ class Reader
 
   protected function printConfiguration($conf): void
   {
-    $omen = is_null($this->omen) ? '[NOT_ANY_DETECTED_SYSTEM]' : get_class($this->omen);
-    echo '<h1>Drupal: '. $this->drupal_version .', APP_ENV: '. $this->app_env .' on '. $omen .'</h1>';
+    $omen = $this->system ?? '[NOT_ANY_DETECTED_SYSTEM]';
+    echo '<h1>Drupal: '. $this->getDrupalVersion() .', APP_ENV: '. $this->app_env .' on '. $omen .'</h1>';
     echo '<pre>';
     echo '<h2>$config</h2>';
     echo json_encode($conf['config'], JSON_PRETTY_PRINT);
@@ -248,8 +245,8 @@ class Reader
       putenv('DRUSH_OPTIONS_URI=https://' . $hosts[0]);
     }
 
-    if ($this->omen && method_exists($this->omen, 'getTrustedHostPatterns')) {
-      $patterns = $this->omen->getTrustedHostPatterns();
+    if ($this->system && method_exists($this->system, 'getTrustedHostPatterns')) {
+      $patterns = $this->system->getTrustedHostPatterns();
       $this->settings['trusted_host_patterns'] = array_merge($this->settings['trusted_host_patterns'], $patterns);
     }
   }
@@ -270,7 +267,7 @@ class Reader
       'prefix' => getenv('DRUPAL_DB_PREFIX') ?: '',
     ];
 
-    $drupal_10 = version_compare($this->drupal_version, '10.0.0', '>=');
+    $drupal_10 = version_compare($this->getDrupalVersion(), '10.0.0', '>=');
 
     if ($drupal_10) {
       $this->databases['default']['default']['init_commands'] = [
@@ -284,6 +281,20 @@ class Reader
     $env = sprintf('DRUPAL_%s', strtoupper($setting));
     $default = self::DRUPAL_SETTING_DEFAULTS[$setting];
 
+    // Order of getting the value:
+    // 1. ENV variable
+    // 2. If variable was already set in $settings
+    // 3. Default value
     $this->settings[$setting] = getenv($env) ?: $this->settings[$setting] ?? $default;
+  }
+
+  private function getDrupalVersion(): string
+  {
+    if (!$this->drupal_version) {
+      // Detect Drupal version.
+      $this->drupal_version = (new ReflectionClass('Drupal'))->getConstants()['VERSION'];
+    }
+
+    return $this->drupal_version;
   }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Druidfi\Omen\EnvMapping;
+namespace Druidfi\Omen\System;
 
 use Druidfi\Omen\Reader;
 
-abstract class EnvMappingAbstract implements EnvMappingInterface
+abstract class AbstractSystem implements SystemInterface
 {
   protected string $env_name = 'LOCAL_ENV_TYPE';
   protected array $env_type_map = [];
