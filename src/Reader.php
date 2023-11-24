@@ -28,7 +28,7 @@ class Reader
   ];
 
   const DRUPAL_SETTING_DEFAULTS = [
-    'config_sync_directory' => 'conf/cmi',
+    'config_sync_directory' => '../conf/cmi',
     'file_public_path' => 'sites/default/files',
     'file_private_path' => FALSE,
     'file_temp_path' => '/tmp',
@@ -266,15 +266,10 @@ class Reader
       'host' => getenv('DRUPAL_DB_HOST') ?: 'db',
       'port' => getenv('DRUPAL_DB_PORT') ?: 3306,
       'prefix' => getenv('DRUPAL_DB_PREFIX') ?: '',
-    ];
-
-    $drupal_10 = version_compare($this->getDrupalVersion(), '10.0.0', '>=');
-
-    if ($drupal_10) {
-      $this->databases['default']['default']['init_commands'] = [
+      'init_commands' => [
         'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
-      ];
-    }
+      ],
+    ];
   }
 
   private function setSetting(string $setting): void
