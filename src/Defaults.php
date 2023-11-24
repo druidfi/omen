@@ -17,7 +17,7 @@ class Defaults
   public function __construct(string $app_env)
   {
     $this->config['system.logging']['error_level'] = match ($app_env) {
-      'dev' => 'all',
+      'dev' => 'verbose',
       default => 'hide',
     };
 
