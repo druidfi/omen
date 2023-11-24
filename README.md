@@ -14,7 +14,7 @@ your project.
 
 Require omen in your composer.json:
 
-```shell
+```console
 composer require druidfi/omen
 ```
 

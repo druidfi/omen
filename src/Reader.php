@@ -49,8 +49,6 @@ class Reader
     extract($vars);
     unset($vars);
 
-    $settings_dir = $app_root . DIRECTORY_SEPARATOR . $site_path;
-
     $this->app_root = $app_root;
     $this->config = &$config;
     $this->databases = &$databases;
@@ -107,6 +105,8 @@ class Reader
     $this->setEnvDefaults();
 
     $features = new Features();
+
+    $settings_dir = $app_root . DIRECTORY_SEPARATOR . $site_path;
 
     // Load/add files (if exist) from sites/default in following order:
     foreach (['all', $this->app_env, 'local'] as $set) {
@@ -175,7 +175,8 @@ class Reader
   protected function printConfiguration($conf): void
   {
     $omen = $this->system ?? '[NOT_ANY_DETECTED_SYSTEM]';
-    echo '<h1>Drupal: '. $this->getDrupalVersion() .', APP_ENV: '. $this->app_env .' on '. $omen .'</h1>';
+
+    echo sprintf('<h1>Drupal: %s, APP_ENV: %s on %s</h1>', $this->getDrupalVersion(), $this->app_env, $omen);
     echo '<pre>';
     echo '<h2>$config</h2>';
     echo json_encode($conf['config'], JSON_PRETTY_PRINT);
