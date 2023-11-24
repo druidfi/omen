@@ -88,7 +88,7 @@ abstract class BaseCase extends TestCase
     $app_env = getenv('APP_ENV');
 
     $error_level = $this->config['system.logging']['error_level'];
-    $expect = ($app_env === Reader::ENV_DEVELOPMENT) ? 'all' : 'hide';
+    $expect = ($app_env === Reader::ENV_DEVELOPMENT) ? 'verbose' : 'hide';
     $this->assertEquals($expect, $error_level);
 
     $preprocess_css = $this->config['system.performance']['css']['preprocess'];
