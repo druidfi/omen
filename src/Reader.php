@@ -104,7 +104,7 @@ class Reader
     // Env specific default values
     $this->setEnvDefaults();
 
-    $features = new Features();
+    //$features = new Features();
 
     $settings_dir = $app_root . DIRECTORY_SEPARATOR . $site_path;
 
