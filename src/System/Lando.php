@@ -1,13 +1,13 @@
 <?php
 
-namespace Druidfi\Omen\EnvMapping;
+namespace Druidfi\Omen\System;
 
-class Lando extends EnvMappingAbstract
+class Lando extends AbstractSystem
 {
   /**
    * @see https://github.com/lando/lando/blob/main/docs/config/env.md
    */
-  public function getEnvs() : array
+  public function getEnvs(): array
   {
     $lando_info = $this->getLandoInfo();
     $lando_host = $this->getLandoHost();
@@ -24,13 +24,13 @@ class Lando extends EnvMappingAbstract
     ];
   }
 
-  private function getLandoHost() : string
+  private function getLandoHost(): string
   {
     return getenv('LANDO_APP_NAME') . '.' . getenv('LANDO_DOMAIN');
   }
 
-  private function getLandoInfo() : array
+  private function getLandoInfo(): array
   {
-    return json_decode(getenv('LANDO_INFO'), TRUE);
+    return json_decode(getenv('LANDO_INFO'), true);
   }
 }

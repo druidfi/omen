@@ -1,10 +1,10 @@
 <?php
 
-namespace Druidfi\Omen\EnvMapping;
+namespace Druidfi\Omen\System;
 
 use Druidfi\Omen\Reader;
 
-class Pantheon extends EnvMappingAbstract
+class Pantheon extends AbstractSystem
 {
   protected string $env_name = 'PANTHEON_ENVIRONMENT';
   protected array $env_type_map = [
@@ -14,7 +14,7 @@ class Pantheon extends EnvMappingAbstract
   /**
    * @see https://pantheon.io/docs/read-environment-config
    */
-  public function getEnvs() : array
+  public function getEnvs(): array
   {
     return [
       'APP_ENV' => $this->getAppEnv(),

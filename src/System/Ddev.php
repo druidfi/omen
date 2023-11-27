@@ -1,10 +1,10 @@
 <?php
 
-namespace Druidfi\Omen\EnvMapping;
+namespace Druidfi\Omen\System;
 
-class Ddev extends EnvMappingAbstract
+class Ddev extends AbstractSystem
 {
-  public function getEnvs() : array
+  public function getEnvs(): array
   {
     return [
       'APP_ENV' => $this->getAppEnv(),
@@ -17,11 +17,11 @@ class Ddev extends EnvMappingAbstract
     ];
   }
 
-  public function setConfiguration(&$config, &$settings)
+  public function setConfiguration(&$config, &$settings): void
   {
     // Don't use Symfony's APCLoader. ddev includes APCu; Composer's APCu loader has
     // better performance.
-    $settings['class_loader_auto_detect'] = FALSE;
+    $settings['class_loader_auto_detect'] = false;
 
     $settings['config_sync_directory'] = 'sites/default/files/sync';
   }
@@ -29,12 +29,12 @@ class Ddev extends EnvMappingAbstract
   protected function getRoutes(): string
   {
     $routes = [];
-    $sheme = (getenv('HTTPS') === 'on') ? 'https' : 'http';
+    $scheme = (getenv('HTTPS') === 'on') ? 'https' : 'http';
     $hosts = explode(',', getenv('VIRTUAL_HOST'));
     $hosts = array_filter(array_unique($hosts));
 
     foreach ($hosts as $host) {
-      $routes[] = $sheme . '://' . $host;
+      $routes[] = $scheme . '://' . $host;
     }
 
     return join(',', $routes);

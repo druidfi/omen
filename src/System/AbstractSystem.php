@@ -1,15 +1,15 @@
 <?php
 
-namespace Druidfi\Omen\EnvMapping;
+namespace Druidfi\Omen\System;
 
 use Druidfi\Omen\Reader;
 
-abstract class EnvMappingAbstract implements EnvMappingInterface
+abstract class AbstractSystem implements SystemInterface
 {
   protected string $env_name = 'LOCAL_ENV_TYPE';
   protected array $env_type_map = [];
 
-  public function getAppEnv()
+  public function getAppEnv(): string
   {
     if (getenv('APP_ENV')) {
       return getenv('APP_ENV');
@@ -28,11 +28,11 @@ abstract class EnvMappingAbstract implements EnvMappingInterface
     return Reader::ENV_DEVELOPMENT;
   }
 
-  public function setConfiguration(&$config, &$settings)
+  public function setConfiguration(&$config, &$settings): void
   {
   }
 
-  public function getEnvs() : array
+  public function getEnvs(): array
   {
     return [
       'APP_ENV' => $this->getAppEnv(),

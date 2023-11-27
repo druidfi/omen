@@ -30,7 +30,7 @@ abstract class BaseCase extends TestCase
   protected function setUp(): void
   {
     if (!class_exists('Drupal')) {
-      eval("class Drupal { const VERSION = '9.4.0'; }");
+      eval("class Drupal { const VERSION = '10.0.0'; }");
     }
 
     $conf = Reader::get(['app_root' => '/app/public', 'site_path' => 'site/default']);
@@ -88,7 +88,7 @@ abstract class BaseCase extends TestCase
     $app_env = getenv('APP_ENV');
 
     $error_level = $this->config['system.logging']['error_level'];
-    $expect = ($app_env === Reader::ENV_DEVELOPMENT) ? 'all' : 'hide';
+    $expect = ($app_env === Reader::ENV_DEVELOPMENT) ? 'verbose' : 'hide';
     $this->assertEquals($expect, $error_level);
 
     $preprocess_css = $this->config['system.performance']['css']['preprocess'];

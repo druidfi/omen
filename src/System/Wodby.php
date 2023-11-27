@@ -1,15 +1,15 @@
 <?php
 
-namespace Druidfi\Omen\EnvMapping;
+namespace Druidfi\Omen\System;
 
-class Wodby extends EnvMappingAbstract
+class Wodby extends AbstractSystem
 {
   protected string $env_name = 'WODBY_INSTANCE_TYPE';
 
   /**
    * @see https://wodby.com/docs/infrastructure/env-vars/
    */
-  public function getEnvs() : array
+  public function getEnvs(): array
   {
     return [
       'APP_ENV' => $this->getAppEnv(),

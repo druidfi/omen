@@ -27,6 +27,6 @@ class LagoonTest extends BaseCase
 
   public function testProxySettings()
   {
-    $this->assertEquals(TRUE, $this->settings['reverse_proxy']);
+    $this->assertTrue($this->settings['reverse_proxy']);
   }
 }

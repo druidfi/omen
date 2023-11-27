@@ -1,13 +1,13 @@
 <?php
 
-namespace Druidfi\Omen\EnvMapping;
+namespace Druidfi\Omen\System;
 
 use Druidfi\Omen\Reader;
 
 /**
  * @see https://github.com/amazeeio/drupal-example/blob/master/web/sites/default/settings.php
  */
-class Lagoon extends EnvMappingAbstract
+class Lagoon extends AbstractSystem
 {
   protected string $env_name = 'LAGOON_ENVIRONMENT_TYPE';
   protected array $env_type_map = [
@@ -15,7 +15,7 @@ class Lagoon extends EnvMappingAbstract
     'production' => Reader::ENV_PRODUCTION,
   ];
 
-  public function setConfiguration(&$config, &$settings)
+  public function setConfiguration(&$config, &$settings): void
   {
     $config = [];
 
@@ -31,10 +31,10 @@ class Lagoon extends EnvMappingAbstract
       $config['search_api.server.solr']['name'] = 'Lagoon Solr - Environment: ' . getenv('LAGOON_PROJECT');
     }
 
-    $settings['reverse_proxy'] = TRUE;
+    $settings['reverse_proxy'] = true;
   }
 
-  public function getEnvs() : array
+  public function getEnvs(): array
   {
     return [
       'APP_ENV' => $this->getAppEnv(),
