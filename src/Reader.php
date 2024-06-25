@@ -134,6 +134,11 @@ class Reader
 
     $this->setTrustedHostPatterns();
     $this->setDatabaseConnection();
+
+    // Version specific settings.
+    if (version_compare($this->getDrupalVersion(), '10.3.0', '>=')) {
+      $this->settings['state_cache'] = TRUE;
+    }
   }
 
   public static function get(array $vars): array
