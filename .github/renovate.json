@@ -1,0 +1,11 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "github>druidfi/renovate-config:global"
+  ],
+  "constraints": {
+    "php": "8.3.*"
+  },
+  "enabled": true
+}

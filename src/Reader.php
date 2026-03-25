@@ -8,6 +8,7 @@ use Druidfi\Omen\System\Lagoon;
 use Druidfi\Omen\System\Lando;
 use Druidfi\Omen\System\Pantheon;
 use Druidfi\Omen\System\Tugboat;
+use Druidfi\Omen\System\Upsun;
 use Druidfi\Omen\System\Wodby;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,7 @@ class Reader
     'LANDO_INFO' => Lando::class,
     'PANTHEON_ENVIRONMENT' => Pantheon::class,
     'TUGBOAT_PREVIEW_ID' => Tugboat::class,
+    'PLATFORM_APPLICATION' => Upsun::class,
     'WODBY_INSTANCE_TYPE' => Wodby::class,
   ];
 
