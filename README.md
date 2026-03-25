@@ -45,6 +45,7 @@ See the whole example [here](settings.php).
 - [Lando](https://lando.dev/)
 - [Pantheon](https://pantheon.io/) - Work in Progress
 - [Tugboat](https://www.tugboat.qa/)
+- [Upsun](https://upsun.com/)
 - [Wodby](https://wodby.com/)
 
 ## What is detected?
