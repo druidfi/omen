@@ -141,6 +141,11 @@ class Reader
     if (version_compare($this->getDrupalVersion(), '10.3.0', '>=')) {
       $this->settings['state_cache'] = TRUE;
     }
+
+    if (version_compare($this->getDrupalVersion(), '11.4.0', '>=')) {
+      // @see https://www.drupal.org/node/3537128
+      $this->settings['enable_html5_validation'] = FALSE;
+    }
   }
 
   public static function get(array $vars): array
