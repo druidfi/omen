@@ -90,12 +90,16 @@ class Reader
         if ($_SERVER['REMOTE_ADDR'] !== $client_ip) {
           $settings['reverse_proxy'] = TRUE;
           $settings['reverse_proxy_addresses'] = (!empty($forwarded)) ? $forwarded : [$_SERVER['REMOTE_ADDR']];
+          // Do not also trust HEADER_FORWARDED here: Symfony throws
+          // ConflictingHeadersException if a request carries both a trusted
+          // "Forwarded" header and a trusted "X-Forwarded-*" header that
+          // disagree, which happens whenever a client sends its own spoofed
+          // "Forwarded" header through a proxy that only sets X-Forwarded-*.
           $settings['reverse_proxy_trusted_headers'] =
             Request::HEADER_X_FORWARDED_FOR |
             Request::HEADER_X_FORWARDED_HOST |
             Request::HEADER_X_FORWARDED_PORT |
-            Request::HEADER_X_FORWARDED_PROTO |
-            Request::HEADER_FORWARDED;
+            Request::HEADER_X_FORWARDED_PROTO;
         }
       }
     }
