@@ -124,4 +124,79 @@ class Upsun extends AbstractSystem
       '^.+\.upsun\.app$',
     ];
   }
+
+  public function getEjectedCode(): string
+  {
+    return <<<'PHP'
+$upsun_env_map = ['production' => 'prod', 'staging' => 'test', 'development' => 'dev'];
+$app_env = getenv('APP_ENV') ?: ($upsun_env_map[getenv('PLATFORM_ENVIRONMENT_TYPE')] ?? (getenv('PLATFORM_ENVIRONMENT_TYPE') ?: 'dev'));
+
+$upsun_db = [];
+
+if ($encoded = getenv('PLATFORM_RELATIONSHIPS')) {
+  $relationships = json_decode(base64_decode($encoded), true) ?: [];
+
+  foreach ($relationships as $connections) {
+    foreach ($connections as $connection) {
+      if (in_array($connection['scheme'] ?? null, ['mysql', 'pgsql'], true)) {
+        $upsun_db = $connection;
+        break 2;
+      }
+    }
+  }
+}
+
+$databases['default']['default'] = [
+  'driver' => $upsun_db['scheme'] ?? 'mysql',
+  'database' => $upsun_db['path'] ?? '',
+  'username' => $upsun_db['username'] ?? '',
+  'password' => $upsun_db['password'] ?? '',
+  'host' => $upsun_db['host'] ?? '',
+  'port' => (string) ($upsun_db['port'] ?? 3306),
+  'prefix' => '',
+  'init_commands' => [
+    'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
+  ],
+];
+
+$settings['hash_salt'] = getenv('PLATFORM_PROJECT_ENTROPY') ?: ($settings['hash_salt'] ?? '0000000000000000');
+$settings['reverse_proxy'] = true;
+
+if ($tree_id = getenv('PLATFORM_TREE_ID')) {
+  $settings['deployment_identifier'] = $tree_id;
+}
+
+if ($app_dir = getenv('PLATFORM_APP_DIR')) {
+  $settings['file_private_path'] = $settings['file_private_path'] ?? $app_dir . '/private';
+  $settings['file_temp_path'] = $settings['file_temp_path'] ?? $app_dir . '/tmp';
+  $settings['php_storage']['default']['directory'] = $settings['php_storage']['default']['directory'] ?? $app_dir . '/private';
+  $settings['php_storage']['twig']['directory'] = $settings['php_storage']['twig']['directory'] ?? $app_dir . '/private';
+}
+
+// Upsun always determines DRUSH_OPTIONS_URI from PLATFORM_ROUTES, overriding
+// any DRUSH_OPTIONS_URI already present in the environment.
+$drush_options_uri = '';
+
+if ($encoded = getenv('PLATFORM_ROUTES')) {
+  $decoded = json_decode(base64_decode($encoded), true) ?: [];
+
+  foreach ($decoded as $url => $route) {
+    if (($route['type'] ?? '') !== 'upstream') {
+      continue;
+    }
+
+    if ($route['primary'] ?? false) {
+      $drush_options_uri = $url;
+    }
+    else {
+      $routes[] = $url;
+    }
+  }
+}
+
+$system_trusted_host_patterns = [
+  '^.+\.upsun\.app$',
+];
+PHP;
+  }
 }
