@@ -11,6 +11,20 @@ namespace Druidfi\Omen;
  */
 class Ejector
 {
+  /**
+   * Files whose content is already inlined/handled elsewhere (see
+   * renderProjectFiles()), so a bare include/require for one of these found
+   * while scanning the real settings.php should not be duplicated.
+   */
+  private const KNOWN_SETTINGS_FILES = [
+    'all.settings.php',
+    'dev.settings.php',
+    'test.settings.php',
+    'prod.settings.php',
+    'local.settings.php',
+    'settings.ejected.php',
+  ];
+
   public function __construct(private readonly Reader $reader)
   {
   }
@@ -23,6 +37,7 @@ class Ejector
       $this->renderSystemBlock(),
       $this->renderDefaults(),
       $this->renderProjectFiles(),
+      $this->renderPreservedIncludes(),
       $this->renderSettingsDefaults(),
       $this->renderTrustedHostPatterns(),
       $this->renderVersionGatedSettings(),
@@ -55,6 +70,11 @@ class Ejector
  *      below only keep pointing at those files, they don't inline them.
  *   5. Run `composer remove druidfi/omen`.
  *   6. Delete this settings.ejected.php file.
+ *
+ * Project-specific `include '...';`/`require '...';` statements found
+ * directly in settings.php (e.g. `include 'valkey.settings.php';`) were
+ * carried forward as-is below - only a plain quoted filename is detected,
+ * so double-check anything built from a variable/expression wasn't missed.
  */
 PHP;
   }
@@ -194,6 +214,47 @@ if (file_exists($app_root . '/' . $site_path . '/local.services.yml')) {
 PHP;
 
     return implode("\n\n", $lines);
+  }
+
+  /**
+   * The real settings.php often has project-specific includes tacked on
+   * after the Reader::get()/eject() call (e.g. colosseum's
+   * `include 'valkey.settings.php';` for Valkey config). Those files are
+   * not inlined/deleted by eject - they're independent of Omen - so just
+   * carry the include statement itself forward verbatim.
+   */
+  private function renderPreservedIncludes(): string
+  {
+    $dir = $this->settingsDir();
+
+    if ($dir === null || !is_file($dir . '/settings.php')) {
+      return '';
+    }
+
+    $code = file_get_contents($dir . '/settings.php');
+    $pattern = '/^[ \t]*((?:include|include_once|require|require_once)\s*\(?\s*[\'"]([^\'"]+)[\'"]\s*\)?\s*;)/m';
+
+    if (!preg_match_all($pattern, $code, $matches, PREG_SET_ORDER)) {
+      return '';
+    }
+
+    $statements = [];
+
+    foreach ($matches as $match) {
+      if (in_array(basename($match[2]), self::KNOWN_SETTINGS_FILES, true)) {
+        continue;
+      }
+
+      $statements[trim($match[1])] = trim($match[1]);
+    }
+
+    if ($statements === []) {
+      return '';
+    }
+
+    $lines = ['// Preserved from settings.php - review these files still exist and still make sense standalone (eject does not inline or delete them):'];
+
+    return implode("\n", array_merge($lines, $statements));
   }
 
   private function renderSettingsDefaults(): string

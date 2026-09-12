@@ -60,4 +60,56 @@ class DdevTest extends BaseCase
       @rmdir($dir);
     }
   }
+
+  public function testEjectPreservesProjectSpecificIncludes(): void
+  {
+    $dir = sys_get_temp_dir() . '/omen-eject-ddev-includes-' . uniqid();
+    mkdir($dir, 0777, true);
+
+    try {
+      // A project-specific include tacked on after the Omen call in the real
+      // settings.php (e.g. colosseum's `include 'valkey.settings.php';`).
+      file_put_contents($dir . '/settings.php', <<<'PHP'
+<?php
+extract(Druidfi\Omen\Reader::get(get_defined_vars()));
+
+// Valkey configuration.
+include 'valkey.settings.php';
+PHP
+      );
+      file_put_contents($dir . '/valkey.settings.php', <<<'PHP'
+<?php
+$settings['cache']['default'] = 'cache.backend.valkey';
+PHP
+      );
+
+      Reader::eject(['app_root' => $dir, 'site_path' => '.']);
+
+      $code = file_get_contents($dir . '/settings.ejected.php');
+      $this->assertStringContainsString("include 'valkey.settings.php';", $code);
+
+      $app_root = $dir;
+      $site_path = '.';
+      $config = [];
+      $databases = [];
+      $settings = [];
+      $cwd = getcwd();
+      chdir($dir);
+
+      try {
+        require $dir . '/settings.ejected.php';
+      }
+      finally {
+        chdir($cwd);
+      }
+
+      $this->assertEquals('cache.backend.valkey', $settings['cache']['default']);
+    }
+    finally {
+      @unlink($dir . '/settings.ejected.php');
+      @unlink($dir . '/settings.php');
+      @unlink($dir . '/valkey.settings.php');
+      @rmdir($dir);
+    }
+  }
 }

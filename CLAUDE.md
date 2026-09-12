@@ -130,6 +130,8 @@ https://example.com/?_show_omens=<token>
 
 `Reader::eject()` is a drop-in replacement for `Reader::get()` that additionally writes `settings.ejected.php` next to `settings.php`: a static rewrite of the currently-detected configuration (system-specific `getenv()` logic inlined, `Defaults`' dev/test/prod branches rendered as `match ($app_env) {...}`, and any `all.settings.php`/`{dev,test,prod}.settings.php` inlined) that no longer depends on this library. It never deletes or renames anything itself.
 
+It also scans the real `settings.php` for project-specific `include '...';`/`require '...';` statements tacked on after the Omen call (e.g. colosseum's `include 'valkey.settings.php';` for Valkey config) and carries them forward verbatim - those files aren't inlined or deleted, only the include statement is preserved. Only a plain quoted filename is detected (not one built from a variable/expression), so still diff and double-check.
+
 Workflow:
 ```php
 // Temporarily, in settings.php:
