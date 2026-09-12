@@ -62,4 +62,50 @@ class Lagoon extends AbstractSystem
       '^.+\.docker\.amazee\.io$',
     ];
   }
+
+  public function getEjectedCode(): string
+  {
+    return <<<'PHP'
+$app_env = getenv('APP_ENV') ?: match (getenv('LAGOON_ENVIRONMENT_TYPE')) {
+  'development' => 'dev',
+  'production' => 'prod',
+  default => getenv('LAGOON_ENVIRONMENT_TYPE') ?: 'dev',
+};
+
+$databases['default']['default'] = [
+  'driver' => 'mysql',
+  'database' => getenv('MARIADB_DATABASE'),
+  'username' => getenv('MARIADB_USERNAME'),
+  'password' => getenv('MARIADB_PASSWORD'),
+  'host' => getenv('MARIADB_HOST') ?: 'mariadb',
+  'port' => 3306,
+  'prefix' => '',
+  'init_commands' => [
+    'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
+  ],
+];
+
+$settings['hash_salt'] = hash('sha256', getenv('LAGOON_PROJECT'));
+$settings['reverse_proxy'] = true;
+
+if (getenv('SOLR_HOST')) {
+  $config['search_api.server.solr']['backend_config']['connector_config']['host'] = getenv('SOLR_HOST');
+  $config['search_api.server.solr']['backend_config']['connector_config']['path'] = '/solr/';
+  $config['search_api.server.solr']['backend_config']['connector_config']['core'] = getenv('SOLR_CORE') ?: 'drupal';
+  $config['search_api.server.solr']['backend_config']['connector_config']['port'] = 8983;
+  $config['search_api.server.solr']['backend_config']['connector_config']['http_user'] = (getenv('SOLR_USER') ?: '');
+  $config['search_api.server.solr']['backend_config']['connector_config']['http']['http_user'] = (getenv('SOLR_USER') ?: '');
+  $config['search_api.server.solr']['backend_config']['connector_config']['http_pass'] = (getenv('SOLR_PASSWORD') ?: '');
+  $config['search_api.server.solr']['backend_config']['connector_config']['http']['http_pass'] = (getenv('SOLR_PASSWORD') ?: '');
+  $config['search_api.server.solr']['name'] = 'Lagoon Solr - Environment: ' . getenv('LAGOON_PROJECT');
+}
+
+$lagoon_routes = getenv('LAGOON_ROUTE') . ',' . getenv('LAGOON_ROUTES');
+$routes = array_values(array_filter(array_unique(explode(',', $lagoon_routes))));
+
+$system_trusted_host_patterns = [
+  '^.+\.docker\.amazee\.io$',
+];
+PHP;
+  }
 }
