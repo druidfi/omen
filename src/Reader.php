@@ -39,6 +39,7 @@ class Reader
 
   private string $app_env;
   private ?string $app_root;
+  private ?string $site_path = null;
   private ?array $config = [];
   private ?array $databases = [];
   private ?string $drupal_version = null;
@@ -52,6 +53,7 @@ class Reader
     unset($vars);
 
     $this->app_root = $app_root;
+    $this->site_path = $site_path ?? null;
     $this->config = &$config;
     $this->databases = &$databases;
     $this->settings = &$settings;
@@ -151,6 +153,61 @@ class Reader
   public static function get(array $vars): array
   {
     return (new Reader($vars))->getConf();
+  }
+
+  /**
+   * Like get(), but also writes settings.ejected.php next to settings.php: a
+   * static, human-reviewable rewrite of the currently detected configuration
+   * that no longer depends on Omen. Meant as a temporary drop-in replacement
+   * for get() while the developer reviews the generated file, then renames it
+   * to settings.php and removes the druidfi/omen dependency.
+   */
+  public static function eject(array $vars): array
+  {
+    $reader = new Reader($vars);
+    $reader->writeEjectedFile();
+
+    return $reader->getConf();
+  }
+
+  public function getSystem(): ?SystemInterface
+  {
+    return $this->system;
+  }
+
+  public function getAppEnv(): string
+  {
+    return $this->app_env;
+  }
+
+  public function getAppRoot(): ?string
+  {
+    return $this->app_root;
+  }
+
+  public function getSitePath(): ?string
+  {
+    return $this->site_path;
+  }
+
+  private function writeEjectedFile(): void
+  {
+    if (!$this->app_root || !$this->site_path) {
+      return;
+    }
+
+    $dir = rtrim($this->app_root, '/') . '/' . trim($this->site_path, '/');
+
+    if (!is_dir($dir) || !is_writable($dir)) {
+      trigger_error(sprintf('Omen: cannot write settings.ejected.php, %s is missing or not writable.', $dir), E_USER_WARNING);
+      return;
+    }
+
+    $code = (new Ejector($this))->render();
+
+    if (@file_put_contents($dir . '/settings.ejected.php', $code) === false) {
+      trigger_error(sprintf('Omen: failed to write %s/settings.ejected.php.', $dir), E_USER_WARNING);
+    }
   }
 
   /**
@@ -296,7 +353,7 @@ class Reader
     $this->settings[$setting] = getenv($env) ?: $this->settings[$setting] ?? $default;
   }
 
-  private function getDrupalVersion(): string
+  public function getDrupalVersion(): string
   {
     if (!$this->drupal_version) {
       // Detect Drupal version.

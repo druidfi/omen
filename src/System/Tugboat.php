@@ -21,4 +21,29 @@ class Tugboat extends AbstractSystem
       'DRUPAL_ROUTES' => getenv('TUGBOAT_DEFAULT_SERVICE_URL'),
     ];
   }
+
+  public function getEjectedCode(): string
+  {
+    return <<<'PHP'
+// Tugboat previews always run in "prod" mode under Omen, regardless of APP_ENV.
+$app_env = 'prod';
+
+$databases['default']['default'] = [
+  'driver' => 'mysql',
+  'database' => 'tugboat',
+  'username' => 'tugboat',
+  'password' => 'tugboat',
+  'host' => 'mysql',
+  'port' => '3306',
+  'prefix' => '',
+  'init_commands' => [
+    'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
+  ],
+];
+
+$settings['hash_salt'] = hash('sha256', getenv('TUGBOAT_REPO_ID'));
+
+$routes = array_values(array_filter(array_unique(explode(',', (string) getenv('TUGBOAT_DEFAULT_SERVICE_URL')))));
+PHP;
+  }
 }

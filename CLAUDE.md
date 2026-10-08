@@ -17,9 +17,10 @@ extract(Druidfi\Omen\Reader::get(get_defined_vars()));
 src/
   Reader.php           # Main class: detects system, applies defaults, sets all Drupal vars
   Defaults.php         # Per-env (dev/test/prod) $config and $settings defaults
+  Ejector.php          # Renders settings.ejected.php for Reader::eject() (see "Ejecting a project")
   Features.php         # Redis/Solr detection (WIP, not yet wired into Reader)
   System/
-    SystemInterface.php    # Interface: getEnvs(), setConfiguration(), getAppEnv()
+    SystemInterface.php    # Interface: getEnvs(), setConfiguration(), getAppEnv(), getEjectedCode()
     AbstractSystem.php     # Base: APP_ENV mapping, default getEnvs() returning APP_ENV
     Lagoon.php             # Amazee.io Lagoon
     Ddev.php               # DDEV Local
@@ -102,6 +103,7 @@ The `vendor/` directory must exist first (`composer install`).
    - Set `$env_type_map` (map system env type values to `dev`/`test`/`prod`)
    - Override `getEnvs()` to map system DB/route vars to `DRUPAL_*`
    - Override `setConfiguration()` for system-specific `$config`/`$settings`
+   - Override `getEjectedCode()` with a static, `getenv()`-based PHP snippet reproducing the above (see "Ejecting a project") - not complete until this exists
 2. Add detection key → class to `Reader::MAP`
 3. Create `tests/NewEnv/NewEnvTest.php` extending `BaseCase`, override expected values
 4. Create `tests/NewEnv.xml` (PHPUnit config setting the detection ENV var and DB vars)
@@ -123,3 +125,21 @@ https://example.com/?_show_omens=<token>
 ## Version-Specific Behavior
 
 - Drupal >= 10.3.0: `$settings['state_cache'] = TRUE` is set automatically
+
+## Ejecting a project
+
+`Reader::eject()` is a drop-in replacement for `Reader::get()` that additionally writes `settings.ejected.php` next to `settings.php`: a static rewrite of the currently-detected configuration (system-specific `getenv()` logic inlined, `Defaults`' dev/test/prod branches rendered as `match ($app_env) {...}`, and any `all.settings.php`/`{dev,test,prod}.settings.php` inlined) that no longer depends on this library. It never deletes or renames anything itself.
+
+It also scans the real `settings.php` for project-specific `include '...';`/`require '...';` statements tacked on after the Omen call (e.g. colosseum's `include 'valkey.settings.php';` for Valkey config) and carries them forward verbatim - those files aren't inlined or deleted, only the include statement is preserved. Only a plain quoted filename is detected (not one built from a variable/expression), so still diff and double-check.
+
+Workflow:
+```php
+// Temporarily, in settings.php:
+extract(Druidfi\Omen\Reader::eject(get_defined_vars()));
+```
+1. Trigger one request (or `drush status`) so the file gets written.
+2. Review `settings.ejected.php`, diffing it against the real `settings.php`.
+3. Rename it to `settings.php`.
+4. Delete `all.settings.php` / `dev.settings.php` / `test.settings.php` / `prod.settings.php` (leave `local.settings.php`/`local.services.yml` - they stay dynamic).
+5. `composer remove druidfi/omen`.
+6. Delete the generated file's now-redundant banner comment / the leftover `eject()` call if it wasn't already replaced in step 3.

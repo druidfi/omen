@@ -23,4 +23,26 @@ class Wodby extends AbstractSystem
       'DRUPAL_ROUTES' => getenv('WODBY_URL_PRIMARY'),
     ];
   }
+
+  public function getEjectedCode(): string
+  {
+    return <<<'PHP'
+$app_env = getenv('APP_ENV') ?: (getenv('WODBY_INSTANCE_TYPE') ?: 'dev');
+
+$databases['default']['default'] = [
+  'driver' => getenv('DB_DRIVER') ?: 'mysql',
+  'database' => getenv('DB_NAME'),
+  'username' => getenv('DB_USER'),
+  'password' => getenv('DB_PASSWORD'),
+  'host' => getenv('DB_HOST'),
+  'port' => getenv('DB_PORT') ?: 3306,
+  'prefix' => getenv('DB_PREFIX') ?: '',
+  'init_commands' => [
+    'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
+  ],
+];
+
+$routes = array_values(array_filter([getenv('WODBY_URL_PRIMARY') ?: null]));
+PHP;
+  }
 }

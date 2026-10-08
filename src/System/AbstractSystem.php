@@ -38,4 +38,24 @@ abstract class AbstractSystem implements SystemInterface
       'APP_ENV' => $this->getAppEnv(),
     ];
   }
+
+  public function getEjectedCode(): string
+  {
+    return <<<'PHP'
+$app_env = getenv('APP_ENV') ?: (getenv('LOCAL_ENV_TYPE') ?: 'dev');
+
+$databases['default']['default'] = [
+  'driver' => getenv('DRUPAL_DB_DRIVER') ?: 'mysql',
+  'database' => getenv('DRUPAL_DB_NAME') ?: 'drupal',
+  'username' => getenv('DRUPAL_DB_USER') ?: 'drupal',
+  'password' => getenv('DRUPAL_DB_PASS') ?: 'drupal',
+  'host' => getenv('DRUPAL_DB_HOST') ?: 'db',
+  'port' => getenv('DRUPAL_DB_PORT') ?: 3306,
+  'prefix' => getenv('DRUPAL_DB_PREFIX') ?: '',
+  'init_commands' => [
+    'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
+  ],
+];
+PHP;
+  }
 }
