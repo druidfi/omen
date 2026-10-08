@@ -31,19 +31,39 @@ class Ejector
 
   public function render(): string
   {
+    [$before, $after] = $this->splitSettingsFile();
+
     $parts = array_filter([
       $this->renderBanner(),
+      $before,
       $this->renderContractDefaults(),
       $this->renderSystemBlock(),
       $this->renderDefaults(),
       $this->renderProjectFiles(),
-      $this->renderPreservedIncludes(),
       $this->renderSettingsDefaults(),
       $this->renderTrustedHostPatterns(),
       $this->renderVersionGatedSettings(),
+      $after,
     ]);
 
-    return "<?php\n\n" . implode("\n\n", $parts) . "\n";
+    // Inlined files may contain top-level `use` imports. Those are only legal
+    // in the outermost scope, so hoist them all (deduplicated) to the top -
+    // otherwise one from an env file would end up inside `if ($app_env ...)`.
+    $uses = [];
+
+    foreach ($parts as $i => $part) {
+      $parts[$i] = preg_replace_callback('/^[ \t]*use\s+(?:function\s+|const\s+)?\\\\?[A-Za-z_][^;{(]*;[ \t]*\n?/m', static function (array $m) use (&$uses) {
+        $uses[trim($m[0])] = trim($m[0]);
+
+        return '';
+      }, $part);
+    }
+
+    if ($uses !== []) {
+      array_splice($parts, 1, 0, [implode("\n", $uses)]);
+    }
+
+    return "<?php\n\n" . implode("\n\n", array_map('trim', array_filter($parts, static fn ($part) => trim($part) !== ''))) . "\n";
   }
 
   private function renderBanner(): string
@@ -60,21 +80,20 @@ class Ejector
  * This is a starting point, not a finished settings.php. Before using it:
  *   1. Diff it against your current settings.php and carry over anything
  *      project-specific that isn't shown here.
- *   2. Rename this file to settings.php, replacing the Reader::get()/eject()
- *      call entirely.
+ *   2. Rename this file to settings.php, replacing the old one (and with it
+ *      the Reader::get()/eject() call) entirely.
  *   3. Delete all.settings.php and any of dev/test/prod.settings.php that
  *      were inlined below. (local.settings.php and local.services.yml are
  *      intentionally left in place and still loaded dynamically below.)
- *   4. If all.services.yml or an env-specific *.services.yml existed, merge
- *      their contents into this project's own services.yml - the lines
- *      below only keep pointing at those files, they don't inline them.
+ *   4. Keep any all/dev/test/prod.services.yml files - the lines below
+ *      still load them (env-specific ones only for the matching \$app_env),
+ *      they don't inline them.
  *   5. Run `composer remove druidfi/omen`.
- *   6. Delete this settings.ejected.php file.
  *
- * Project-specific `include '...';`/`require '...';` statements found
- * directly in settings.php (e.g. `include 'valkey.settings.php';`) were
- * carried forward as-is below - only a plain quoted filename is detected,
- * so double-check anything built from a variable/expression wasn't missed.
+ * Any code settings.php had before/after the Reader::get()/eject() call was
+ * carried forward verbatim at the very top/bottom of this file, preserving
+ * the order it ran in relative to Omen. Top-level `use` imports from all
+ * inlined files were hoisted to just below this comment.
  */
 PHP;
   }
@@ -82,6 +101,12 @@ PHP;
   private function renderContractDefaults(): string
   {
     return <<<'PHP'
+// Handle HTTPS behind a TLS-terminating proxy.
+if (getenv('HTTPS') !== 'on' && getenv('HTTP_X_FORWARDED_PROTO') === 'https') {
+  $_SERVER['HTTPS'] = 'on';
+  $_SERVER['SERVER_PORT'] = getenv('HTTP_X_FORWARDED_PORT') ?: 443;
+}
+
 $routes = [];
 // Reader::setTrustedHostPatterns() always reads this straight from the
 // environment, regardless of which (if any) system was detected.
@@ -138,31 +163,38 @@ PHP;
 
   private function renderDefaults(): string
   {
-    $dev = (new Defaults('dev'))->getDefaults();
-    $test = (new Defaults('test'))->getDefaults();
-    $prod = (new Defaults('prod'))->getDefaults();
+    $envs = [];
+
+    foreach (['dev', 'test', 'prod'] as $env) {
+      $envs[$env] = (new Defaults($env))->getDefaults();
+    }
+
+    // What Defaults yields for any other APP_ENV value (e.g. 'stage'), so the
+    // match() default arm stays faithful for those too.
+    $other = (new Defaults(''))->getDefaults();
 
     $lines = ['// Environment-specific defaults (from Druidfi\Omen\Defaults).'];
 
     foreach (['config', 'settings'] as $bucket) {
-      foreach ($this->collectLeafPaths($dev[$bucket]) as $path) {
-        $dev_value = $this->getByPath($dev[$bucket], $path);
-        $test_value = $this->getByPath($test[$bucket], $path);
-        $prod_value = $this->getByPath($prod[$bucket], $path);
+      foreach ($this->collectLeafPaths($other[$bucket]) as $path) {
+        $fallback = $this->getByPath($other[$bucket], $path);
         $target = '$' . $bucket . $this->pathToArrayAccess($path);
+        $arms = [];
 
-        if ($dev_value === $test_value && $test_value === $prod_value) {
-          $lines[] = sprintf('%s = %s;', $target, $this->exportValue($dev_value));
+        foreach ($envs as $env => $defaults) {
+          $value = $this->getByPath($defaults[$bucket], $path);
+
+          if ($value !== $fallback) {
+            $arms[] = "  '{$env}' => " . $this->exportValue($value) . ',';
+          }
+        }
+
+        if ($arms === []) {
+          $lines[] = sprintf('%s = %s;', $target, $this->exportValue($fallback));
           continue;
         }
 
-        $arms = ["  'dev' => " . $this->exportValue($dev_value) . ','];
-
-        if ($test_value !== $prod_value) {
-          $arms[] = "  'test' => " . $this->exportValue($test_value) . ',';
-        }
-
-        $arms[] = '  default => ' . $this->exportValue($prod_value) . ',';
+        $arms[] = '  default => ' . $this->exportValue($fallback) . ',';
 
         $lines[] = sprintf("%s = match (\$app_env) {\n%s\n};", $target, implode("\n", $arms));
       }
@@ -182,23 +214,22 @@ PHP;
     $lines = [];
 
     if (($code = $this->readStrippedFile($dir . '/all.settings.php')) !== null) {
-      $lines[] = "// Inlined from all.settings.php.\n" . $code;
+      $lines[] = "// Inlined from all.settings.php.\n" . $this->databasesNote($code) . $code;
     }
 
     foreach (['dev', 'test', 'prod'] as $env) {
       $code = $this->readStrippedFile($dir . "/{$env}.settings.php");
 
       if ($code !== null) {
-        $lines[] = "// Inlined from {$env}.settings.php.\nif (\$app_env === '{$env}') {\n" . $this->indent($code) . "\n}";
+        $lines[] = "// Inlined from {$env}.settings.php.\n" . $this->databasesNote($code) . "if (\$app_env === '{$env}') {\n" . $this->indent($code) . "\n}";
       }
     }
 
+    // Reader only loads all.services.yml and the one matching APP_ENV.
     foreach (['all', 'dev', 'test', 'prod'] as $env) {
       if (is_file($dir . "/{$env}.services.yml")) {
-        $lines[] = sprintf(
-          "if (file_exists(\$app_root . '/' . \$site_path . '/%s')) {\n  \$settings['container_yamls'][] = \$app_root . '/' . \$site_path . '/%s';\n}",
-          "{$env}.services.yml", "{$env}.services.yml"
-        );
+        $line = sprintf("\$settings['container_yamls'][] = \$app_root . '/' . \$site_path . '/%s';", "{$env}.services.yml");
+        $lines[] = $env === 'all' ? $line : "if (\$app_env === '{$env}') {\n  {$line}\n}";
       }
     }
 
@@ -217,46 +248,70 @@ PHP;
   }
 
   /**
-   * The real settings.php often has project-specific includes tacked on
-   * after the Reader::get()/eject() call (e.g. colosseum's
-   * `include 'valkey.settings.php';` for Valkey config). Those files are
-   * not inlined/deleted by eject - they're independent of Omen - so just
-   * carry the include statement itself forward verbatim.
+   * Reader::setDatabaseConnection() runs after the project files are loaded
+   * and replaces $databases['default']['default'] wholesale, so anything they
+   * set there was silently discarded by Omen. The ejected file sets the
+   * connection first, so such lines now take effect - flag that change.
    */
-  private function renderPreservedIncludes(): string
+  private function databasesNote(string $code): string
+  {
+    if (!preg_match('/\$databases\b/', $code)) {
+      return '';
+    }
+
+    return "// NOTE: With Omen, Reader::get() replaced \$databases['default']['default']\n"
+      . "// after loading this file, so any \$databases changes below had NO effect\n"
+      . "// before ejecting. They take effect now - verify they are still correct.\n";
+  }
+
+  /**
+   * Splits the real settings.php around its Reader::get()/eject() call, so
+   * project code there (e.g. `include 'valkey.settings.php';`, per-platform
+   * overrides) can be carried forward in the same position relative to the
+   * Omen-generated code. The `//` comment block directly above the call
+   * (Omen's own boilerplate) and comment-only chunks are dropped.
+   *
+   * @return array{0: string, 1: string}
+   *   Code before and after the call. Empty strings if there's no call.
+   */
+  private function splitSettingsFile(): array
   {
     $dir = $this->settingsDir();
 
-    if ($dir === null || !is_file($dir . '/settings.php')) {
-      return '';
+    if ($dir === null || ($code = $this->readStrippedFile($dir . '/settings.php')) === null) {
+      return ['', ''];
     }
 
-    $code = file_get_contents($dir . '/settings.php');
-    $pattern = '/^[ \t]*((?:include|include_once|require|require_once)\s*\(?\s*[\'"]([^\'"]+)[\'"]\s*\)?\s*;)/m';
+    $chunks = preg_split('/(?:^[ \t]*\/\/[^\n]*\n)*^[^\n]*\bReader::(?:get|eject)\s*\([^;]*;[^\n]*\n?/m', $code, 2);
 
-    if (!preg_match_all($pattern, $code, $matches, PREG_SET_ORDER)) {
-      return '';
+    if (count($chunks) !== 2) {
+      return ['', ''];
     }
 
-    $statements = [];
+    return array_map(function (string $chunk): string {
+      // Imports of Omen itself are no longer valid once it's removed.
+      $chunk = preg_replace('/^use\s+Druidfi\\\\Omen\\\\[^;]*;[ \t]*\n?/m', '', $chunk);
 
-    foreach ($matches as $match) {
-      if (in_array(basename($match[2]), self::KNOWN_SETTINGS_FILES, true)) {
+      // Files Ejector already inlines (or keeps loading) itself.
+      $known = implode('|', array_map('preg_quote', self::KNOWN_SETTINGS_FILES));
+      $chunk = preg_replace('/^[ \t]*(?:include|include_once|require|require_once)\b[^;]*[\'"\/](?:' . $known . ')[\'"]\s*\)?\s*;[ \t]*\n?/m', '', $chunk);
+
+      return $this->hasCode($chunk) ? trim($chunk) : '';
+    }, $chunks);
+  }
+
+  private function hasCode(string $chunk): bool
+  {
+    foreach (token_get_all('<?php ' . $chunk) as $token) {
+      if (is_array($token) && in_array($token[0], [T_OPEN_TAG, T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)) {
         continue;
       }
 
-      $statements[trim($match[1])] = trim($match[1]);
+      return true;
     }
 
-    if ($statements === []) {
-      return '';
-    }
-
-    $lines = ['// Preserved from settings.php - review these files still exist and still make sense standalone (eject does not inline or delete them):'];
-
-    return implode("\n", array_merge($lines, $statements));
+    return false;
   }
-
   private function renderSettingsDefaults(): string
   {
     $lines = [
