@@ -122,4 +122,5 @@ https://example.com/?_show_omens=<token>
 
 ## Version-Specific Behavior
 
-- Drupal >= 10.3.0: `$settings['state_cache'] = TRUE` is set automatically
+- Drupal >= 10.3.0 and < 12: `$settings['state_cache'] = TRUE` is set automatically (removed in Drupal 12, where the state cache is always on)
+- Drupal >= 11.4.0: `$settings['enable_html5_validation'] = FALSE` is set automatically

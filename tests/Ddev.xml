@@ -3,7 +3,6 @@
          beStrictAboutTestsThatDoNotTestAnything="true"
          beStrictAboutOutputDuringTests="true"
          beStrictAboutChangesToGlobalState="true"
-         beStrictAboutCoversAnnotation="false"
          cacheResult="false">
   <php>
     <!-- Set error reporting to E_ALL. -->
