@@ -365,7 +365,8 @@ PHP;
     $version = $this->reader->getDrupalVersion();
     $lines = ["// Version-gated settings, resolved once for Drupal {$version} at generation time."];
 
-    if (version_compare($version, '10.3.0', '>=')) {
+    // Drupal 12 removed the setting as the state cache is always enabled.
+    if (version_compare($version, '10.3.0', '>=') && version_compare($version, '12.0.0-dev', '<')) {
       $lines[] = "\$settings['state_cache'] = TRUE;";
     }
 
