@@ -2,6 +2,8 @@
 
 namespace Druidfi\Omen\Tests;
 
+use Druidfi\Omen\Reader;
+
 class LagoonTest extends BaseCase
 {
   protected array $expected_db_settings = [
@@ -28,5 +30,38 @@ class LagoonTest extends BaseCase
   public function testProxySettings()
   {
     $this->assertTrue($this->settings['reverse_proxy']);
+  }
+
+  public function testEject(): void
+  {
+    $dir = sys_get_temp_dir() . '/omen-eject-lagoon-' . uniqid();
+    mkdir($dir, 0777, true);
+
+    try {
+      $expected = Reader::get(['app_root' => $dir, 'site_path' => '.']);
+      $actual = Reader::eject(['app_root' => $dir, 'site_path' => '.']);
+
+      $this->assertEquals($expected, $actual);
+
+      $this->assertFileExists($dir . '/settings.ejected.php');
+      $code = file_get_contents($dir . '/settings.ejected.php');
+      $this->assertStringContainsString('MARIADB_DATABASE', $code);
+      $this->assertStringContainsString('LAGOON_PROJECT', $code);
+
+      $app_root = $dir;
+      $site_path = '.';
+      $config = [];
+      $databases = [];
+      $settings = [];
+      require $dir . '/settings.ejected.php';
+
+      $this->assertEquals($expected['config'], $config);
+      $this->assertEquals($expected['databases'], $databases);
+      $this->assertEquals($expected['settings'], $settings);
+    }
+    finally {
+      @unlink($dir . '/settings.ejected.php');
+      @rmdir($dir);
+    }
   }
 }

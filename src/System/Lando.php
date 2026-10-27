@@ -33,4 +33,34 @@ class Lando extends AbstractSystem
   {
     return json_decode(getenv('LANDO_INFO'), true);
   }
+
+  public function getEjectedCode(): string
+  {
+    return <<<'PHP'
+$app_env = getenv('APP_ENV') ?: (getenv('LOCAL_ENV_TYPE') ?: 'dev');
+
+$lando_info = json_decode((string) getenv('LANDO_INFO'), true) ?: [];
+$lando_host = getenv('LANDO_APP_NAME') . '.' . getenv('LANDO_DOMAIN');
+
+$databases['default']['default'] = [
+  'driver' => 'mysql',
+  'database' => $lando_info['database']['creds']['database'] ?? 'drupal',
+  'username' => $lando_info['database']['creds']['user'] ?? 'drupal',
+  'password' => $lando_info['database']['creds']['password'] ?? 'drupal',
+  'host' => $lando_info['database']['internal_connection']['host'] ?? 'db',
+  'port' => (string) ($lando_info['database']['internal_connection']['port'] ?? 3306),
+  'prefix' => '',
+  'init_commands' => [
+    'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
+  ],
+];
+
+$settings['hash_salt'] = getenv('HASH_SALT') ?: ($settings['hash_salt'] ?? '0000000000000000');
+
+$routes = [
+  'http://' . $lando_host,
+  'https://' . $lando_host,
+];
+PHP;
+  }
 }
