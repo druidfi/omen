@@ -26,17 +26,18 @@
     },
     "require": {
         "php": "^8.1",
-        "drupal/core-recommended": "^10.0 || ^11.0",
+        "drupal/core-recommended": "^10.0 || ^11.0 || ^12.0",
         "ext-json": "*"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.17 || ^3.15",
-        "phpunit/phpunit": "^9.6 <10"
+        "phpunit/phpunit": "^9.6 || ^12.0"
     },
     "config": {
         "allow-plugins": {
             "composer/installers": true,
-            "drupal/core-composer-scaffold": true
+            "drupal/core-composer-scaffold": true,
+            "symfony/runtime": false
         }
     },
     "minimum-stability": "dev",
@@ -53,44 +54,44 @@
             "@test-unknown"
         ],
         "test-lagoon": [
-            "APP_ENV=dev phpunit --debug --verbose --configuration tests/Lagoon.xml",
-            "APP_ENV=test phpunit --debug --verbose --configuration tests/Lagoon.xml",
-            "APP_ENV=prod phpunit --debug --verbose --configuration tests/Lagoon.xml"
+            "APP_ENV=dev phpunit --configuration tests/Lagoon.xml",
+            "APP_ENV=test phpunit --configuration tests/Lagoon.xml",
+            "APP_ENV=prod phpunit --configuration tests/Lagoon.xml"
         ],
         "test-ddev": [
-            "APP_ENV=dev phpunit --debug --verbose --configuration tests/Ddev.xml",
-            "APP_ENV=test phpunit --debug --verbose --configuration tests/Ddev.xml",
-            "APP_ENV=prod phpunit --debug --verbose --configuration tests/Ddev.xml"
+            "APP_ENV=dev phpunit --configuration tests/Ddev.xml",
+            "APP_ENV=test phpunit --configuration tests/Ddev.xml",
+            "APP_ENV=prod phpunit --configuration tests/Ddev.xml"
         ],
         "test-lando": [
-            "APP_ENV=dev phpunit --debug --verbose --configuration tests/Lando.xml",
-            "APP_ENV=test phpunit --debug --verbose --configuration tests/Lando.xml",
-            "APP_ENV=prod phpunit --debug --verbose --configuration tests/Lando.xml"
+            "APP_ENV=dev phpunit --configuration tests/Lando.xml",
+            "APP_ENV=test phpunit --configuration tests/Lando.xml",
+            "APP_ENV=prod phpunit --configuration tests/Lando.xml"
         ],
         "test-pantheon": [
-            "APP_ENV=dev phpunit --debug --verbose --configuration tests/Pantheon.xml",
-            "APP_ENV=test phpunit --debug --verbose --configuration tests/Pantheon.xml",
-            "APP_ENV=prod phpunit --debug --verbose --configuration tests/Pantheon.xml"
+            "APP_ENV=dev phpunit --configuration tests/Pantheon.xml",
+            "APP_ENV=test phpunit --configuration tests/Pantheon.xml",
+            "APP_ENV=prod phpunit --configuration tests/Pantheon.xml"
         ],
         "test-tugboat": [
-            "APP_ENV=dev phpunit --debug --verbose --configuration tests/Tugboat.xml",
-            "APP_ENV=test phpunit --debug --verbose --configuration tests/Tugboat.xml",
-            "APP_ENV=prod phpunit --debug --verbose --configuration tests/Tugboat.xml"
+            "APP_ENV=dev phpunit --configuration tests/Tugboat.xml",
+            "APP_ENV=test phpunit --configuration tests/Tugboat.xml",
+            "APP_ENV=prod phpunit --configuration tests/Tugboat.xml"
         ],
         "test-upsun": [
-            "APP_ENV=dev phpunit --debug --verbose --configuration tests/Upsun.xml",
-            "APP_ENV=test phpunit --debug --verbose --configuration tests/Upsun.xml",
-            "APP_ENV=prod phpunit --debug --verbose --configuration tests/Upsun.xml"
+            "APP_ENV=dev phpunit --configuration tests/Upsun.xml",
+            "APP_ENV=test phpunit --configuration tests/Upsun.xml",
+            "APP_ENV=prod phpunit --configuration tests/Upsun.xml"
         ],
         "test-wodby": [
-            "APP_ENV=dev phpunit --debug --verbose --configuration tests/Wodby.xml",
-            "APP_ENV=test phpunit --debug --verbose --configuration tests/Wodby.xml",
-            "APP_ENV=prod phpunit --debug --verbose --configuration tests/Wodby.xml"
+            "APP_ENV=dev phpunit --configuration tests/Wodby.xml",
+            "APP_ENV=test phpunit --configuration tests/Wodby.xml",
+            "APP_ENV=prod phpunit --configuration tests/Wodby.xml"
         ],
         "test-unknown": [
-            "APP_ENV=dev phpunit --debug --verbose --configuration tests/Unknown.xml",
-            "APP_ENV=test phpunit --debug --verbose --configuration tests/Unknown.xml",
-            "APP_ENV=prod phpunit --debug --verbose --configuration tests/Unknown.xml"
+            "APP_ENV=dev phpunit --configuration tests/Unknown.xml",
+            "APP_ENV=test phpunit --configuration tests/Unknown.xml",
+            "APP_ENV=prod phpunit --configuration tests/Unknown.xml"
         ]
     }
 }

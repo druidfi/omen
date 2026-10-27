@@ -138,7 +138,8 @@ class Reader
     $this->setDatabaseConnection();
 
     // Version specific settings.
-    if (version_compare($this->getDrupalVersion(), '10.3.0', '>=')) {
+    // Drupal 12 removed the setting as the state cache is always enabled.
+    if (version_compare($this->getDrupalVersion(), '10.3.0', '>=') && version_compare($this->getDrupalVersion(), '12.0.0-dev', '<')) {
       $this->settings['state_cache'] = TRUE;
     }
 
